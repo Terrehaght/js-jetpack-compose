@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Screen</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <!-- Load Framework Files -->
+    <script src="layouts.js"></script>
+    
+    <script src="material-views.js"></script>
+    <script src="material-notifiers.js"></script>
+    
+    <script src="bottom_nav.js"></script>
+    <script src="Settings.js"></script>
+    <script src="tabs.js"></script>
+
+
+    <script>
+        const { Column, Row, mount } = AndroidLayouts;
+        const { TextView, MaterialButton, MaterialInput, Card, Snackbar } = AndroidComponents;
+
+        // Create login form
+        const emailInput = MaterialInput({
+            label: 'Email Address',
+            type: 'email',
+            leadingIcon: 'bx bx-envelope',
+            required: true,
+            helperText: 'Enter your email address'
+        });
+
+        const passwordInput = MaterialInput({
+            label: 'Password',
+            type: 'password',
+            leadingIcon: 'bx bx-lock',
+            required: true,
+            passwordToggle: true
+        });
+
+        const loginButton = MaterialButton({
+            text: 'Sign In',
+            variant: 'filled',
+            fullWidth: true,
+            size: 'large',
+            leadingIcon: 'bx bx-log-in',
+            onClick: async () => {
+                // Get values
+                const email = emailInput.getValue();
+                const password = passwordInput.getValue();
+
+                // Validate
+                if (!email || !password) {
+                    Snackbar.error('Please fill in all fields');
+                    return;
+                }
+
+                if (!email.includes('@')) {
+                    emailInput.setError('Please enter a valid email address');
+                    return;
+                }
+
+                // Show loading state
+                loginButton.setLoading(true, 'Signing in...');
+
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                // Success
+                loginButton.setLoading(false);
+                Snackbar.success('Welcome back! Login successful.');
+                
+                // Clear form after success
+                setTimeout(() => {
+                    emailInput.reset();
+                    passwordInput.reset();
+                }, 2000);
+            }
+        });
+
+        const forgotPasswordButton = MaterialButton({
+            text: 'Forgot Password?',
+            variant: 'text',
+            fullWidth: true,
+            onClick: () => {
+                Snackbar.show('Password reset link would be sent to your email');
+            }
+        });
+
+        // Create the login card
+        const loginCard = Card({
+            variant: 'elevated',
+            elevation: 3,
+            cornerRadius: 16,
+            padding: 32,
+            width: 400
+        }, [
+            Column({ gap: 24, width: 'match_parent' }, [
+                // Header
+                Column({ gap: 8, gravity: 'center_horizontal' }, [
+                    Row({ 
+                        gravity: 'center',
+                        width: 'match_parent',
+                        margin: 0,
+                        padding: 0
+                    }, [
+                        TextView({
+                            text: '👋',
+                            textSize: 48
+                        })
+                    ]),
+                    TextView({
+                        text: 'Welcome Back',
+                        textSize: 28,
+                        textStyle: 'bold',
+                        gravity: 'center',
+                        textColor: '#1f2328'
+                    }),
+                    TextView({
+                        text: 'Sign in to continue to your account',
+                        textSize: 14,
+                        gravity: 'center',
+                        textColor: '#656d76'
+                    })
+                ]),
+
+                // Form inputs
+                Column({ gap: 16, width: 'match_parent' }, [
+                    emailInput,
+                    passwordInput
+                ]),
+
+                // Buttons
+                Column({ gap: 8, width: 'match_parent' }, [
+                    loginButton,
+                    forgotPasswordButton
+                ]),
+
+                // Sign up link
+                Row({ gravity: 'center', gap: 4 }, [
+                    TextView({
+                        text: "Don't have an account?",
+                        textSize: 13,
+                        textColor: '#656d76'
+                    }),
+                    MaterialButton({
+                        text: 'Sign Up',
+                        variant: 'text',
+                        size: 'small',
+                        onClick: () => {
+                            Snackbar.show('Sign up feature coming soon!');
+                        }
+                    })
+                ])
+            ])
+        ]);
+
+        // Main layout
+        const app = Column({
+            width: 'match_parent',
+            height: '100vh',
+            gravity: 'center',
+            padding: 16
+        }, [
+            loginCard
+        ]);
+
+        // Mount to DOM
+        mount(app, 'app');
+    </script>
+</body>
+</html>
