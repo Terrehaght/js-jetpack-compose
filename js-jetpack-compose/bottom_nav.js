@@ -1,5 +1,5 @@
 // ============================================
-// AndroidComponents Bottom Navigation
+// AndroidComponents Bottom Navigation - FIXED
 // Requires: components1.js to be loaded first
 // ============================================
 (function() {
@@ -16,7 +16,7 @@
   });
 
   // ==========================================
-  // Bottom Navigation Styles
+  // Bottom Navigation Styles - FIXED
   // ==========================================
   const BOTTOM_NAV_STYLES = `
     .md-bottom-nav {
@@ -48,21 +48,21 @@
       -webkit-tap-highlight-color: transparent;
       max-width: 168px;
       min-width: 80px;
-      padding: 12px 0 16px;
+      padding: 8px 12px 12px;
+      gap: 4px;
     }
 
     .md-bottom-nav-item-indicator {
       position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
       width: 64px;
       height: 32px;
       background: transparent;
       border-radius: 16px;
       transition: background 0.2s cubic-bezier(0.2, 0, 0, 1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      pointer-events: none;
     }
 
     .md-bottom-nav-item.md-selected .md-bottom-nav-item-indicator {
@@ -78,6 +78,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 24px;
+      height: 24px;
     }
 
     .md-bottom-nav-item.md-selected .md-bottom-nav-item-icon {
@@ -88,13 +90,13 @@
       font-size: 12px;
       font-weight: 500;
       color: var(--md-on-surface-variant, #49454F);
-      margin-top: 4px;
       transition: all 0.2s ease;
       position: relative;
       z-index: 1;
       text-align: center;
       line-height: 16px;
       letter-spacing: 0.5px;
+      white-space: nowrap;
     }
 
     .md-bottom-nav-item.md-selected .md-bottom-nav-item-label {
@@ -108,8 +110,8 @@
 
     .md-bottom-nav-badge {
       position: absolute;
-      top: 8px;
-      right: calc(50% - 20px);
+      top: 4px;
+      right: calc(50% - 24px);
       background: var(--md-error, #BA1A1A);
       color: var(--md-on-error, #FFFFFF);
       border-radius: 8px;
@@ -132,6 +134,7 @@
       
       .md-bottom-nav-item {
         min-width: 60px;
+        padding: 8px 8px 12px;
       }
     }
   `;
@@ -158,20 +161,23 @@
       navItem.className = 'md-bottom-nav-item';
       navItem.setAttribute('data-id', item.id);
 
+      // Indicator (background pill)
       const indicator = document.createElement('div');
       indicator.className = 'md-bottom-nav-item-indicator';
-
-      const icon = document.createElement('i');
-      icon.className = `md-bottom-nav-item-icon ${item.icon}`;
-
-      indicator.appendChild(icon);
       navItem.appendChild(indicator);
 
+      // Icon
+      const icon = document.createElement('i');
+      icon.className = `md-bottom-nav-item-icon ${item.icon}`;
+      navItem.appendChild(icon);
+
+      // Label
       const label = document.createElement('span');
       label.className = 'md-bottom-nav-item-label';
       label.textContent = item.name;
       navItem.appendChild(label);
 
+      // Badge (if exists)
       if (item.badge) {
         const badge = document.createElement('span');
         badge.className = 'md-bottom-nav-badge';
