@@ -1,5 +1,5 @@
 // Enhanced Android-style Layout Framework
-// Comprehensive layouts for organizing UI components
+// Comprehensive layouts for organizing UI components with visibility controls
 
 const AndroidLayouts = (() => {
   // Utility: Convert dp to pixels
@@ -7,12 +7,29 @@ const AndroidLayouts = (() => {
     if (typeof value === 'number') return `${value}px`;
     if (typeof value === 'string' && value.includes('px')) return value;
     return `${value}px`;
-  };
+  };  
 
   // Utility: Apply styles to an element
   const applyStyles = (element, styles) => {
     Object.assign(element.style, styles);
   };
+
+  // Utility: Visibility methods for any component
+  const createVisibilityMethods = (container) => ({
+    setVisibility: (visibility) => {
+      const visibilityMap = {
+        'visible': { display: '', visibility: 'visible' },
+        'invisible': { display: '', visibility: 'hidden' },
+        'gone': { display: 'none', visibility: '' }
+      };
+      const styles = visibilityMap[visibility] || visibilityMap.visible;
+      Object.assign(container.style, styles);
+    },
+    show: function() { this.setVisibility('visible'); return this; },
+    hide: function() { this.setVisibility('gone'); return this; },
+    invisible: function() { this.setVisibility('invisible'); return this; },
+    isVisible: () => container.style.display !== 'none' && container.style.visibility !== 'hidden'
+  });
 
   // Process layout params for children
   const processLayoutParams = (element, layoutParams, parentOrientation = 'vertical') => {
@@ -163,7 +180,8 @@ const AndroidLayouts = (() => {
       },
       clear: () => {
         container.innerHTML = '';
-      }
+      },
+      ...createVisibilityMethods(container)
     };
   };
 
@@ -246,7 +264,8 @@ const AndroidLayouts = (() => {
           if (row) el.style.gridRowStart = row;
         }
         container.appendChild(el);
-      }
+      },
+      ...createVisibilityMethods(container)
     };
   };
 
@@ -354,7 +373,8 @@ const AndroidLayouts = (() => {
     });
 
     return {
-      getElement: () => container
+      getElement: () => container,
+      ...createVisibilityMethods(container)
     };
   };
 
@@ -411,7 +431,8 @@ const AndroidLayouts = (() => {
       },
       scrollToBottom: () => {
         container.scrollTop = container.scrollHeight;
-      }
+      },
+      ...createVisibilityMethods(container)
     };
   };
 
@@ -487,7 +508,8 @@ const AndroidLayouts = (() => {
     });
 
     return {
-      getElement: () => container
+      getElement: () => container,
+      ...createVisibilityMethods(container)
     };
   };
 
@@ -565,7 +587,7 @@ const AndroidLayouts = (() => {
     Constrained,
     mount,
     // Export utilities for other modules
-    utils: { dp, applyStyles }
+    utils: { dp, applyStyles, createVisibilityMethods }
   };
 })();
 

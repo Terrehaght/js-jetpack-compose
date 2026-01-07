@@ -86,6 +86,19 @@
     }
     .md-toolbar-overflow-item:hover { background: rgba(103, 80, 164, 0.08); }
     .md-toolbar-overflow-item i { font-size: 1.25rem; color: var(--md-on-surface-variant); }
+    
+    /* Collapsing Toolbar */
+    .md-toolbar-collapsing {
+      transition: min-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .md-toolbar-collapsing.md-collapsed {
+      min-height: 56px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .md-toolbar-collapsing.md-expanded {
+      min-height: 128px;
+    }
   `;
 
   // ==========================================
@@ -116,11 +129,70 @@
       left: auto; right: 0; transform: translateX(100%);
     }
     .md-drawer-container.md-right.md-visible { transform: translateX(0); }
+    
+    /* Close Button for Full Width Drawer */
+    .md-drawer-close-btn {
+      position: absolute;
+      top: 12px;
+      background: var(--md-surface-container-highest, #E6E0E9);
+      color: var(--md-on-surface, #1C1B1F);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.5rem;
+      z-index: 10;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+      transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+    }
+    .md-drawer-close-btn:hover {
+      background: var(--md-surface-container-high, #ECE6F0);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.16), 0 2px 4px rgba(0,0,0,0.23);
+    }
+    .md-drawer-close-btn:active {
+      transform: scale(0.95);
+    }
+    .md-drawer-container.md-full-width .md-drawer-close-btn {
+      display: flex;
+    }
+    .md-drawer-close-btn.md-position-start {
+      left: 16px;
+    }
+    .md-drawer-close-btn.md-position-end {
+      right: 16px;
+    }
+    
+    /* Swipe indicator for swipe-to-dismiss */
+    .md-drawer-swipe-indicator {
+      position: absolute;
+      top: 12px;
+      width: 32px;
+      height: 4px;
+      background: var(--md-on-surface-variant, #49454F);
+      opacity: 0.4;
+      border-radius: 2px;
+      display: none;
+    }
+    .md-drawer-container.md-swipeable .md-drawer-swipe-indicator {
+      display: block;
+    }
+    .md-drawer-container.md-swipeable.md-position-start .md-drawer-swipe-indicator {
+      left: 12px;
+    }
+    .md-drawer-container.md-swipeable.md-position-end .md-drawer-swipe-indicator {
+      right: 12px;
+    }
+    
     .md-drawer-header {
       padding: 16px; min-height: 64px;
       background: var(--md-primary-container, #EADDFF);
       color: var(--md-on-primary-container, #21005E);
       display: flex; flex-direction: column; justify-content: center;
+      position: relative;
     }
     .md-drawer-header-title {
       font-size: 1.25rem; font-weight: 500; margin: 0;
@@ -186,6 +258,23 @@
       padding: 16px; border-top: 1px solid var(--md-outline-variant, #CAC4D0);
       background: var(--md-surface, #FFFBFE);
     }
+    
+    /* Modal Drawer (centered on screen) */
+    .md-drawer-container.md-modal {
+      left: 50%;
+      top: 50%;
+      bottom: auto;
+      transform: translate(-50%, -50%) scale(0.9);
+      width: 90%;
+      max-width: 400px;
+      max-height: 80vh;
+      border-radius: 12px;
+      opacity: 0;
+    }
+    .md-drawer-container.md-modal.md-visible {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
   `;
 
   // ==========================================
@@ -203,6 +292,8 @@
       background: props.background || null,
       color: props.color || null,
       elevation: props.elevation !== false,
+      collapsible: props.collapsible || false,
+      collapsed: false,
       element: null,
       overflowMenuElement: null,
       overflowVisible: false
@@ -291,6 +382,10 @@
       state.element.className = 'md-toolbar';
       state.element.setAttribute('role', 'banner');
 
+      if (state.collapsible) {
+        state.element.classList.add('md-toolbar-collapsing', 'md-expanded');
+      }
+
       if (state.background) state.element.style.background = state.background;
       if (state.color) state.element.style.color = state.color;
       if (!state.elevation) state.element.style.boxShadow = 'none';
@@ -364,6 +459,23 @@
         state.overflowVisible = false;
         state.overflowMenuElement.classList.remove('md-visible');
       },
+      collapse() {
+        if (!state.collapsible || state.collapsed) return this;
+        state.collapsed = true;
+        state.element?.classList.remove('md-expanded');
+        state.element?.classList.add('md-collapsed');
+        return this;
+      },
+      expand() {
+        if (!state.collapsible || !state.collapsed) return this;
+        state.collapsed = false;
+        state.element?.classList.remove('md-collapsed');
+        state.element?.classList.add('md-expanded');
+        return this;
+      },
+      toggleCollapse() {
+        return state.collapsed ? this.expand() : this.collapse();
+      },
       getElement() {
         if (!state.element) build();
         return state.element;
@@ -383,17 +495,27 @@
     const state = {
       position: props.position || 'left',
       fullWidth: props.fullWidth || false,
+      modal: props.modal || false,
       header: props.header || null,
       footer: props.footer || null,
       items: props.items || [],
       onItemClick: props.onItemClick || null,
       dismissOnItemClick: props.dismissOnItemClick !== false,
       dismissOnScrim: props.dismissOnScrim !== false,
+      swipeToDismiss: props.swipeToDismiss || false,
+      closeButton: props.closeButton !== undefined ? props.closeButton : true,
+      closeButtonIcon: props.closeButtonIcon || '×',
+      closeButtonPosition: props.closeButtonPosition || 'end',
+      onOpen: props.onOpen || null,
+      onClose: props.onClose || null,
       scrim: null,
       container: null,
       contentElement: null,
+      closeButtonElement: null,
       isOpen: false,
-      activeItemId: null
+      activeItemId: null,
+      swipeStartX: 0,
+      swipeCurrentX: 0
     };
 
     const createMenuItem = (item) => {
@@ -490,6 +612,49 @@
       });
     };
 
+    const setupSwipeToDismiss = () => {
+      if (!state.swipeToDismiss) return;
+
+      let startX = 0;
+      let currentX = 0;
+      let isDragging = false;
+
+      const handleTouchStart = (e) => {
+        startX = e.touches[0].clientX;
+        isDragging = true;
+      };
+
+      const handleTouchMove = (e) => {
+        if (!isDragging) return;
+        currentX = e.touches[0].clientX;
+        const diff = currentX - startX;
+
+        if (state.position === 'left' && diff < 0) {
+          state.container.style.transform = `translateX(${diff}px)`;
+        } else if (state.position === 'right' && diff > 0) {
+          state.container.style.transform = `translateX(${diff}px)`;
+        }
+      };
+
+      const handleTouchEnd = () => {
+        if (!isDragging) return;
+        isDragging = false;
+        const diff = currentX - startX;
+        const threshold = state.container.offsetWidth * 0.3;
+
+        if ((state.position === 'left' && diff < -threshold) ||
+            (state.position === 'right' && diff > threshold)) {
+          instance.close();
+        } else {
+          state.container.style.transform = '';
+        }
+      };
+
+      state.container.addEventListener('touchstart', handleTouchStart);
+      state.container.addEventListener('touchmove', handleTouchMove);
+      state.container.addEventListener('touchend', handleTouchEnd);
+    };
+
     const build = () => {
       // Scrim
       state.scrim = document.createElement('div');
@@ -510,6 +675,33 @@
       
       if (state.fullWidth) {
         state.container.classList.add('md-full-width');
+      }
+
+      if (state.modal) {
+        state.container.classList.add('md-modal');
+      }
+
+      if (state.swipeToDismiss) {
+        state.container.classList.add('md-swipeable');
+        const swipeIndicator = document.createElement('div');
+        swipeIndicator.className = 'md-drawer-swipe-indicator';
+        state.container.appendChild(swipeIndicator);
+      }
+
+      // Close button for full width drawer
+      if (state.closeButton && state.fullWidth) {
+        state.closeButtonElement = document.createElement('button');
+        state.closeButtonElement.className = `md-drawer-close-btn md-position-${state.closeButtonPosition}`;
+        state.closeButtonElement.setAttribute('aria-label', 'Close drawer');
+        
+        if (state.closeButtonIcon.includes('bx-') || state.closeButtonIcon.includes('class=')) {
+          state.closeButtonElement.innerHTML = `<i class="${state.closeButtonIcon}"></i>`;
+        } else {
+          state.closeButtonElement.innerHTML = state.closeButtonIcon;
+        }
+        
+        state.closeButtonElement.addEventListener('click', () => instance.close());
+        state.container.appendChild(state.closeButtonElement);
       }
 
       // Header
@@ -564,6 +756,8 @@
         state.container.appendChild(footer);
       }
 
+      setupSwipeToDismiss();
+
       document.body.appendChild(state.scrim);
       document.body.appendChild(state.container);
     };
@@ -580,6 +774,7 @@
         });
         
         state.isOpen = true;
+        if (state.onOpen) state.onOpen();
         return this;
       },
       close() {
@@ -593,6 +788,7 @@
         }, 250);
         
         state.isOpen = false;
+        if (state.onClose) state.onClose();
         return this;
       },
       toggle() {
@@ -638,6 +834,17 @@
       },
       isShowing() {
         return state.isOpen;
+      },
+      setCloseButtonIcon(icon) {
+        state.closeButtonIcon = icon;
+        if (state.closeButtonElement) {
+          if (icon.includes('bx-') || icon.includes('class=')) {
+            state.closeButtonElement.innerHTML = `<i class="${icon}"></i>`;
+          } else {
+            state.closeButtonElement.innerHTML = icon;
+          }
+        }
+        return this;
       },
       destroy() {
         if (state.scrim?.parentNode) state.scrim.parentNode.removeChild(state.scrim);

@@ -1,0 +1,2353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AndroidLayouts.js Documentation</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --bg-card: #1c2128;
+            --text-primary: #f0f6fc;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --accent-primary: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-purple: #a371f7;
+            --accent-orange: #d29922;
+            --accent-pink: #f778ba;
+            --accent-cyan: #39d2c0;
+            --border-color: #30363d;
+            --code-bg: #0d1117;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .light {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f6f8fa;
+            --bg-tertiary: #eaeef2;
+            --bg-card: #ffffff;
+            --text-primary: #1f2328;
+            --text-secondary: #656d76;
+            --text-muted: #8c959f;
+            --accent-primary: #0969da;
+            --accent-green: #1a7f37;
+            --accent-purple: #8250df;
+            --accent-orange: #bf8700;
+            --accent-pink: #bf3989;
+            --accent-cyan: #1b7c83;
+            --border-color: #d0d7de;
+            --code-bg: #f6f8fa;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .logo-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-link {
+            padding: 8px 16px;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .nav-link.active {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        /* Main Layout */
+        .main-container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: calc(100vh - 73px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 24px 16px;
+            position: sticky;
+            top: 73px;
+            height: calc(100vh - 73px);
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .sidebar-section {
+            margin-bottom: 24px;
+        }
+
+        .sidebar-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            padding: 0 12px;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .sidebar-link {
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-link:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .sidebar-link.active {
+            background: rgba(88, 166, 255, 0.15);
+            color: var(--accent-primary);
+        }
+
+        .sidebar-link i {
+            font-size: 18px;
+            opacity: 0.7;
+        }
+
+        /* Content */
+        .content {
+            flex: 1;
+            padding: 32px 48px;
+            max-width: 900px;
+            overflow-x: hidden;
+        }
+
+        .section {
+            margin-bottom: 64px;
+            scroll-margin-top: 100px;
+        }
+
+        .section-header {
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title i {
+            color: var(--accent-primary);
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        /* Component Card */
+        .component-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            margin-bottom: 32px;
+            overflow: hidden;
+        }
+
+        .component-header {
+            padding: 20px 24px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .component-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent-cyan);
+        }
+
+        .component-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-layout {
+            background: rgba(163, 113, 247, 0.2);
+            color: var(--accent-purple);
+        }
+
+        .badge-component {
+            background: rgba(63, 185, 80, 0.2);
+            color: var(--accent-green);
+        }
+
+        .badge-navigation {
+            background: rgba(247, 120, 186, 0.2);
+            color: var(--accent-pink);
+        }
+
+        .badge-overlay {
+            background: rgba(210, 153, 34, 0.2);
+            color: var(--accent-orange);
+        }
+
+        .component-body {
+            padding: 24px;
+        }
+
+        .component-desc {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        /* Props Table */
+        .props-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .props-table th {
+            text-align: left;
+            padding: 12px 16px;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .props-table th:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+
+        .props-table th:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+
+        .props-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: top;
+        }
+
+        .props-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .prop-name {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-primary);
+            font-weight: 500;
+        }
+
+        .prop-type {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-purple);
+            font-size: 12px;
+        }
+
+        .prop-default {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-orange);
+            font-size: 12px;
+        }
+
+        .prop-values {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 4px;
+        }
+
+        .prop-value {
+            padding: 2px 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--accent-green);
+        }
+
+        /* Code Block */
+        .code-block {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .code-title i {
+            color: var(--accent-primary);
+        }
+
+        .copy-btn {
+            padding: 6px 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+        }
+
+        .code-content {
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        .code-content pre {
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        /* Syntax Highlighting */
+        .keyword { color: var(--accent-purple); }
+        .function { color: var(--accent-primary); }
+        .string { color: var(--accent-green); }
+        .number { color: var(--accent-orange); }
+        .comment { color: var(--text-muted); font-style: italic; }
+        .property { color: var(--accent-cyan); }
+        .bracket { color: var(--text-secondary); }
+
+        /* Demo Preview */
+        .demo-preview {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .demo-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        /* Methods List */
+        .methods-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .method-item {
+            padding: 16px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            border-left: 3px solid var(--accent-purple);
+        }
+
+        .method-signature {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--accent-primary);
+            margin-bottom: 8px;
+        }
+
+        .method-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 48px 24px;
+            margin-bottom: 48px;
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-purple), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            color: var(--text-secondary);
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+
+        .hero-badges {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .hero-badge {
+            padding: 8px 16px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hero-badge i {
+            color: var(--accent-primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                display: none;
+            }
+
+            .content {
+                padding: 24px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero-title {
+                font-size: 28px;
+            }
+
+            .section-title {
+                font-size: 22px;
+            }
+
+            .props-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="bx bxl-android"></i>
+                </div>
+                <span class="logo-text">AndroidLayouts.js</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#layouts" class="nav-link active">Layouts</a>
+                <a href="#components" class="nav-link">Components</a>
+                <a href="#navigation" class="nav-link">Navigation</a>
+                <a href="#overlays" class="nav-link">Overlays</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Layouts</h3>
+                <nav class="sidebar-nav">
+                    <a href="#linear-layout" class="sidebar-link"><i class="bx bx-layout"></i> LinearLayout</a>
+                    <a href="#column-row" class="sidebar-link"><i class="bx bx-columns"></i> Column / Row</a>
+                    <a href="#grid-layout" class="sidebar-link"><i class="bx bx-grid-alt"></i> GridLayout</a>
+                    <a href="#constraint-layout" class="sidebar-link"><i class="bx bx-layer"></i> ConstraintLayout</a>
+                    <a href="#frame-layout" class="sidebar-link"><i class="bx bx-square"></i> FrameLayout</a>
+                    <a href="#scroll-view" class="sidebar-link"><i class="bx bx-expand-vertical"></i> ScrollView</a>
+                </nav>
+            </div>
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Components</h3>
+                <nav class="sidebar-nav">
+                    <a href="#text-view" class="sidebar-link"><i class="bx bx-text"></i> TextView</a>
+                    <a href="#material-button" class="sidebar-link"><i class="bx bx-pointer"></i> MaterialButton</a>
+                    <a href="#material-input" class="sidebar-link"><i class="bx bx-edit-alt"></i> MaterialInput</a>
+                    <a href="#material-switch" class="sidebar-link"><i class="bx bx-toggle-right"></i> MaterialSwitch</a>
+                    <a href="#card" class="sidebar-link"><i class="bx bx-card"></i> Card</a>
+                    <a href="#recycler-view" class="sidebar-link"><i class="bx bx-list-ul"></i> RecyclerView</a>
+                </nav>
+            </div>
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Navigation</h3>
+                <nav class="sidebar-nav">
+                    <a href="#tab-layout" class="sidebar-link"><i class="bx bx-tab"></i> TabLayout</a>
+                    <a href="#bottom-nav" class="sidebar-link"><i class="bx bx-navigation"></i> BottomNavigation</a>
+                    <a href="#toolbar" class="sidebar-link"><i class="bx bx-dock-top"></i> MaterialToolbar</a>
+                    <a href="#drawer" class="sidebar-link"><i class="bx bx-menu"></i> MaterialDrawer</a>
+                </nav>
+            </div>
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Overlays</h3>
+                <nav class="sidebar-nav">
+                    <a href="#dialog" class="sidebar-link"><i class="bx bx-message-square-dots"></i> MaterialDialog</a>
+                    <a href="#snackbar" class="sidebar-link"><i class="bx bx-bell"></i> Snackbar</a>
+                </nav>
+            </div>
+        </aside>
+
+        <main class="content" id="main-content">
+            <!-- Hero -->
+            <div class="hero">
+                <h1 class="hero-title">Jetpack Compose Style UI for JavaScript</h1>
+                <p class="hero-subtitle">Build beautiful Android-inspired user interfaces with a declarative, composable API. No HTML required.</p>
+                <div class="hero-badges">
+                    <span class="hero-badge"><i class="bx bx-code-block"></i> Declarative Syntax</span>
+                    <span class="hero-badge"><i class="bx bxl-android"></i> Material Design 3</span>
+                    <span class="hero-badge"><i class="bx bx-mobile"></i> Responsive</span>
+                    <span class="hero-badge"><i class="bx bx-moon"></i> Dark Mode</span>
+                </div>
+            </div>
+
+            <!-- LAYOUTS SECTION -->
+            <section id="layouts" class="section">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="bx bx-layout"></i> Layouts</h2>
+                    <p class="section-desc">Container components for organizing your UI elements with flexible positioning and sizing.</p>
+<div style="background: #f0f0f0; padding: 15px; margin: 20px 0; border-left: 4px solid #333;">
+  <h3>Required Scripts</h3>
+  <p>Add all these lightweight scripts before proceeding or leave out if obvious:</p>
+  <pre style="overflow-x: auto; white-space: nowrap;"><code>&lt;<br>script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/layouts.js"&gt;&lt;/script&gt;
+&lt;<br>script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/AndroidFramework.js"&gt;&lt;/script&gt;
+&lt;<br>script src="https://cdn.jsdelivr.net/gh/Terrehaught/js-jetpack-compose@main/js-jetpack-compose/material-views.js"&gt;&lt;/script&gt;
+&lt;<br>script src="https://cdn.jsdelivr.net/gh/Terrehaught/js-jetpack-compose@main/js-jetpack-compose/material-notifiers.js"&gt;&lt;/script&gt;
+&lt;<br>script src="https://cdn.jsdelivr.net/gh/Terrehaught/js-jetpack-compose@main/js-jetpack-compose/.Mainactivity.js"&gt;&lt;/script&gt;
+&lt;<br>script src="https://cdn.jsdelivr.net/gh/Terrehaught/js-jetpack-compose@main/js-jetpack-compose/bottom_nav.js"&gt;&lt;/script&gt;
+&lt;<br>script src="https://cdn.jsdelivr.net/gh/Terrehaught/js-jetpack-compose@main/js-jetpack-compose/drawer_tools.js"&gt;&lt;/script&gt;
+&lt;<br>script src="https://cdn.jsdelivr.net/gh/Terrehaught/js-jetpack-compose@main/js-jetpack-compose/tabs.js"&gt;&lt;/script&gt;</code></pre>
+</div>
+                </div>
+
+                <!-- LinearLayout -->
+                <div id="linear-layout" class="component-card">
+                    <div class="component-header">
+                        <span class="component-name">LinearLayout</span>
+                        <span class="component-badge badge-layout">Layout</span>
+                    </div>
+                    <div class="component-body">
+                        <p class="component-desc">
+                            A layout that arranges its children in a single row or column. The default orientation is vertical.
+                        </p>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Type</th>
+                                    <th>Default</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="prop-name">orientation</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">'vertical'</span></td>
+                                    <td>Direction of child arrangement
+                                        <div class="prop-values">
+                                            <span class="prop-value">'vertical'</span>
+                                            <span class="prop-value">'horizontal'</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">gravity</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">undefined</span></td>
+                                    <td>Alignment of children
+                                        <div class="prop-values">
+                                            <span class="prop-value">'center'</span>
+                                            <span class="prop-value">'start'</span>
+                                            <span class="prop-value">'end'</span>
+                                            <span class="prop-value">'center_horizontal'</span>
+                                            <span class="prop-value">'center_vertical'</span>
+                                            <span class="prop-value">'space_between'</span>
+                                            <span class="prop-value">'space_around'</span>
+                                            <span class="prop-value">'space_evenly'</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">width</span></td>
+                                    <td><span class="prop-type">string | number</span></td>
+                                    <td><span class="prop-default">undefined</span></td>
+                                    <td>Width of the layout
+                                        <div class="prop-values">
+                                            <span class="prop-value">'match_parent'</span>
+                                            <span class="prop-value">'wrap_content'</span>
+                                            <span class="prop-value">number (px)</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">height</span></td>
+                                    <td><span class="prop-type">string | number</span></td>
+                                    <td><span class="prop-default">undefined</span></td>
+                                    <td>Height of the layout (same values as width)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">gap</span></td>
+                                    <td><span class="prop-type">number</span></td>
+                                    <td><span class="prop-default">0</span></td>
+                                    <td>Space between children (in pixels)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">padding</span></td>
+                                    <td><span class="prop-type">number | object</span></td>
+                                    <td><span class="prop-default">undefined</span></td>
+                                    <td>Inner spacing. Object: { top, right, bottom, left, horizontal, vertical, all }</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">margin</span></td>
+                                    <td><span class="prop-type">number</span></td>
+                                    <td><span class="prop-default">undefined</span></td>
+                                    <td>Outer spacing (in pixels)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">background</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">undefined</span></td>
+                                    <td>CSS background value</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">wrap</span></td>
+                                    <td><span class="prop-type">boolean</span></td>
+                                    <td><span class="prop-default">false</span></td>
+                                    <td>Enable flex-wrap for children</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title"><i class="bx bxl-javascript"></i> Usage Example</span>
+                            </div>
+                            <div class="code-content">
+<pre><span class="keyword">const</span> { <span class="function">LinearLayout</span>, <span class="function">Column</span>, <span class="function">Row</span>, <span class="function">mount</span> } = <span class="property">AndroidLayouts</span>;
+<span class="keyword">const</span> { <span class="function">TextView</span>, <span class="function">MaterialButton</span> } = <span class="property">AndroidComponents</span>;
+
+<span class="comment">// Vertical LinearLayout</span>
+<span class="keyword">const</span> layout = <span class="function">LinearLayout</span>({
+  <span class="property">orientation</span>: <span class="string">'vertical'</span>,
+  <span class="property">width</span>: <span class="string">'match_parent'</span>,
+  <span class="property">padding</span>: <span class="number">16</span>,
+  <span class="property">gap</span>: <span class="number">12</span>,
+  <span class="property">gravity</span>: <span class="string">'center_horizontal'</span>
+}, [
+  <span class="function">TextView</span>({ <span class="property">text</span>: <span class="string">'Hello World'</span>, <span class="property">textSize</span>: <span class="number">24</span> }),
+  <span class="function">MaterialButton</span>({ <span class="property">text</span>: <span class="string">'Click Me'</span> })
+]);
+
+<span class="function">mount</span>(layout, <span class="string">'app'</span>);</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column / Row -->
+                <div id="column-row" class="component-card">
+                    <div class="component-header">
+                        <span class="component-name">Column / Row</span>
+                        <span class="component-badge badge-layout">Layout</span>
+                    </div>
+                    <div class="component-body">
+                        <p class="component-desc">
+                            Shorthand functions for vertical and horizontal LinearLayout. Same properties as LinearLayout.
+                        </p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title"><i class="bx bxl-javascript"></i> Usage Example</span>
+                            </div>
+                            <div class="code-content">
+<pre><span class="keyword">const</span> { <span class="function">Column</span>, <span class="function">Row</span> } = <span class="property">AndroidLayouts</span>;
+<span class="keyword">const</span> { <span class="function">TextView</span>, <span class="function">Icon</span> } = <span class="property">AndroidComponents</span>;
+
+<span class="comment">// Compose-style nesting</span>
+<span class="keyword">const</span> card = <span class="function">Column</span>({ <span class="property">padding</span>: <span class="number">16</span>, <span class="property">gap</span>: <span class="number">8</span> }, [
+  <span class="function">Row</span>({ <span class="property">gravity</span>: <span class="string">'center_vertical'</span>, <span class="property">gap</span>: <span class="number">12</span> }, [
+    <span class="function">Icon</span>({ <span class="property">name</span>: <span class="string">'bx bx-user'</span>, <span class="property">size</span>: <span class="number">24</span> }),
+    <span class="function">TextView</span>({ <span class="property">text</span>: <span class="string">'John Doe'</span>, <span class="property">textStyle</span>: <span class="string">'bold'</span> })
+  ]),
+  <span class="function">TextView</span>({ <span class="property">text</span>: <span class="string">'Software Engineer'</span>, <span class="property">textColor</span>: <span class="string">'#888'</span> })
+]);</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GridLayout -->
+                <div id="grid-layout" class="component-card">
+                    <div class="component-header">
+                        <span class="component-name">GridLayout</span>
+                        <span class="component-badge badge-layout">Layout</span>
+                    </div>
+                    <div class="component-body">
+                        <p class="component-desc">
+                            A layout that arranges children in a grid of rows and columns.
+                        </p>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Type</th>
+                                    <th>Default</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="prop-name">columns</span></td>
+                                    <td><span class="prop-type">number</span></td>
+                                    <td><span class="prop-default">2</span></td>
+                                    <td>Number of columns</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">rows</span></td>
+                                    <td><span class="prop-type">number</span></td>
+                                    <td><span class="prop-default">undefined</span></td>
+                                    <td>Number of rows (optional)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">gap</span></td>
+                                    <td><span class="prop-type">number</span></td>
+                                    <td><span class="prop-default">0</span></td>
+                                    <td>Gap between items</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">columnGap</span></td>
+                                    <td><span class="prop-type">number</span></td>
+                                    <td><span class="prop-default">undefined</span></td>
+                                    <td>Gap between columns</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">rowGap</span></td>
+                                    <td><span class="prop-type">number</span></td>
+                                    <td><span class="prop-default">undefined</span></td>
+                                    <td>Gap between rows</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">autoFlow</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">'row'</span></td>
+                                    <td>Grid auto flow
+                                        <div class="prop-values">
+                                            <span class="prop-value">'row'</span>
+                                            <span class="prop-value">'column'</span>
+                                            <span class="prop-value">'dense'</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title"><i class="bx bxl-javascript"></i> Usage Example</span>
+                            </div>
+                            <div class="code-content">
+<pre><span class="keyword">const</span> { <span class="function">GridLayout</span>, <span class="function">GridParams</span> } = <span class="property">AndroidLayouts</span>;
+<span class="keyword">const</span> { <span class="function">Card</span>, <span class="function">TextView</span> } = <span class="property">AndroidComponents</span>;
+
+<span class="keyword">const</span> grid = <span class="function">GridLayout</span>({
+  <span class="property">columns</span>: <span class="number">3</span>,
+  <span class="property">gap</span>: <span class="number">16</span>,
+  <span class="property">padding</span>: <span class="number">16</span>
+}, [
+  <span class="comment">// Regular item (1 column)</span>
+  <span class="function">Card</span>({}, [<span class="function">TextView</span>({ <span class="property">text</span>: <span class="string">'Item 1'</span> })]),
+
+  <span class="comment">// Span 2 columns</span>
+  <span class="function">GridParams</span>({ <span class="property">columnSpan</span>: <span class="number">2</span> },
+    <span class="function">Card</span>({}, [<span class="function">TextView</span>({ <span class="property">text</span>: <span class="string">'Wide Item'</span> })])
+  ),
+
+  <span class="comment">// Span 2 rows</span>
+  <span class="function">GridParams</span>({ <span class="property">rowSpan</span>: <span class="number">2</span> },
+    <span class="function">Card</span>({}, [<span class="function">TextView</span>({ <span class="property">text</span>: <span class="string">'Tall Item'</span> })])
+  )
+]);</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ConstraintLayout -->
+                <div id="constraint-layout" class="component-card">
+                    <div class="component-header">
+                        <span class="component-name">ConstraintLayout</span>
+                        <span class="component-badge badge-layout">Layout</span>
+                    </div>
+                    <div class="component-body">
+                        <p class="component-desc">
+                            A layout that positions children using constraints. Children are positioned absolutely relative to the container.
+                        </p>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr>
+                                    <th>Constraint Property</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="prop-name">top, right, bottom, left</span></td>
+                                    <td><span class="prop-type">number</span></td>
+                                    <td>Distance from parent edge</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">centerHorizontally</span></td>
+                                    <td><span class="prop-type">boolean</span></td>
+                                    <td>Center child horizontally</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">centerVertically</span></td>
+                                    <td><span class="prop-type">boolean</span></td>
+                                    <td>Center child vertically</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">width, height</span></td>
+                                    <td><span class="prop-type">string | number</span></td>
+                                    <td>Size. Use 'match_constraint' to fill between constraints</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title"><i class="bx bxl-javascript"></i> Usage Example</span>
+                            </div>
+                            <div class="code-content">
+<pre><span class="keyword">const</span> { <span class="function">ConstraintLayout</span>, <span class="function">Constrained</span> } = <span class="property">AndroidLayouts</span>;
+<span class="keyword">const</span> { <span class="function">MaterialButton</span>, <span class="function">TextView</span> } = <span class="property">AndroidComponents</span>;
+
+<span class="keyword">const</span> layout = <span class="function">ConstraintLayout</span>({
+  <span class="property">width</span>: <span class="string">'match_parent'</span>,
+  <span class="property">height</span>: <span class="number">300</span>
+}, [
+  <span class="comment">// Centered title</span>
+  <span class="function">Constrained</span>({ <span class="property">centerHorizontally</span>: <span class="keyword">true</span>, <span class="property">top</span>: <span class="number">20</span> },
+    <span class="function">TextView</span>({ <span class="property">text</span>: <span class="string">'Welcome'</span>, <span class="property">textSize</span>: <span class="number">32</span> })
+  ),
+
+  <span class="comment">// Button pinned to bottom-right</span>
+  <span class="function">Constrained</span>({ <span class="property">bottom</span>: <span class="number">16</span>, <span class="property">right</span>: <span class="number">16</span> },
+    <span class="function">MaterialButton</span>({ <span class="property">text</span>: <span class="string">'Continue'</span> })
+  )
+]);</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FrameLayout -->
+                <div id="frame-layout" class="component-card">
+                    <div class="component-header">
+                        <span class="component-name">FrameLayout</span>
+                        <span class="component-badge badge-layout">Layout</span>
+                    </div>
+                    <div class="component-body">
+                        <p class="component-desc">
+                            A layout for stacking children on top of each other. Use <code>Positioned</code> to place children.
+                        </p>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr>
+                                    <th>Position Property</th>
+                                    <th>Values</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="prop-name">gravity</span></td>
+                                    <td>
+                                        <div class="prop-values">
+                                            <span class="prop-value">'center'</span>
+                                            <span class="prop-value">'top'</span>
+                                            <span class="prop-value">'bottom'</span>
+                                            <span class="prop-value">'left'</span>
+                                            <span class="prop-value">'right'</span>
+                                            <span class="prop-value">'top_left'</span>
+                                            <span class="prop-value">'top_right'</span>
+                                            <span class="prop-value">'bottom_left'</span>
+                                            <span class="prop-value">'bottom_right'</span>
+                                        </div>
+                                    </td>
+                                    <td>Position preset for child</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">zIndex</span></td>
+                                    <td><span class="prop-type">number</span></td>
+                                    <td>Stack order of child</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title"><i class="bx bxl-javascript"></i> Usage Example</span>
+                            </div>
+                            <div class="code-content">
+<pre><span class="keyword">const</span> { <span class="function">FrameLayout</span>, <span class="function">Positioned</span> } = <span class="property">AndroidLayouts</span>;
+<span class="keyword">const</span> { <span class="function">Avatar</span>, <span class="function">Icon</span> } = <span class="property">AndroidComponents</span>;
+
+<span class="keyword">const</span> profilePic = <span class="function">FrameLayout</span>({
+  <span class="property">width</span>: <span class="number">80</span>,
+  <span class="property">height</span>: <span class="number">80</span>
+}, [
+  <span class="comment">// Avatar in center</span>
+  <span class="function">Positioned</span>({ <span class="property">gravity</span>: <span class="string">'center'</span> },
+    <span class="function">Avatar</span>({ <span class="property">size</span>: <span class="number">64</span>, <span class="property">text</span>: <span class="string">'JD'</span> })
+  ),
+
+  <span class="comment">// Status indicator in bottom-right</span>
+  <span class="function">Positioned</span>({ <span class="property">gravity</span>: <span class="string">'bottom_right'</span>, <span class="property">zIndex</span>: <span class="number">1</span> },
+    <span class="function">Icon</span>({ <span class="property">name</span>: <span class="string">'bx bxs-circle'</span>, <span class="property">size</span>: <span class="number">16</span>, <span class="property">color</span>: <span class="string">'#3fb950'</span> })
+  )
+]);</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ScrollView -->
+                <div id="scroll-view" class="component-card">
+                    <div class="component-header">
+                        <span class="component-name">ScrollView</span>
+                        <span class="component-badge badge-layout">Layout</span>
+                    </div>
+                    <div class="component-body">
+                        <p class="component-desc">
+                            A scrollable container. Also available as <code>EnhancedScrollView</code> with infinite scroll support.
+                        </p>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Type</th>
+                                    <th>Default</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="prop-name">orientation</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">'vertical'</span></td>
+                                    <td>Scroll direction: 'vertical' | 'horizontal'</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4 style="margin: 20px 0 12px; color: var(--text-primary);">Methods</h4>
+                        <div class="methods-list">
+                            <div class="method-item">
+                                <div class="method-signature">scrollTo(x, y)</div>
+                                <div class="method-desc">Scroll to specific position</div>
+                            </div>
+                            <div class="method-item">
+                                <div class="method-signature">scrollToTop()</div>
+                                <div class="method-desc">Scroll to the top</div>
+                            </div>
+                            <div class="method-item">
+                                <div class="method-signature">scrollToBottom()</div>
+                                <div class="method-desc">Scroll to the bottom</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- COMPONENTS SECTION -->
+            <section id="components" class="section">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="bx bx-cube"></i> Components</h2>
+                    <p class="section-desc">Material Design 3 UI components for building interactive interfaces.</p>
+                </div>
+
+                <!-- TextView -->
+                <div id="text-view" class="component-card">
+                    <div class="component-header">
+                        <span class="component-name">TextView</span>
+                        <span class="component-badge badge-component">Component</span>
+                    </div>
+                    <div class="component-body">
+                        <p class="component-desc">A component for displaying text with various styling options.</p>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Type</th>
+                                    <th>Default</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="prop-name">text</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">''</span></td>
+                                    <td>Text content to display</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">textSize</span></td>
+                                    <td><span class="prop-type">number</span></td>
+                                    <td><span class="prop-default">14</span></td>
+                                    <td>Font size in pixels</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">textColor</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">--md-on-surface</span></td>
+                                    <td>Text color (CSS color value)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">textStyle</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">'normal'</span></td>
+                                    <td>Font style
+                                        <div class="prop-values">
+                                            <span class="prop-value">'normal'</span>
+                                            <span class="prop-value">'bold'</span>
+                                            <span class="prop-value">'italic'</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">gravity</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">undefined</span></td>
+                                    <td>Text alignment: 'center' | 'end' | 'right'</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">maxLines</span></td>
+                                    <td><span class="prop-type">number</span></td>
+                                    <td><span class="prop-default">undefined</span></td>
+                                    <td>Maximum lines before truncation</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">ellipsize</span></td>
+                                    <td><span class="prop-type">boolean</span></td>
+                                    <td><span class="prop-default">false</span></td>
+                                    <td>Show ellipsis for overflow</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title"><i class="bx bxl-javascript"></i> Usage Example</span>
+                            </div>
+                            <div class="code-content">
+<pre><span class="keyword">const</span> { <span class="function">TextView</span> } = <span class="property">AndroidComponents</span>;
+
+<span class="keyword">const</span> title = <span class="function">TextView</span>({
+  <span class="property">text</span>: <span class="string">'Welcome Back!'</span>,
+  <span class="property">textSize</span>: <span class="number">32</span>,
+  <span class="property">textStyle</span>: <span class="string">'bold'</span>,
+  <span class="property">textColor</span>: <span class="string">'#6750a4'</span>,
+  <span class="property">gravity</span>: <span class="string">'center'</span>
+});
+
+<span class="comment">// Update text programmatically</span>
+title.<span class="function">setText</span>(<span class="string">'Hello, John!'</span>);</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MaterialButton -->
+                <div id="material-button" class="component-card">
+                    <div class="component-header">
+                        <span class="component-name">MaterialButton</span>
+                        <span class="component-badge badge-component">Component</span>
+                    </div>
+                    <div class="component-body">
+                        <p class="component-desc">A Material Design 3 button with multiple variants and states.</p>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Type</th>
+                                    <th>Default</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="prop-name">text</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">'Button'</span></td>
+                                    <td>Button label</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">variant</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">'filled'</span></td>
+                                    <td>Button style
+                                        <div class="prop-values">
+                                            <span class="prop-value">'filled'</span>
+                                            <span class="prop-value">'outlined'</span>
+                                            <span class="prop-value">'text'</span>
+                                            <span class="prop-value">'elevated'</span>
+                                            <span class="prop-value">'tonal'</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">size</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">'medium'</span></td>
+                                    <td>Button size
+                                        <div class="prop-values">
+                                            <span class="prop-value">'small'</span>
+                                            <span class="prop-value">'medium'</span>
+                                            <span class="prop-value">'large'</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">leadingIcon</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">undefined</span></td>
+                                    <td>Icon class before text (e.g., 'bx bx-plus')</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">trailingIcon</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">undefined</span></td>
+                                    <td>Icon class after text</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">iconOnly</span></td>
+                                    <td><span class="prop-type">boolean</span></td>
+                                    <td><span class="prop-default">false</span></td>
+                                    <td>Circular icon-only button</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">fullWidth</span></td>
+                                    <td><span class="prop-type">boolean</span></td>
+                                    <td><span class="prop-default">false</span></td>
+                                    <td>Full width button</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">disabled</span></td>
+                                    <td><span class="prop-type">boolean</span></td>
+                                    <td><span class="prop-default">false</span></td>
+                                    <td>Disable button</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">color</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">undefined</span></td>
+                                    <td>Custom color (hex)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">onClick</span></td>
+                                    <td><span class="prop-type">function</span></td>
+                                    <td><span class="prop-default">undefined</span></td>
+                                    <td>Click handler</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4 style="margin: 20px 0 12px; color: var(--text-primary);">Methods</h4>
+                        <div class="methods-list">
+                            <div class="method-item">
+                                <div class="method-signature">setLoading(isLoading, loadingText?)</div>
+                                <div class="method-desc">Show loading spinner with optional text</div>
+                            </div>
+                            <div class="method-item">
+                                <div class="method-signature">setDisabled(disabled)</div>
+                                <div class="method-desc">Enable or disable the button</div>
+                            </div>
+                            <div class="method-item">
+                                <div class="method-signature">setText(text)</div>
+                                <div class="method-desc">Update button text</div>
+                            </div>
+                        </div>
+
+                        <div class="code-block" style="margin-top: 20px;">
+                            <div class="code-header">
+                                <span class="code-title"><i class="bx bxl-javascript"></i> Usage Example</span>
+                            </div>
+                            <div class="code-content">
+<pre><span class="keyword">const</span> { <span class="function">MaterialButton</span> } = <span class="property">AndroidComponents</span>;
+
+<span class="comment">// Filled button with icon</span>
+<span class="keyword">const</span> saveBtn = <span class="function">MaterialButton</span>({
+  <span class="property">text</span>: <span class="string">'Save Changes'</span>,
+  <span class="property">variant</span>: <span class="string">'filled'</span>,
+  <span class="property">leadingIcon</span>: <span class="string">'bx bx-save'</span>,
+  <span class="property">onClick</span>: <span class="keyword">async</span> () => {
+    saveBtn.<span class="function">setLoading</span>(<span class="keyword">true</span>, <span class="string">'Saving...'</span>);
+    <span class="keyword">await</span> <span class="function">saveData</span>();
+    saveBtn.<span class="function">setLoading</span>(<span class="keyword">false</span>);
+  }
+});
+
+<span class="comment">// Icon-only FAB</span>
+<span class="keyword">const</span> fab = <span class="function">MaterialButton</span>({
+  <span class="property">leadingIcon</span>: <span class="string">'bx bx-plus'</span>,
+  <span class="property">iconOnly</span>: <span class="keyword">true</span>,
+  <span class="property">size</span>: <span class="string">'large'</span>,
+  <span class="property">variant</span>: <span class="string">'filled'</span>
+});</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MaterialInput -->
+                <div id="material-input" class="component-card">
+                    <div class="component-header">
+                        <span class="component-name">MaterialInput</span>
+                        <span class="component-badge badge-component">Component</span>
+                    </div>
+                    <div class="component-body">
+                        <p class="component-desc">A Material Design text input field with floating label and validation.</p>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Type</th>
+                                    <th>Default</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="prop-name">label</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">'Label'</span></td>
+                                    <td>Floating label text</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">type</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">'text'</span></td>
+                                    <td>Input type
+                                        <div class="prop-values">
+                                            <span class="prop-value">'text'</span>
+                                            <span class="prop-value">'password'</span>
+                                            <span class="prop-value">'email'</span>
+                                            <span class="prop-value">'number'</span>
+                                            <span class="prop-value">'tel'</span>
+                                            <span class="prop-value">'url'</span>
+                                            <span class="prop-value">'textarea'</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">value</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">''</span></td>
+                                    <td>Initial value</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">helperText</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">''</span></td>
+                                    <td>Helper text below input</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">leadingIcon</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">null</span></td>
+                                    <td>Icon class (e.g., 'bx bx-user')</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">maxLength</span></td>
+                                    <td><span class="prop-type">number</span></td>
+                                    <td><span class="prop-default">null</span></td>
+                                    <td>Maximum character length</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">showCounter</span></td>
+                                    <td><span class="prop-type">boolean</span></td>
+                                    <td><span class="prop-default">false</span></td>
+                                    <td>Show character counter</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">required</span></td>
+                                    <td><span class="prop-type">boolean</span></td>
+                                    <td><span class="prop-default">false</span></td>
+                                    <td>Mark as required field</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">passwordToggle</span></td>
+                                    <td><span class="prop-type">boolean</span></td>
+                                    <td><span class="prop-default">true</span></td>
+                                    <td>Show/hide password toggle</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4 style="margin: 20px 0 12px; color: var(--text-primary);">Methods</h4>
+                        <div class="methods-list">
+                            <div class="method-item">
+                                <div class="method-signature">getValue() → string</div>
+                                <div class="method-desc">Get current input value</div>
+                            </div>
+                            <div class="method-item">
+                                <div class="method-signature">setValue(value)</div>
+                                <div class="method-desc">Set input value</div>
+                            </div>
+                            <div class="method-item">
+                                <div class="method-signature">setError(message)</div>
+                                <div class="method-desc">Show error state with message</div>
+                            </div>
+                            <div class="method-item">
+                                <div class="method-signature">setSuccess(message)</div>
+                                <div class="method-desc">Show success state with message</div>
+                            </div>
+                            <div class="method-item">
+                                <div class="method-signature">validate() → boolean</div>
+                                <div class="method-desc">Validate input and show errors</div>
+                            </div>
+                            <div class="method-item">
+                                <div class="method-signature">reset()</div>
+                                <div class="method-desc">Clear value and state</div>
+                            </div>
+                        </div>
+
+                        <div class="code-block" style="margin-top: 20px;">
+                            <div class="code-header">
+                                <span class="code-title"><i class="bx bxl-javascript"></i> Usage Example</span>
+                            </div>
+                            <div class="code-content">
+<pre><span class="keyword">const</span> { <span class="function">MaterialInput</span> } = <span class="property">AndroidComponents</span>;
+
+<span class="keyword">const</span> emailInput = <span class="function">MaterialInput</span>({
+  <span class="property">label</span>: <span class="string">'Email Address'</span>,
+  <span class="property">type</span>: <span class="string">'email'</span>,
+  <span class="property">leadingIcon</span>: <span class="string">'bx bx-envelope'</span>,
+  <span class="property">helperText</span>: <span class="string">'We will never share your email'</span>,
+  <span class="property">required</span>: <span class="keyword">true</span>,
+  <span class="property">onInput</span>: (value) => <span class="function">console.log</span>(value),
+  <span class="property">onBlur</span>: (value) => {
+    <span class="keyword">if</span> (!value.<span class="function">includes</span>(<span class="string">'@'</span>)) {
+      emailInput.<span class="function">setError</span>(<span class="string">'Invalid email format'</span>);
+    } <span class="keyword">else</span> {
+      emailInput.<span class="function">setSuccess</span>(<span class="string">'Looks good!'</span>);
+    }
+  }
+});</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MaterialSwitch -->
+                <div id="material-switch" class="component-card">
+                    <div class="component-header">
+                        <span class="component-name">MaterialSwitch</span>
+                        <span class="component-badge badge-component">Component</span>
+                    </div>
+                    <div class="component-body">
+                        <p class="component-desc">A Material Design toggle switch component.</p>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Type</th>
+                                    <th>Default</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="prop-name">checked</span></td>
+                                    <td><span class="prop-type">boolean</span></td>
+                                    <td><span class="prop-default">false</span></td>
+                                    <td>Initial checked state</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">label</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">''</span></td>
+                                    <td>Label text</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">labelPosition</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">'right'</span></td>
+                                    <td>Label position: 'left' | 'right'</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">showIcon</span></td>
+                                    <td><span class="prop-type">boolean</span></td>
+                                    <td><span class="prop-default">true</span></td>
+                                    <td>Show check icon when on</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">disabled</span></td>
+                                    <td><span class="prop-type">boolean</span></td>
+                                    <td><span class="prop-default">false</span></td>
+                                    <td>Disable switch</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">onChange</span></td>
+                                    <td><span class="prop-type">function</span></td>
+                                    <td><span class="prop-default">undefined</span></td>
+                                    <td>Callback when toggled (receives boolean)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="code-block" style="margin-top: 20px;">
+                            <div class="code-header">
+                                <span class="code-title"><i class="bx bxl-javascript"></i> Usage Example</span>
+                            </div>
+                            <div class="code-content">
+<pre><span class="keyword">const</span> { <span class="function">MaterialSwitch</span> } = <span class="property">AndroidComponents</span>;
+
+<span class="keyword">const</span> darkModeSwitch = <span class="function">MaterialSwitch</span>({
+  <span class="property">label</span>: <span class="string">'Dark Mode'</span>,
+  <span class="property">checked</span>: <span class="keyword">false</span>,
+  <span class="property">onChange</span>: (isChecked) => {
+    document.documentElement.<span class="property">classList</span>.<span class="function">toggle</span>(<span class="string">'dark'</span>, isChecked);
+  }
+});</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card -->
+                <div id="card" class="component-card">
+                    <div class="component-header">
+                        <span class="component-name">Card</span>
+                        <span class="component-badge badge-component">Component</span>
+                    </div>
+                    <div class="component-body">
+                        <p class="component-desc">A Material Design card container with elevation and styling options.</p>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Type</th>
+                                    <th>Default</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="prop-name">variant</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">'elevated'</span></td>
+                                    <td>Card style
+                                        <div class="prop-values">
+                                            <span class="prop-value">'elevated'</span>
+                                            <span class="prop-value">'filled'</span>
+                                            <span class="prop-value">'outlined'</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">elevation</span></td>
+                                    <td><span class="prop-type">number</span></td>
+                                    <td><span class="prop-default">1</span></td>
+                                    <td>Shadow depth (1-5)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">cornerRadius</span></td>
+                                    <td><span class="prop-type">number</span></td>
+                                    <td><span class="prop-default">12</span></td>
+                                    <td>Border radius in pixels</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">onClick</span></td>
+                                    <td><span class="prop-type">function</span></td>
+                                    <td><span class="prop-default">undefined</span></td>
+                                    <td>Makes card clickable</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="code-block" style="margin-top: 20px;">
+                            <div class="code-header">
+                                <span class="code-title"><i class="bx bxl-javascript"></i> Usage Example</span>
+                            </div>
+                            <div class="code-content">
+<pre><span class="keyword">const</span> { <span class="function">Card</span>, <span class="function">TextView</span>, <span class="function">Avatar</span> } = <span class="property">AndroidComponents</span>;
+<span class="keyword">const</span> { <span class="function">Row</span>, <span class="function">Column</span> } = <span class="property">AndroidLayouts</span>;
+
+<span class="keyword">const</span> userCard = <span class="function">Card</span>({
+  <span class="property">variant</span>: <span class="string">'outlined'</span>,
+  <span class="property">padding</span>: <span class="number">16</span>,
+  <span class="property">onClick</span>: () => <span class="function">showProfile</span>()
+}, [
+  <span class="function">Row</span>({ <span class="property">gap</span>: <span class="number">16</span>, <span class="property">gravity</span>: <span class="string">'center_vertical'</span> }, [
+    <span class="function">Avatar</span>({ <span class="property">text</span>: <span class="string">'JD'</span>, <span class="property">size</span>: <span class="number">48</span> }),
+    <span class="function">Column</span>({ <span class="property">gap</span>: <span class="number">4</span> }, [
+      <span class="function">TextView</span>({ <span class="property">text</span>: <span class="string">'John Doe'</span>, <span class="property">textStyle</span>: <span class="string">'bold'</span> }),
+      <span class="function">TextView</span>({ <span class="property">text</span>: <span class="string">'@johndoe'</span>, <span class="property">textSize</span>: <span class="number">12</span> })
+    ])
+  ])
+]);</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RecyclerView -->
+                <div id="recycler-view" class="component-card">
+                    <div class="component-header">
+                        <span class="component-name">RecyclerView</span>
+                        <span class="component-badge badge-component">Component</span>
+                    </div>
+                    <div class="component-body">
+                        <p class="component-desc">An efficient list/grid component with view recycling, infinite scroll, and empty/loading states.</p>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Type</th>
+                                    <th>Default</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="prop-name">data</span></td>
+                                    <td><span class="prop-type">array</span></td>
+                                    <td><span class="prop-default">[]</span></td>
+                                    <td>Array of data items</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">adapter</span></td>
+                                    <td><span class="prop-type">function</span></td>
+                                    <td><span class="prop-default">null</span></td>
+                                    <td>Function (item, index) => component</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">layoutManager</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">'linear'</span></td>
+                                    <td>Layout type: 'linear' | 'grid'</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">gridColumns</span></td>
+                                    <td><span class="prop-type">number</span></td>
+                                    <td><span class="prop-default">2</span></td>
+                                    <td>Columns when using grid layout</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">divider</span></td>
+                                    <td><span class="prop-type">boolean</span></td>
+                                    <td><span class="prop-default">false</span></td>
+                                    <td>Show dividers between items</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">onLoadMore</span></td>
+                                    <td><span class="prop-type">function</span></td>
+                                    <td><span class="prop-default">null</span></td>
+                                    <td>Async function for infinite scroll</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">emptyText</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">'No items'</span></td>
+                                    <td>Text shown when empty</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">emptyIcon</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">'bx bx-inbox'</span></td>
+                                    <td>Icon shown when empty</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="code-block" style="margin-top: 20px;">
+                            <div class="code-header">
+                                <span class="code-title"><i class="bx bxl-javascript"></i> Usage Example</span>
+                            </div>
+                            <div class="code-content">
+<pre><span class="keyword">const</span> { <span class="function">RecyclerView</span>, <span class="function">Card</span>, <span class="function">TextView</span> } = <span class="property">AndroidComponents</span>;
+<span class="keyword">const</span> { <span class="function">Row</span> } = <span class="property">AndroidLayouts</span>;
+
+<span class="keyword">const</span> userList = <span class="function">RecyclerView</span>({
+  <span class="property">data</span>: users,
+  <span class="property">height</span>: <span class="number">400</span>,
+  <span class="property">divider</span>: <span class="keyword">true</span>,
+  <span class="property">emptyText</span>: <span class="string">'No users found'</span>,
+
+  <span class="comment">// Adapter renders each item</span>
+  <span class="property">adapter</span>: (user, index) =>
+    <span class="function">Card</span>({ <span class="property">padding</span>: <span class="number">12</span> }, [
+      <span class="function">Row</span>({ <span class="property">gap</span>: <span class="number">12</span> }, [
+        <span class="function">Avatar</span>({ <span class="property">text</span>: user.name }),
+        <span class="function">TextView</span>({ <span class="property">text</span>: user.name })
+      ])
+    ]),
+
+  <span class="comment">// Infinite scroll</span>
+  <span class="property">onLoadMore</span>: <span class="keyword">async</span> (offset) => {
+    <span class="keyword">const</span> moreUsers = <span class="keyword">await</span> <span class="function">fetchUsers</span>(offset);
+    <span class="keyword">return</span> { <span class="property">data</span>: moreUsers, <span class="property">hasMore</span>: moreUsers.length > <span class="number">0</span> };
+  }
+});</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- NAVIGATION SECTION -->
+            <section id="navigation" class="section">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="bx bx-navigation"></i> Navigation</h2>
+                    <p class="section-desc">Components for app navigation including tabs, toolbars, and drawers.</p>
+                </div>
+
+                <!-- TabLayout -->
+                <div id="tab-layout" class="component-card">
+                    <div class="component-header">
+                        <span class="component-name">TabLayout</span>
+                        <span class="component-badge badge-navigation">Navigation</span>
+                    </div>
+                    <div class="component-body">
+                        <p class="component-desc">A tabbed interface with swipe support and animated indicator.</p>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Type</th>
+                                    <th>Default</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="prop-name">tabs</span></td>
+                                    <td><span class="prop-type">array</span></td>
+                                    <td><span class="prop-default">[]</span></td>
+                                    <td>Tab items: [{ text, icon?, badge? }]</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">pages</span></td>
+                                    <td><span class="prop-type">array</span></td>
+                                    <td><span class="prop-default">[]</span></td>
+                                    <td>Page content for each tab</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">mode</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">'fixed'</span></td>
+                                    <td>Tab mode: 'fixed' | 'scrollable'</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">orientation</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">'horizontal'</span></td>
+                                    <td>Layout: 'horizontal' | 'vertical'</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">style</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">'primary'</span></td>
+                                    <td>Visual style: 'primary' | 'secondary'</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">swipeable</span></td>
+                                    <td><span class="prop-type">boolean</span></td>
+                                    <td><span class="prop-default">true</span></td>
+                                    <td>Enable swipe gestures</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">lazyLoad</span></td>
+                                    <td><span class="prop-type">boolean</span></td>
+                                    <td><span class="prop-default">false</span></td>
+                                    <td>Lazy load page content</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="code-block" style="margin-top: 20px;">
+                            <div class="code-header">
+                                <span class="code-title"><i class="bx bxl-javascript"></i> Usage Example</span>
+                            </div>
+                            <div class="code-content">
+<pre><span class="keyword">const</span> { <span class="function">TabLayout</span> } = <span class="property">AndroidComponents</span>;
+<span class="keyword">const</span> { <span class="function">Column</span>, <span class="function">TextView</span> } = <span class="property">AndroidLayouts</span>;
+
+<span class="keyword">const</span> tabLayout = <span class="function">TabLayout</span>({
+  <span class="property">tabs</span>: [
+    { <span class="property">text</span>: <span class="string">'Home'</span>, <span class="property">icon</span>: <span class="string">'bx bx-home'</span> },
+    { <span class="property">text</span>: <span class="string">'Explore'</span>, <span class="property">icon</span>: <span class="string">'bx bx-compass'</span> },
+    { <span class="property">text</span>: <span class="string">'Profile'</span>, <span class="property">icon</span>: <span class="string">'bx bx-user'</span>, <span class="property">badge</span>: <span class="string">'3'</span> }
+  ],
+  <span class="property">pages</span>: [
+    <span class="function">Column</span>({}, [<span class="function">TextView</span>({ <span class="property">text</span>: <span class="string">'Home Content'</span> })]),
+    <span class="function">Column</span>({}, [<span class="function">TextView</span>({ <span class="property">text</span>: <span class="string">'Explore Content'</span> })]),
+    <span class="function">Column</span>({}, [<span class="function">TextView</span>({ <span class="property">text</span>: <span class="string">'Profile Content'</span> })])
+  ],
+  <span class="property">style</span>: <span class="string">'secondary'</span>,
+  <span class="property">onTabSelected</span>: (index, tab) => <span class="function">console.log</span>(<span class="string">'Selected:'</span>, tab.text)
+});</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BottomNavigation -->
+                <div id="bottom-nav" class="component-card">
+                    <div class="component-header">
+                        <span class="component-name">BottomNavigation</span>
+                        <span class="component-badge badge-navigation">Navigation</span>
+                    </div>
+                    <div class="component-body">
+                        <p class="component-desc">A Material Design bottom navigation bar with icon animation.</p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title"><i class="bx bxl-javascript"></i> Usage Example</span>
+                            </div>
+                            <div class="code-content">
+<pre><span class="keyword">const</span> { <span class="function">BottomNavigation</span> } = <span class="property">AndroidComponents</span>;
+
+<span class="keyword">const</span> bottomNav = <span class="function">BottomNavigation</span>()
+  .<span class="function">setItems</span>([
+    { <span class="property">id</span>: <span class="string">'home'</span>, <span class="property">name</span>: <span class="string">'Home'</span>, <span class="property">icon</span>: <span class="string">'bx bx-home'</span> },
+    { <span class="property">id</span>: <span class="string">'search'</span>, <span class="property">name</span>: <span class="string">'Search'</span>, <span class="property">icon</span>: <span class="string">'bx bx-search'</span> },
+    { <span class="property">id</span>: <span class="string">'notif'</span>, <span class="property">name</span>: <span class="string">'Notifications'</span>, <span class="property">icon</span>: <span class="string">'bx bx-bell'</span>, <span class="property">badge</span>: <span class="string">'5'</span> },
+    { <span class="property">id</span>: <span class="string">'profile'</span>, <span class="property">name</span>: <span class="string">'Profile'</span>, <span class="property">icon</span>: <span class="string">'bx bx-user'</span> }
+  ])
+  .<span class="function">setOnItemSelect</span>((id) => <span class="function">navigateTo</span>(id))
+  .<span class="function">setItemColor</span>(<span class="string">'#6750a4'</span>)
+  .<span class="function">show</span>();
+
+<span class="comment">// Update badge dynamically</span>
+bottomNav.<span class="function">setBadge</span>(<span class="string">'notif'</span>, <span class="string">'10'</span>);</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MaterialToolbar -->
+                <div id="toolbar" class="component-card">
+                    <div class="component-header">
+                        <span class="component-name">MaterialToolbar</span>
+                        <span class="component-badge badge-navigation">Navigation</span>
+                    </div>
+                    <div class="component-body">
+                        <p class="component-desc">A top app bar with navigation icon, title, and action buttons.</p>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="prop-name">title</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td>Toolbar title text</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">navigationIcon</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td>Left icon class (e.g., 'bx bx-menu')</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">onNavigationClick</span></td>
+                                    <td><span class="prop-type">function</span></td>
+                                    <td>Navigation icon click handler</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">actions</span></td>
+                                    <td><span class="prop-type">array</span></td>
+                                    <td>[{ icon, label?, badge?, onClick }]</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">overflowMenu</span></td>
+                                    <td><span class="prop-type">array</span></td>
+                                    <td>[{ text, icon?, onClick }]</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="code-block" style="margin-top: 20px;">
+                            <div class="code-header">
+                                <span class="code-title"><i class="bx bxl-javascript"></i> Usage Example</span>
+                            </div>
+                            <div class="code-content">
+<pre><span class="keyword">const</span> { <span class="function">MaterialToolbar</span>, <span class="function">MaterialDrawer</span> } = <span class="property">AndroidComponents</span>;
+
+<span class="keyword">const</span> drawer = <span class="function">MaterialDrawer</span>({ <span class="comment">/* ... */</span> });
+
+<span class="keyword">const</span> toolbar = <span class="function">MaterialToolbar</span>({
+  <span class="property">title</span>: <span class="string">'My App'</span>,
+  <span class="property">navigationIcon</span>: <span class="string">'bx bx-menu'</span>,
+  <span class="property">onNavigationClick</span>: () => drawer.<span class="function">open</span>(),
+  <span class="property">actions</span>: [
+    { <span class="property">icon</span>: <span class="string">'bx bx-search'</span>, <span class="property">onClick</span>: () => <span class="function">openSearch</span>() },
+    { <span class="property">icon</span>: <span class="string">'bx bx-bell'</span>, <span class="property">badge</span>: <span class="string">'3'</span>, <span class="property">onClick</span>: () => <span class="function">openNotifs</span>() }
+  ],
+  <span class="property">overflowMenu</span>: [
+    { <span class="property">text</span>: <span class="string">'Settings'</span>, <span class="property">icon</span>: <span class="string">'bx bx-cog'</span>, <span class="property">onClick</span>: () => <span class="function">openSettings</span>() },
+    { <span class="property">text</span>: <span class="string">'About'</span>, <span class="property">icon</span>: <span class="string">'bx bx-info-circle'</span>, <span class="property">onClick</span>: () => <span class="function">showAbout</span>() }
+  ]
+});</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MaterialDrawer -->
+                <div id="drawer" class="component-card">
+                    <div class="component-header">
+                        <span class="component-name">MaterialDrawer</span>
+                        <span class="component-badge badge-navigation">Navigation</span>
+                    </div>
+                    <div class="component-body">
+                        <p class="component-desc">A slide-out navigation drawer with header, sections, and custom content.</p>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Type</th>
+                                    <th>Default</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="prop-name">position</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">'left'</span></td>
+                                    <td>Slide direction: 'left' | 'right'</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">fullWidth</span></td>
+                                    <td><span class="prop-type">boolean</span></td>
+                                    <td><span class="prop-default">false</span></td>
+                                    <td>Full width drawer</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">header</span></td>
+                                    <td><span class="prop-type">string | object | element</span></td>
+                                    <td><span class="prop-default">null</span></td>
+                                    <td>Header: string, { title, subtitle }, or custom element</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">items</span></td>
+                                    <td><span class="prop-type">array</span></td>
+                                    <td><span class="prop-default">[]</span></td>
+                                    <td>Menu items (see example)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="code-block" style="margin-top: 20px;">
+                            <div class="code-header">
+                                <span class="code-title"><i class="bx bxl-javascript"></i> Usage Example</span>
+                            </div>
+                            <div class="code-content">
+<pre><span class="keyword">const</span> { <span class="function">MaterialDrawer</span> } = <span class="property">AndroidComponents</span>;
+
+<span class="keyword">const</span> drawer = <span class="function">MaterialDrawer</span>({
+  <span class="property">header</span>: { <span class="property">title</span>: <span class="string">'My App'</span>, <span class="property">subtitle</span>: <span class="string">'user@example.com'</span> },
+  <span class="property">items</span>: [
+    { <span class="property">type</span>: <span class="string">'section'</span>, <span class="property">title</span>: <span class="string">'Main'</span>, <span class="property">items</span>: [
+      { <span class="property">id</span>: <span class="string">'home'</span>, <span class="property">text</span>: <span class="string">'Home'</span>, <span class="property">icon</span>: <span class="string">'bx bx-home'</span> },
+      { <span class="property">id</span>: <span class="string">'inbox'</span>, <span class="property">text</span>: <span class="string">'Inbox'</span>, <span class="property">icon</span>: <span class="string">'bx bx-inbox'</span>, <span class="property">badge</span>: <span class="string">'5'</span> }
+    ]},
+    { <span class="property">type</span>: <span class="string">'divider'</span> },
+    { <span class="property">type</span>: <span class="string">'section'</span>, <span class="property">title</span>: <span class="string">'Settings'</span>, <span class="property">items</span>: [
+      { <span class="property">id</span>: <span class="string">'settings'</span>, <span class="property">text</span>: <span class="string">'Settings'</span>, <span class="property">icon</span>: <span class="string">'bx bx-cog'</span> }
+    ]}
+  ],
+  <span class="property">onItemClick</span>: (id) => <span class="function">navigateTo</span>(id)
+});
+
+drawer.<span class="function">open</span>();  <span class="comment">// Open drawer</span>
+drawer.<span class="function">close</span>(); <span class="comment">// Close drawer</span></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- OVERLAYS SECTION -->
+            <section id="overlays" class="section">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="bx bx-message-square-dots"></i> Overlays</h2>
+                    <p class="section-desc">Modal dialogs and notification components.</p>
+                </div>
+
+                <!-- MaterialDialog -->
+                <div id="dialog" class="component-card">
+                    <div class="component-header">
+                        <span class="component-name">MaterialDialog</span>
+                        <span class="component-badge badge-overlay">Overlay</span>
+                    </div>
+                    <div class="component-body">
+                        <p class="component-desc">A Material Design dialog with builder pattern. Supports alert, confirm, prompt, and custom content.</p>
+
+                        <h4 style="margin: 20px 0 12px; color: var(--text-primary);">Builder Methods</h4>
+                        <div class="methods-list">
+                            <div class="method-item">
+                                <div class="method-signature">setTitle(title) → this</div>
+                                <div class="method-desc">Set dialog title</div>
+                            </div>
+                            <div class="method-item">
+                                <div class="method-signature">setMessage(message) → this</div>
+                                <div class="method-desc">Set dialog message</div>
+                            </div>
+                            <div class="method-item">
+                                <div class="method-signature">setIcon(iconClass) → this</div>
+                                <div class="method-desc">Set header icon</div>
+                            </div>
+                            <div class="method-item">
+                                <div class="method-signature">setView(element) → this</div>
+                                <div class="method-desc">Set custom content</div>
+                            </div>
+                            <div class="method-item">
+                                <div class="method-signature">setPositiveButton(text, callback?, options?) → this</div>
+                                <div class="method-desc">Add confirm button. Options: { style: 'filled'|'text'|'tonal', error: boolean }</div>
+                            </div>
+                            <div class="method-item">
+                                <div class="method-signature">setNegativeButton(text, callback?, options?) → this</div>
+                                <div class="method-desc">Add cancel button</div>
+                            </div>
+                            <div class="method-item">
+                                <div class="method-signature">show() → this</div>
+                                <div class="method-desc">Display the dialog</div>
+                            </div>
+                            <div class="method-item">
+                                <div class="method-signature">dismiss()</div>
+                                <div class="method-desc">Close the dialog</div>
+                            </div>
+                        </div>
+
+                        <h4 style="margin: 24px 0 12px; color: var(--text-primary);">Static Helpers</h4>
+                        <div class="methods-list">
+                            <div class="method-item">
+                                <div class="method-signature">MaterialDialog.alert(title, message, options?)</div>
+                                <div class="method-desc">Show simple alert dialog</div>
+                            </div>
+                            <div class="method-item">
+                                <div class="method-signature">MaterialDialog.confirm(title, message, options?)</div>
+                                <div class="method-desc">Show confirmation dialog with cancel/confirm buttons</div>
+                            </div>
+                            <div class="method-item">
+                                <div class="method-signature">MaterialDialog.prompt(title, message, options?)</div>
+                                <div class="method-desc">Show input dialog with text field</div>
+                            </div>
+                        </div>
+
+                        <div class="code-block" style="margin-top: 20px;">
+                            <div class="code-header">
+                                <span class="code-title"><i class="bx bxl-javascript"></i> Usage Example</span>
+                            </div>
+                            <div class="code-content">
+<pre><span class="keyword">const</span> { <span class="function">MaterialDialog</span> } = <span class="property">AndroidComponents</span>;
+
+<span class="comment">// Simple alert</span>
+<span class="property">MaterialDialog</span>.<span class="function">alert</span>(<span class="string">'Success'</span>, <span class="string">'Your changes have been saved!'</span>);
+
+<span class="comment">// Confirmation dialog</span>
+<span class="property">MaterialDialog</span>.<span class="function">confirm</span>(<span class="string">'Delete Item'</span>, <span class="string">'This action cannot be undone.'</span>, {
+  <span class="property">confirmText</span>: <span class="string">'Delete'</span>,
+  <span class="property">confirmStyle</span>: <span class="string">'filled'</span>,
+  <span class="property">confirmError</span>: <span class="keyword">true</span>,
+  <span class="property">onConfirm</span>: () => <span class="function">deleteItem</span>()
+});
+
+<span class="comment">// Prompt dialog</span>
+<span class="property">MaterialDialog</span>.<span class="function">prompt</span>(<span class="string">'Rename'</span>, <span class="string">'Enter a new name:'</span>, {
+  <span class="property">placeholder</span>: <span class="string">'New name'</span>,
+  <span class="property">defaultValue</span>: <span class="string">'Document'</span>,
+  <span class="property">onConfirm</span>: (value) => <span class="function">rename</span>(value)
+});
+
+<span class="comment">// Builder pattern with custom content</span>
+<span class="function">MaterialDialog</span>({ <span class="property">icon</span>: <span class="string">'bx bx-cog'</span> })
+  .<span class="function">setTitle</span>(<span class="string">'Settings'</span>)
+  .<span class="function">setView</span>(settingsForm)
+  .<span class="function">setNegativeButton</span>(<span class="string">'Cancel'</span>)
+  .<span class="function">setPositiveButton</span>(<span class="string">'Save'</span>, <span class="function">saveSettings</span>, { <span class="property">style</span>: <span class="string">'filled'</span> })
+  .<span class="function">show</span>();</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Snackbar -->
+                <div id="snackbar" class="component-card">
+                    <div class="component-header">
+                        <span class="component-name">Snackbar</span>
+                        <span class="component-badge badge-overlay">Overlay</span>
+                    </div>
+                    <div class="component-body">
+                        <p class="component-desc">A brief message that appears at the bottom of the screen with optional action.</p>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Type</th>
+                                    <th>Default</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="prop-name">message</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">''</span></td>
+                                    <td>Message text</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">duration</span></td>
+                                    <td><span class="prop-type">number</span></td>
+                                    <td><span class="prop-default">4000</span></td>
+                                    <td>Display time in ms (0 = infinite)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">position</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">'bottom'</span></td>
+                                    <td>Position: 'bottom' | 'top'</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">type</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">'default'</span></td>
+                                    <td>Style: 'default' | 'error' | 'success'</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">action</span></td>
+                                    <td><span class="prop-type">object</span></td>
+                                    <td><span class="prop-default">null</span></td>
+                                    <td>{ text, onClick }</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">showClose</span></td>
+                                    <td><span class="prop-type">boolean</span></td>
+                                    <td><span class="prop-default">false</span></td>
+                                    <td>Show close button</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">icon</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">null</span></td>
+                                    <td>Leading icon class</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4 style="margin: 24px 0 12px; color: var(--text-primary);">Static Helpers</h4>
+                        <div class="methods-list">
+                            <div class="method-item">
+                                <div class="method-signature">Snackbar.show(message, options?)</div>
+                                <div class="method-desc">Show default snackbar</div>
+                            </div>
+                            <div class="method-item">
+                                <div class="method-signature">Snackbar.success(message, options?)</div>
+                                <div class="method-desc">Show success snackbar with check icon</div>
+                            </div>
+                            <div class="method-item">
+                                <div class="method-signature">Snackbar.error(message, options?)</div>
+                                <div class="method-desc">Show error snackbar with error icon</div>
+                            </div>
+                            <div class="method-item">
+                                <div class="method-signature">Snackbar.dismissAll()</div>
+                                <div class="method-desc">Dismiss all active snackbars</div>
+                            </div>
+                        </div>
+
+                        <div class="code-block" style="margin-top: 20px;">
+                            <div class="code-header">
+                                <span class="code-title"><i class="bx bxl-javascript"></i> Usage Example</span>
+                            </div>
+                            <div class="code-content">
+<pre><span class="keyword">const</span> { <span class="function">Snackbar</span> } = <span class="property">AndroidComponents</span>;
+
+<span class="comment">// Simple message</span>
+<span class="property">Snackbar</span>.<span class="function">show</span>(<span class="string">'Item added to cart'</span>);
+
+<span class="comment">// Success notification</span>
+<span class="property">Snackbar</span>.<span class="function">success</span>(<span class="string">'Changes saved successfully!'</span>);
+
+<span class="comment">// Error notification</span>
+<span class="property">Snackbar</span>.<span class="function">error</span>(<span class="string">'Failed to connect to server'</span>);
+
+<span class="comment">// With action button</span>
+<span class="function">Snackbar</span>({
+  <span class="property">message</span>: <span class="string">'Email archived'</span>,
+  <span class="property">action</span>: {
+    <span class="property">text</span>: <span class="string">'Undo'</span>,
+    <span class="property">onClick</span>: () => <span class="function">undoArchive</span>()
+  },
+  <span class="property">duration</span>: <span class="number">6000</span>,
+  <span class="property">showClose</span>: <span class="keyword">true</span>
+}).<span class="function">show</span>();</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer style="text-align: center; padding: 48px 24px; color: var(--text-muted); border-top: 1px solid var(--border-color); margin-top: 48px;">
+                <p style="margin-bottom: 8px;">Built with <span style="color: var(--accent-pink);">♥</span> using AndroidLayouts.js</p>
+                <p style="font-size: 13px;">Jetpack Compose-style UI for JavaScript</p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Load Framework Files -->
+ 
+
+    <script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+            document.documentElement.classList.add('light');
+        }
+        window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('light');
+            } else {
+                document.documentElement.classList.remove('light');
+            }
+        });
+
+        // Active link highlighting
+        const observerOptions = {
+            rootMargin: '-100px 0px -50% 0px',
+            threshold: 0
+        };
+
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.id;
+
+                    // Update sidebar links
+                    sidebarLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+
+                    // Update nav links based on section
+                    const sectionMap = {
+                        'layouts': ['linear-layout', 'column-row', 'grid-layout', 'constraint-layout', 'frame-layout', 'scroll-view'],
+                        'components': ['text-view', 'material-button', 'material-input', 'material-switch', 'card', 'recycler-view'],
+                        'navigation': ['tab-layout', 'bottom-nav', 'toolbar', 'drawer'],
+                        'overlays': ['dialog', 'snackbar']
+                    };
+
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        const section = link.getAttribute('href').replace('#', '');
+                        if (sectionMap[section] && sectionMap[section].includes(id)) {
+                            link.classList.add('active');
+                        }
+                        if (section === id) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+
+        // Observe all component cards and sections
+        document.querySelectorAll('.component-card, .section').forEach(el => {
+            if (el.id) observer.observe(el);
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -950,6 +950,947 @@ const AndroidComponents = (() => {
     };
   };
 
+
+
+
+
+
+// Add to the injectStyles section (after the material-input styles):
+
+injectStyles('material-spinner', `
+  /* Material Spinner/Dropdown Styles */
+  .material-spinner-container {
+    position: relative;
+    width: 100%;
+    font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
+  }
+
+  .material-spinner-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 56px;
+    padding: 8px 12px 8px 16px;
+    border: 1px solid var(--md-outline);
+    border-radius: 4px;
+    background: var(--md-surface);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .material-spinner-field:hover:not(.material-spinner-disabled) {
+    border-color: var(--md-on-surface);
+    background: var(--md-surface-container-highest);
+  }
+
+  .material-spinner-field.material-spinner-focused {
+    border-color: var(--md-primary);
+    border-width: 2px;
+    padding: 7px 11px 7px 15px;
+    box-shadow: 0 0 0 3px var(--md-ripple);
+  }
+
+  .material-spinner-field.material-spinner-error {
+    border-color: var(--md-error);
+  }
+
+  .material-spinner-field.material-spinner-disabled {
+    background: var(--md-disabled-bg);
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  .material-spinner-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .material-spinner-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: var(--md-on-surface-variant);
+    flex-shrink: 0;
+  }
+
+  .material-spinner-focused .material-spinner-icon {
+    color: var(--md-primary);
+  }
+
+  .material-spinner-text-wrapper {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .material-spinner-label {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: var(--md-on-surface-variant);
+    pointer-events: none;
+    transition: all 0.2s ease;
+    background: transparent;
+    padding: 0;
+    white-space: nowrap;
+  }
+
+  .material-spinner-has-icon .material-spinner-label {
+    left: 52px;
+  }
+
+  .material-spinner-floated .material-spinner-label {
+    top: 0;
+    transform: translateY(-50%);
+    font-size: 12px;
+    background: var(--md-surface);
+    padding: 0 4px;
+    left: 12px;
+    color: var(--md-primary);
+  }
+
+  .material-spinner-has-icon.material-spinner-floated .material-spinner-label {
+    left: 12px;
+  }
+
+  .material-spinner-error .material-spinner-label {
+    color: var(--md-error);
+  }
+
+  .material-spinner-disabled .material-spinner-label {
+    color: var(--md-disabled-text);
+    background: var(--md-disabled-bg);
+  }
+
+  .material-spinner-selected-text {
+    font-size: 16px;
+    color: var(--md-on-surface);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .material-spinner-placeholder {
+    font-size: 16px;
+    color: var(--md-on-surface-variant);
+    opacity: 0;
+  }
+
+  .material-spinner-floated .material-spinner-placeholder {
+    opacity: 1;
+  }
+
+  .material-spinner-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    color: var(--md-on-surface-variant);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .material-spinner-arrow i {
+    font-size: 24px;
+  }
+
+  .material-spinner-focused .material-spinner-arrow {
+    color: var(--md-primary);
+    transform: rotate(180deg);
+  }
+
+  .material-spinner-error .material-spinner-arrow {
+    color: var(--md-error);
+  }
+
+  .material-spinner-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    max-height: 280px;
+    background: var(--md-surface-container);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px var(--md-shadow), 0 0 1px var(--md-outline);
+    overflow: hidden;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .material-spinner-dropdown.material-spinner-open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .material-spinner-search-wrapper {
+    padding: 8px;
+    border-bottom: 1px solid var(--md-outline-variant);
+    background: var(--md-surface);
+  }
+
+  .material-spinner-search {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--md-outline);
+    border-radius: 4px;
+    background: var(--md-surface);
+    color: var(--md-on-surface);
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .material-spinner-search:focus {
+    border-color: var(--md-primary);
+  }
+
+  .material-spinner-search::placeholder {
+    color: var(--md-on-surface-variant);
+  }
+
+  .material-spinner-options {
+    max-height: 224px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .material-spinner-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    color: var(--md-on-surface);
+    font-size: 14px;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .material-spinner-option:hover {
+    background: var(--md-surface-container-highest);
+  }
+
+  .material-spinner-option.material-spinner-selected {
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
+  }
+
+  .material-spinner-option.material-spinner-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .material-spinner-option-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    color: var(--md-on-surface-variant);
+  }
+
+  .material-spinner-selected .material-spinner-option-icon {
+    color: var(--md-on-primary-container);
+  }
+
+  .material-spinner-option-text {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .material-spinner-option-check {
+    display: none;
+    font-size: 18px;
+    color: var(--md-primary);
+    flex-shrink: 0;
+  }
+
+  .material-spinner-selected .material-spinner-option-check {
+    display: flex;
+  }
+
+  .material-spinner-empty {
+    padding: 24px 16px;
+    text-align: center;
+    color: var(--md-on-surface-variant);
+    font-size: 14px;
+  }
+
+  .material-spinner-loading {
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--md-on-surface-variant);
+    font-size: 14px;
+  }
+
+  .material-spinner-loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--md-outline);
+    border-top-color: var(--md-primary);
+    border-radius: 50%;
+    animation: material-spin 0.8s linear infinite;
+  }
+
+  .material-spinner-helper {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 16px 0;
+    font-size: 12px;
+    color: var(--md-on-surface-variant);
+  }
+
+  .material-spinner-helper-text {
+    flex: 1;
+  }
+
+  .material-spinner-error .material-spinner-helper-text {
+    color: var(--md-error);
+  }
+
+  .material-spinner-required .material-spinner-label::after {
+    content: ' *';
+    color: var(--md-error);
+  }
+
+  /* Custom scrollbar for dropdown */
+  .material-spinner-options::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .material-spinner-options::-webkit-scrollbar-track {
+    background: var(--md-surface-variant);
+  }
+
+  .material-spinner-options::-webkit-scrollbar-thumb {
+    background: var(--md-outline);
+    border-radius: 4px;
+  }
+
+  .material-spinner-options::-webkit-scrollbar-thumb:hover {
+    background: var(--md-on-surface-variant);
+  }
+
+  /* Custom color support */
+  .material-spinner-field[data-color].material-spinner-focused {
+    border-color: var(--md-custom-spinner-color);
+    box-shadow: 0 0 0 3px var(--md-custom-spinner-color-light);
+  }
+
+  .material-spinner-field[data-color] .material-spinner-floated .material-spinner-label {
+    color: var(--md-custom-spinner-color);
+  }
+
+  .material-spinner-field[data-color] .material-spinner-focused .material-spinner-arrow,
+  .material-spinner-field[data-color] .material-spinner-focused .material-spinner-icon {
+    color: var(--md-custom-spinner-color);
+  }
+`);
+
+
+// ==========================================
+// MaterialSpinner
+// ==========================================
+
+const MaterialSpinner = (props = {}) => {
+  const {
+    id,
+    name = '',
+    label = 'Select',
+    options = [],
+    value = null,
+    placeholder = '',
+    helperText = '',
+    errorText = '',
+    required = false,
+    disabled = false,
+    searchable = false,
+    searchPlaceholder = 'Search...',
+    leadingIcon = null,
+    color = null,
+    emptyText = 'No options available',
+    loadingText = 'Loading...',
+    showCheckmark = true,
+    lazyLoad = false,
+    onLoadMore = null,
+    onSearch = null,
+    onChange = null,
+    onOpen = null,
+    onClose = null,
+    margin,
+    weight,
+    alignSelf,
+    width,
+    className
+  } = props;
+
+  const spinnerId = id || generateId('material-spinner');
+  let isOpen = false;
+  let selectedValue = value;
+  let filteredOptions = [...options];
+  let isLoading = false;
+  let searchTimeout = null;
+
+  // Container
+  const container = document.createElement('div');
+  const containerClasses = ['material-spinner-container'];
+  if (required) containerClasses.push('material-spinner-required');
+  if (className) containerClasses.push(className);
+  container.className = containerClasses.join(' ');
+
+  // Apply container styles
+  const containerStyles = {};
+  if (margin) containerStyles.margin = dp(margin);
+  if (weight) containerStyles.flex = weight;
+  if (alignSelf) containerStyles.alignSelf = alignSelf;
+  if (width === 'match_parent') containerStyles.width = '100%';
+  else if (width) containerStyles.width = dp(width);
+  applyStyles(container, containerStyles);
+
+  // Hidden native select for form compatibility
+  const hiddenSelect = document.createElement('select');
+  hiddenSelect.style.display = 'none';
+  hiddenSelect.id = spinnerId;
+  if (name) hiddenSelect.name = name;
+  if (required) hiddenSelect.required = true;
+  if (disabled) hiddenSelect.disabled = true;
+  container.appendChild(hiddenSelect);
+
+  // Spinner Field
+  const field = document.createElement('div');
+  const fieldClasses = ['material-spinner-field'];
+  if (disabled) fieldClasses.push('material-spinner-disabled');
+  if (leadingIcon) fieldClasses.push('material-spinner-has-icon');
+  field.className = fieldClasses.join(' ');
+
+  // Custom color
+  if (color) {
+    field.dataset.color = color;
+    field.style.setProperty('--md-custom-spinner-color', color);
+    field.style.setProperty('--md-custom-spinner-color-light', hexToRgba(color, 0.15));
+  }
+
+  // Content wrapper
+  const content = document.createElement('div');
+  content.className = 'material-spinner-content';
+
+  // Leading Icon
+  let leadingIconEl;
+  if (leadingIcon) {
+    leadingIconEl = document.createElement('span');
+    leadingIconEl.className = 'material-spinner-icon';
+    leadingIconEl.innerHTML = `<i class="${leadingIcon}"></i>`;
+    content.appendChild(leadingIconEl);
+  }
+
+  // Text wrapper
+  const textWrapper = document.createElement('div');
+  textWrapper.className = 'material-spinner-text-wrapper';
+
+  const selectedText = document.createElement('div');
+  selectedText.className = 'material-spinner-selected-text';
+
+  const placeholderText = document.createElement('div');
+  placeholderText.className = 'material-spinner-placeholder';
+  placeholderText.textContent = placeholder || label;
+
+  textWrapper.appendChild(selectedText);
+  textWrapper.appendChild(placeholderText);
+  content.appendChild(textWrapper);
+
+  field.appendChild(content);
+
+  // Label
+  const labelEl = document.createElement('label');
+  labelEl.className = 'material-spinner-label';
+  labelEl.textContent = label;
+  field.appendChild(labelEl);
+
+  // Arrow
+  const arrow = document.createElement('div');
+  arrow.className = 'material-spinner-arrow';
+  arrow.innerHTML = '<i class="bx bx-chevron-down"></i>';
+  field.appendChild(arrow);
+
+  container.appendChild(field);
+
+  // Dropdown - NOW WITH PROPER Z-INDEX AND POSITIONING
+  const dropdown = document.createElement('div');
+dropdown.style. background = 'white';
+  dropdown.className = 'material-spinner-dropdown';
+  dropdown.style.position = 'fixed'; // Changed from absolute to fixed for better positioning
+  dropdown.style.zIndex = '999999'; // High z-index to appear above other elements
+
+  // Search input
+  let searchInput;
+  if (searchable) {
+    const searchWrapper = document.createElement('div');
+    searchWrapper.className = 'material-spinner-search-wrapper';
+
+    searchInput = document.createElement('input');
+    searchInput.type = 'text';
+    searchInput.className = 'material-spinner-search';
+    searchInput.placeholder = searchPlaceholder;
+
+    searchWrapper.appendChild(searchInput);
+    dropdown.appendChild(searchWrapper);
+  }
+
+  // Options container
+  const optionsContainer = document.createElement('div');
+  optionsContainer.className = 'material-spinner-options';
+  dropdown.appendChild(optionsContainer);
+
+  container.appendChild(dropdown);
+
+  // Helper text
+  let helperRow, helperTextEl;
+  if (helperText || errorText) {
+    helperRow = document.createElement('div');
+    helperRow.className = 'material-spinner-helper';
+
+    helperTextEl = document.createElement('span');
+    helperTextEl.className = 'material-spinner-helper-text';
+    helperTextEl.textContent = errorText || helperText;
+    helperRow.appendChild(helperTextEl);
+
+    container.appendChild(helperRow);
+  }
+
+  // SMART POSITIONING FUNCTION
+  const positionDropdown = () => {
+    const fieldRect = field.getBoundingClientRect();
+    const dropdownHeight = dropdown.offsetHeight || 300; // Default max height
+    const viewportHeight = window.innerHeight;
+    const viewportWidth = window.innerWidth;
+    const scrollY = window.scrollY;
+    const scrollX = window.scrollX;
+
+    // Calculate available space above and below
+    const spaceBelow = viewportHeight - fieldRect.bottom;
+    const spaceAbove = fieldRect.top;
+
+    // Determine if dropdown should open upward or downward
+    const shouldOpenUpward = spaceBelow < dropdownHeight && spaceAbove > spaceBelow;
+
+    // Position dropdown
+    let top, left;
+    
+    if (shouldOpenUpward) {
+      // Open upward
+      top = fieldRect.top - dropdownHeight;
+      dropdown.classList.add('material-spinner-dropdown-upward');
+      dropdown.classList.remove('material-spinner-dropdown-downward');
+    } else {
+      // Open downward (default)
+      top = fieldRect.bottom;
+      dropdown.classList.add('material-spinner-dropdown-downward');
+      dropdown.classList.remove('material-spinner-dropdown-upward');
+    }
+
+    // Horizontal positioning
+    left = fieldRect.left;
+    const dropdownWidth = fieldRect.width;
+
+    // Ensure dropdown stays within viewport horizontally
+    if (left + dropdownWidth > viewportWidth) {
+      left = viewportWidth - dropdownWidth - 16; // 16px padding from edge
+    }
+    if (left < 16) {
+      left = 16;
+    }
+
+    // Ensure dropdown stays within viewport vertically
+    if (top < 16) {
+      top = 16;
+    }
+    if (top + dropdownHeight > viewportHeight) {
+      top = viewportHeight - dropdownHeight - 16;
+    }
+
+    // Apply positioning
+    dropdown.style.top = `${top}px`;
+    dropdown.style.left = `${left}px`;
+    dropdown.style.width = `${dropdownWidth}px`;
+    dropdown.style.maxHeight = `${Math.min(dropdownHeight, viewportHeight - top - 16)}px`;
+  };
+
+  // THEME DETECTION AND APPLICATION
+  const applyTheme = () => {
+    const isDark = document.documentElement.classList.contains('dark') ||
+                   window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (isDark) {
+      container.classList.add('material-spinner-dark-theme');
+      container.classList.remove('material-spinner-light-theme');
+    } else {
+      container.classList.add('material-spinner-light-theme');
+      container.classList.remove('material-spinner-dark-theme');
+    }
+  };
+
+  // Watch for theme changes
+  const themeObserver = new MutationObserver(() => applyTheme());
+  themeObserver.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class']
+  });
+
+  // Watch for system theme changes
+  const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  darkModeMediaQuery.addEventListener('change', applyTheme);
+
+  // Helper functions
+  const getSelectedOption = () => {
+    return options.find(opt => opt.value === selectedValue);
+  };
+
+  const updateSelectedDisplay = () => {
+    const selected = getSelectedOption();
+    
+    if (selected) {
+      field.classList.add('material-spinner-floated');
+      
+      if (leadingIconEl && selected.icon) {
+        leadingIconEl.innerHTML = `<i class="${selected.icon}"></i>`;
+      }
+      
+      selectedText.textContent = selected.label;
+      selectedText.style.display = 'block';
+      placeholderText.style.display = 'none';
+
+      hiddenSelect.value = selected.value;
+    } else {
+      field.classList.remove('material-spinner-floated');
+      
+      if (leadingIconEl && leadingIcon) {
+        leadingIconEl.innerHTML = `<i class="${leadingIcon}"></i>`;
+      }
+      
+      selectedText.style.display = 'none';
+      placeholderText.style.display = 'block';
+      
+      hiddenSelect.value = '';
+    }
+  };
+
+  const renderOptions = (opts = filteredOptions) => {
+    optionsContainer.innerHTML = '';
+
+    if (isLoading) {
+      const loadingEl = document.createElement('div');
+      loadingEl.className = 'material-spinner-loading';
+      loadingEl.innerHTML = `
+        <div class="material-spinner-loading-spinner"></div>
+        <span>${loadingText}</span>
+      `;
+      optionsContainer.appendChild(loadingEl);
+      return;
+    }
+
+    if (opts.length === 0) {
+      const emptyEl = document.createElement('div');
+      emptyEl.className = 'material-spinner-empty';
+      emptyEl.textContent = emptyText;
+      optionsContainer.appendChild(emptyEl);
+      return;
+    }
+
+    opts.forEach(option => {
+      const optionEl = document.createElement('div');
+      const optionClasses = ['material-spinner-option'];
+      if (option.value === selectedValue) optionClasses.push('material-spinner-selected');
+      if (option.disabled) optionClasses.push('material-spinner-disabled');
+      optionEl.className = optionClasses.join(' ');
+      optionEl.dataset.value = option.value;
+
+      if (option.icon) {
+        const iconEl = document.createElement('span');
+        iconEl.className = 'material-spinner-option-icon';
+        iconEl.innerHTML = `<i class="${option.icon}"></i>`;
+        optionEl.appendChild(iconEl);
+      }
+
+      const textEl = document.createElement('span');
+      textEl.className = 'material-spinner-option-text';
+      textEl.textContent = option.label;
+      optionEl.appendChild(textEl);
+
+      if (showCheckmark) {
+        const checkEl = document.createElement('span');
+        checkEl.className = 'material-spinner-option-check';
+        checkEl.innerHTML = '<i class="bx bx-check"></i>';
+        optionEl.appendChild(checkEl);
+      }
+
+      if (!option.disabled) {
+        optionEl.addEventListener('click', () => selectOption(option.value));
+      }
+
+      optionsContainer.appendChild(optionEl);
+    });
+
+    if (lazyLoad && onLoadMore) {
+      optionsContainer.addEventListener('scroll', handleScroll);
+    }
+  };
+
+  const handleScroll = () => {
+    if (isLoading) return;
+    
+    const { scrollTop, scrollHeight, clientHeight } = optionsContainer;
+    if (scrollTop + clientHeight >= scrollHeight - 50) {
+      if (onLoadMore) {
+        setLoading(true);
+        onLoadMore(() => setLoading(false));
+      }
+    }
+  };
+
+  const selectOption = (val) => {
+    selectedValue = val;
+    updateSelectedDisplay();
+    closeDropdown();
+    
+    if (onChange) {
+      const selected = getSelectedOption();
+      onChange(val, selected);
+    }
+  };
+
+  const openDropdown = () => {
+    if (disabled || isOpen) return;
+    
+    isOpen = true;
+    field.classList.add('material-spinner-focused');
+    dropdown.classList.add('material-spinner-open');
+    
+    // Position dropdown after it's visible
+    setTimeout(() => {
+      positionDropdown();
+    }, 10);
+    
+    if (searchable && searchInput) {
+      setTimeout(() => searchInput.focus(), 100);
+    }
+    
+    if (onOpen) onOpen();
+  };
+
+  const closeDropdown = () => {
+    if (!isOpen) return;
+    
+    isOpen = false;
+    field.classList.remove('material-spinner-focused');
+    dropdown.classList.remove('material-spinner-open');
+    
+    if (searchable && searchInput) {
+      searchInput.value = '';
+      filteredOptions = [...options];
+      renderOptions();
+    }
+    
+    if (onClose) onClose();
+  };
+
+  const toggleDropdown = () => {
+    if (isOpen) closeDropdown();
+    else openDropdown();
+  };
+
+  const setLoading = (loading) => {
+    isLoading = loading;
+    renderOptions();
+  };
+
+  const handleSearch = (query) => {
+    if (onSearch) {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        setLoading(true);
+        onSearch(query, (results) => {
+          filteredOptions = results;
+          setLoading(false);
+          renderOptions(results);
+        });
+      }, 300);
+    } else {
+      const lowerQuery = query.toLowerCase();
+      filteredOptions = options.filter(opt => 
+        opt.label.toLowerCase().includes(lowerQuery)
+      );
+      renderOptions();
+    }
+  };
+
+  // Event Listeners
+  field.addEventListener('click', toggleDropdown);
+
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => handleSearch(e.target.value));
+    searchInput.addEventListener('click', (e) => e.stopPropagation());
+  }
+
+  // Close on outside click
+  document.addEventListener('click', (e) => {
+    if (!container.contains(e.target) && isOpen) {
+      closeDropdown();
+    }
+  });
+
+  // Reposition on scroll/resize
+  window.addEventListener('scroll', () => {
+    if (isOpen) positionDropdown();
+  }, true);
+  
+  window.addEventListener('resize', () => {
+    if (isOpen) positionDropdown();
+  });
+
+  // Keyboard navigation
+  field.addEventListener('keydown', (e) => {
+    if (disabled) return;
+    
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggleDropdown();
+    } else if (e.key === 'Escape' && isOpen) {
+      closeDropdown();
+    }
+  });
+
+  // Initialize
+  applyTheme();
+  updateSelectedDisplay();
+  renderOptions();
+
+  // Populate hidden select with options
+  options.forEach(opt => {
+    const optionEl = document.createElement('option');
+    optionEl.value = opt.value;
+    optionEl.textContent = opt.label;
+    if (opt.disabled) optionEl.disabled = true;
+    hiddenSelect.appendChild(optionEl);
+  });
+
+  // Cleanup function
+  const cleanup = () => {
+    themeObserver.disconnect();
+    darkModeMediaQuery.removeEventListener('change', applyTheme);
+  };
+
+  return {
+    getElement: () => container,
+    getValue: () => selectedValue,
+    setValue: (val) => {
+      selectedValue = val;
+      updateSelectedDisplay();
+    },
+    getSelectedOption: () => getSelectedOption(),
+    setOptions: (newOptions) => {
+      filteredOptions = [...newOptions];
+      
+      hiddenSelect.innerHTML = '';
+      newOptions.forEach(opt => {
+        const optionEl = document.createElement('option');
+        optionEl.value = opt.value;
+        optionEl.textContent = opt.label;
+        if (opt.disabled) optionEl.disabled = true;
+        hiddenSelect.appendChild(optionEl);
+      });
+      
+      renderOptions();
+      updateSelectedDisplay();
+    },
+    addOption: (option) => {
+      filteredOptions.push(option);
+      
+      const optionEl = document.createElement('option');
+      optionEl.value = option.value;
+      optionEl.textContent = option.label;
+      if (option.disabled) optionEl.disabled = true;
+      hiddenSelect.appendChild(optionEl);
+      
+      renderOptions();
+    },
+    removeOption: (val) => {
+      filteredOptions = filteredOptions.filter(opt => opt.value !== val);
+      
+      const optionEl = Array.from(hiddenSelect.options).find(opt => opt.value === val);
+      if (optionEl) optionEl.remove();
+      
+      if (selectedValue === val) {
+        selectedValue = null;
+        updateSelectedDisplay();
+      }
+      renderOptions();
+    },
+    open: openDropdown,
+    close: closeDropdown,
+    toggle: toggleDropdown,
+    isOpen: () => isOpen,
+    setLoading,
+    setError: (message) => {
+      field.classList.add('material-spinner-error');
+      if (helperTextEl) {
+        helperTextEl.textContent = message || errorText || 'Error';
+      }
+    },
+    clearError: () => {
+      field.classList.remove('material-spinner-error');
+      if (helperTextEl) {
+        helperTextEl.textContent = helperText || '';
+      }
+    },
+    setDisabled: (newDisabled) => {
+      hiddenSelect.disabled = newDisabled;
+      field.classList.toggle('material-spinner-disabled', newDisabled);
+      if (newDisabled) closeDropdown();
+    },
+    reset: () => {
+      selectedValue = null;
+      updateSelectedDisplay();
+      if (searchInput) searchInput.value = '';
+      filteredOptions = [...options];
+      renderOptions();
+      closeDropdown();
+    },
+    validate: () => {
+      const valid = hiddenSelect.checkValidity();
+      if (!valid) {
+        field.classList.add('material-spinner-error');
+        if (helperTextEl) {
+          helperTextEl.textContent = hiddenSelect.validationMessage;
+        }
+      }
+      return valid;
+    },
+    destroy: cleanup
+  };
+};
+
+
   // ==========================================
   // MaterialButton
   // ==========================================
@@ -1457,10 +2398,11 @@ const AndroidComponents = (() => {
   };
 
   return {
-    TextView, Button, Card, Icon, Divider, Avatar,
-    MaterialButton, MaterialSwitch, MaterialInput,
-    utils: { injectStyles, injectedStyles, generateId, hexToRgba, getLuminance }
-  };
+  TextView, Button, Card, Icon, Divider, Avatar,
+  MaterialButton, MaterialSwitch, MaterialInput, MaterialSpinner,
+  utils: { injectStyles, injectedStyles, generateId, hexToRgba, getLuminance }
+};
+
 })();
 
 window.AndroidComponents = AndroidComponents;

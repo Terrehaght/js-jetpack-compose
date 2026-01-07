@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enhanced Tab Components</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0f1419;
+      --bg-secondary: #1a1f26;
+      --bg-tertiary: #252b33;
+      --bg-elevated: #2d343d;
+      --text-primary: #e7e9ea;
+      --text-secondary: #8b98a5;
+      --text-muted: #6a7682;
+      --accent: #1d9bf0;
+      --accent-hover: #1a8cd8;
+      --accent-soft: rgba(29, 155, 240, 0.15);
+      --success: #00ba7c;
+      --warning: #ffad1f;
+      --error: #f4212e;
+      --border: #2f3336;
+      --pill-bg: #2d343d;
+      --pill-active: #e7e9ea;
+      --pill-active-text: #0f1419;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+    }
+
+    .light {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f7f9f9;
+      --bg-tertiary: #eff3f4;
+      --bg-elevated: #ffffff;
+      --text-primary: #0f1419;
+      --text-secondary: #536471;
+      --text-muted: #8b98a5;
+      --border: #eff3f4;
+      --pill-bg: #eff3f4;
+      --pill-active: #0f1419;
+      --pill-active-text: #ffffff;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    .app-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+      animation: fadeInDown 0.6s ease-out;
+    }
+
+    .header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--accent), #a855f7, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .section {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+      animation: fadeInUp 0.5s ease-out;
+      animation-fill-mode: both;
+    }
+
+    .section:nth-child(2) { animation-delay: 0.1s; }
+    .section:nth-child(3) { animation-delay: 0.2s; }
+    .section:nth-child(4) { animation-delay: 0.3s; }
+    .section:nth-child(5) { animation-delay: 0.4s; }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title i {
+      color: var(--accent);
+    }
+
+    /* =============================================
+       PILL TABS - Like the screenshot
+    ============================================= */
+    .pill-tabs {
+      display: inline-flex;
+      background: var(--pill-bg);
+      border-radius: var(--radius-full);
+      padding: 4px;
+      gap: 2px;
+      position: relative;
+    }
+
+    .pill-tabs-full {
+      display: flex;
+      width: 100%;
+    }
+
+    .pill-tab {
+      flex: 1;
+      padding: 12px 24px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: var(--radius-full);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+      min-width: 100px;
+      white-space: nowrap;
+    }
+
+    .pill-tab:hover:not(.active) {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .pill-tab.active {
+      color: var(--pill-active-text);
+      background: var(--pill-active);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .pill-tab i {
+      font-size: 1rem;
+      transition: transform 0.2s;
+    }
+
+    .pill-tab:hover i {
+      transform: scale(1.1);
+    }
+
+    /* Pill tabs with sliding indicator */
+    .pill-tabs-animated {
+      position: relative;
+    }
+
+    .pill-tabs-animated .pill-indicator {
+      position: absolute;
+      top: 4px;
+      bottom: 4px;
+      background: var(--pill-active);
+      border-radius: var(--radius-full);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow-sm);
+      z-index: 0;
+    }
+
+    .pill-tabs-animated .pill-tab {
+      background: transparent !important;
+    }
+
+    .pill-tabs-animated .pill-tab.active {
+      color: var(--pill-active-text);
+    }
+
+    /* =============================================
+       ICON-ONLY PILL TABS
+    ============================================= */
+    .icon-pill-tabs {
+      display: inline-flex;
+      background: var(--pill-bg);
+      border-radius: var(--radius-full);
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .icon-pill-tab {
+      width: 44px;
+      height: 44px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      cursor: pointer;
+      border-radius: 50%;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .icon-pill-tab:hover:not(.active) {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .icon-pill-tab.active {
+      color: var(--pill-active-text);
+      background: var(--pill-active);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .icon-pill-tab .badge {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      min-width: 16px;
+      height: 16px;
+      background: var(--error);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 600;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+    }
+
+    /* =============================================
+       UNDERLINE TABS
+    ============================================= */
+    .underline-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      gap: 0;
+    }
+
+    .underline-tab {
+      flex: 1;
+      padding: 16px 20px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .underline-tab:hover {
+      color: var(--text-primary);
+      background: var(--accent-soft);
+    }
+
+    .underline-tab.active {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .underline-tabs .tab-indicator {
+      position: absolute;
+      bottom: -1px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 3px 3px 0 0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* =============================================
+       SEGMENTED CONTROL (iOS style)
+    ============================================= */
+    .segmented-control {
+      display: inline-flex;
+      background: var(--pill-bg);
+      border-radius: var(--radius-md);
+      padding: 4px;
+      gap: 0;
+      position: relative;
+    }
+
+    .segmented-control-full {
+      display: flex;
+      width: 100%;
+    }
+
+    .segment {
+      flex: 1;
+      padding: 10px 20px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .segment:hover:not(.active) {
+      color: var(--text-primary);
+    }
+
+    .segment.active {
+      color: var(--text-primary);
+      background: var(--bg-elevated);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* =============================================
+       VERTICAL TABS
+    ============================================= */
+    .vertical-tabs-container {
+      display: flex;
+      gap: 16px;
+      min-height: 200px;
+    }
+
+    .vertical-tabs {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 160px;
+    }
+
+    .vertical-tab {
+      padding: 12px 16px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: var(--radius-md);
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+      position: relative;
+    }
+
+    .vertical-tab:hover:not(.active) {
+      background: var(--accent-soft);
+      color: var(--text-primary);
+    }
+
+    .vertical-tab.active {
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+    }
+
+    .vertical-tab i {
+      width: 20px;
+      text-align: center;
+    }
+
+    .vertical-tab-content {
+      flex: 1;
+      padding: 16px;
+      background: var(--bg-tertiary);
+      border-radius: var(--radius-md);
+    }
+
+    /* =============================================
+       TAB CONTENT PANELS
+    ============================================= */
+    .tab-content {
+      display: none;
+      padding: 20px;
+      background: var(--bg-tertiary);
+      border-radius: var(--radius-md);
+      margin-top: 16px;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .tab-content h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+
+    .tab-content p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    /* =============================================
+       DEMO FORM CONTENT
+    ============================================= */
+    .demo-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .form-group input {
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 16px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    /* =============================================
+       CUSTOMIZATION PANEL
+    ============================================= */
+    .customization-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .color-option {
+      padding: 12px;
+      border-radius: var(--radius-md);
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .color-option:hover {
+      transform: translateY(-2px);
+    }
+
+    .color-option.selected {
+      border-color: var(--accent);
+    }
+
+    .color-blue { background: linear-gradient(135deg, #1d9bf0, #3b82f6); color: white; }
+    .color-purple { background: linear-gradient(135deg, #8b5cf6, #a855f7); color: white; }
+    .color-pink { background: linear-gradient(135deg, #ec4899, #f472b6); color: white; }
+    .color-green { background: linear-gradient(135deg, #10b981, #34d399); color: white; }
+    .color-orange { background: linear-gradient(135deg, #f59e0b, #fbbf24); color: white; }
+
+    /* =============================================
+       ANIMATIONS
+    ============================================= */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    /* =============================================
+       RESPONSIVE
+    ============================================= */
+    @media (max-width: 600px) {
+      .app-container {
+        padding: 16px 12px;
+      }
+
+      .section {
+        padding: 16px;
+      }
+
+      .pill-tab {
+        padding: 10px 16px;
+        font-size: 0.875rem;
+      }
+
+      .vertical-tabs-container {
+        flex-direction: column;
+      }
+
+      .vertical-tabs {
+        flex-direction: row;
+        overflow-x: auto;
+        min-width: unset;
+        padding-bottom: 8px;
+      }
+
+      .vertical-tab {
+        flex-shrink: 0;
+      }
+
+      .customization-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Theme toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      transition: all 0.3s;
+      z-index: 100;
+    }
+
+    .theme-toggle:hover {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+    <i class="fas fa-moon"></i>
+  </button>
+
+  <div class="app-container">
+    <header class="header">
+      <h1><i class="fas fa-layer-group"></i> Enhanced Tabs</h1>
+      <p>Beautiful, customizable tab components</p>
+    </header>
+
+    <!-- Pill Tabs - Like Screenshot -->
+    <div class="section">
+      <div class="section-title">
+        <i class="fas fa-toggle-on"></i>
+        Pill Tabs (Auth Style)
+      </div>
+
+      <div class="pill-tabs pill-tabs-full pill-tabs-animated" id="authTabs">
+        <div class="pill-indicator"></div>
+        <button class="pill-tab active" data-tab="login">
+          <i class="fas fa-sign-in-alt"></i>
+          Login
+        </button>
+        <button class="pill-tab" data-tab="signup">
+          <i class="fas fa-user-plus"></i>
+          Sign Up
+        </button>
+      </div>
+
+      <div class="tab-content active" id="login-content">
+        <form class="demo-form" onsubmit="return false;">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" placeholder="you@example.com">
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" placeholder="••••••••">
+          </div>
+          <button class="btn btn-primary">Sign In</button>
+        </form>
+      </div>
+
+      <div class="tab-content" id="signup-content">
+        <form class="demo-form" onsubmit="return false;">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" placeholder="John Doe">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" placeholder="you@example.com">
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" placeholder="••••••••">
+          </div>
+          <button class="btn btn-primary">Create Account</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Icon + Text Pill Tabs -->
+    <div class="section">
+      <div class="section-title">
+        <i class="fas fa-icons"></i>
+        Navigation Pills
+      </div>
+
+      <div class="pill-tabs pill-tabs-animated" id="navTabs">
+        <div class="pill-indicator"></div>
+        <button class="pill-tab active" data-tab="home">
+          <i class="fas fa-home"></i>
+          Home
+        </button>
+        <button class="pill-tab" data-tab="explore">
+          <i class="fas fa-compass"></i>
+          Explore
+        </button>
+        <button class="pill-tab" data-tab="favorites">
+          <i class="fas fa-heart"></i>
+          Favorites
+        </button>
+      </div>
+
+      <div class="tab-content active" id="home-content">
+        <h3><i class="fas fa-home"></i> Home</h3>
+        <p>Welcome to your personalized dashboard. See your latest updates and recommendations.</p>
+      </div>
+      <div class="tab-content" id="explore-content">
+        <h3><i class="fas fa-compass"></i> Explore</h3>
+        <p>Discover trending content, new creators, and popular topics in your area of interest.</p>
+      </div>
+      <div class="tab-content" id="favorites-content">
+        <h3><i class="fas fa-heart"></i> Favorites</h3>
+        <p>Your saved and liked items appear here for quick access.</p>
+      </div>
+    </div>
+
+    <!-- Icon-Only Pills -->
+    <div class="section">
+      <div class="section-title">
+        <i class="fas fa-th"></i>
+        Icon-Only Pills
+      </div>
+
+      <div class="icon-pill-tabs" id="iconTabs">
+        <button class="icon-pill-tab active" data-tab="grid" title="Grid View">
+          <i class="fas fa-th-large"></i>
+        </button>
+        <button class="icon-pill-tab" data-tab="list" title="List View">
+          <i class="fas fa-list"></i>
+        </button>
+        <button class="icon-pill-tab" data-tab="calendar" title="Calendar">
+          <i class="fas fa-calendar"></i>
+        </button>
+        <button class="icon-pill-tab" data-tab="notifications" title="Notifications">
+          <i class="fas fa-bell"></i>
+          <span class="badge">3</span>
+        </button>
+      </div>
+
+      <div class="tab-content active" id="grid-content">
+        <h3><i class="fas fa-th-large"></i> Grid View</h3>
+        <p>Items displayed in a grid layout for visual browsing.</p>
+      </div>
+      <div class="tab-content" id="list-content">
+        <h3><i class="fas fa-list"></i> List View</h3>
+        <p>Compact list format showing more details per item.</p>
+      </div>
+      <div class="tab-content" id="calendar-content">
+        <h3><i class="fas fa-calendar"></i> Calendar</h3>
+        <p>View your schedule and upcoming events.</p>
+      </div>
+      <div class="tab-content" id="notifications-content">
+        <h3><i class="fas fa-bell"></i> Notifications</h3>
+        <p>You have 3 unread notifications.</p>
+      </div>
+    </div>
+
+    <!-- Underline Tabs -->
+    <div class="section">
+      <div class="section-title">
+        <i class="fas fa-minus"></i>
+        Underline Tabs
+      </div>
+
+      <div class="underline-tabs" id="underlineTabs">
+        <button class="underline-tab active" data-tab="posts">
+          <i class="fas fa-newspaper"></i>
+          Posts
+        </button>
+        <button class="underline-tab" data-tab="replies">
+          <i class="fas fa-reply"></i>
+          Replies
+        </button>
+        <button class="underline-tab" data-tab="media">
+          <i class="fas fa-image"></i>
+          Media
+        </button>
+        <button class="underline-tab" data-tab="likes">
+          <i class="fas fa-heart"></i>
+          Likes
+        </button>
+        <div class="tab-indicator"></div>
+      </div>
+
+      <div class="tab-content active" id="posts-content">
+        <h3>Your Posts</h3>
+        <p>All your published content appears here.</p>
+      </div>
+      <div class="tab-content" id="replies-content">
+        <h3>Replies</h3>
+        <p>Conversations and replies you've participated in.</p>
+      </div>
+      <div class="tab-content" id="media-content">
+        <h3>Media</h3>
+        <p>Photos and videos you've shared.</p>
+      </div>
+      <div class="tab-content" id="likes-content">
+        <h3>Likes</h3>
+        <p>Content you've liked from others.</p>
+      </div>
+    </div>
+
+    <!-- Segmented Control -->
+    <div class="section">
+      <div class="section-title">
+        <i class="fas fa-sliders-h"></i>
+        Segmented Control
+      </div>
+
+      <div class="segmented-control segmented-control-full" id="segmentedTabs">
+        <button class="segment active" data-tab="daily">Daily</button>
+        <button class="segment" data-tab="weekly">Weekly</button>
+        <button class="segment" data-tab="monthly">Monthly</button>
+        <button class="segment" data-tab="yearly">Yearly</button>
+      </div>
+
+      <div class="tab-content active" id="daily-content">
+        <h3>Daily Overview</h3>
+        <p>Today's statistics and metrics at a glance.</p>
+      </div>
+      <div class="tab-content" id="weekly-content">
+        <h3>Weekly Summary</h3>
+        <p>Performance trends over the past 7 days.</p>
+      </div>
+      <div class="tab-content" id="monthly-content">
+        <h3>Monthly Report</h3>
+        <p>Comprehensive data for the current month.</p>
+      </div>
+      <div class="tab-content" id="yearly-content">
+        <h3>Yearly Analysis</h3>
+        <p>Long-term trends and annual comparisons.</p>
+      </div>
+    </div>
+
+    <!-- Vertical Tabs -->
+    <div class="section">
+      <div class="section-title">
+        <i class="fas fa-stream"></i>
+        Vertical Tabs
+      </div>
+
+      <div class="vertical-tabs-container">
+        <div class="vertical-tabs" id="verticalTabs">
+          <button class="vertical-tab active" data-tab="profile">
+            <i class="fas fa-user"></i>
+            Profile
+          </button>
+          <button class="vertical-tab" data-tab="security">
+            <i class="fas fa-shield-alt"></i>
+            Security
+          </button>
+          <button class="vertical-tab" data-tab="notifications-settings">
+            <i class="fas fa-bell"></i>
+            Notifications
+          </button>
+          <button class="vertical-tab" data-tab="privacy">
+            <i class="fas fa-lock"></i>
+            Privacy
+          </button>
+        </div>
+
+        <div class="vertical-tab-content">
+          <div class="tab-content active" id="profile-content" style="display: block; margin-top: 0; background: transparent; padding: 0;">
+            <h3>Profile Settings</h3>
+            <p>Manage your public profile information, avatar, and bio.</p>
+          </div>
+          <div class="tab-content" id="security-content" style="margin-top: 0; background: transparent; padding: 0;">
+            <h3>Security Settings</h3>
+            <p>Password, two-factor authentication, and login history.</p>
+          </div>
+          <div class="tab-content" id="notifications-settings-content" style="margin-top: 0; background: transparent; padding: 0;">
+            <h3>Notification Preferences</h3>
+            <p>Control what alerts you receive and how.</p>
+          </div>
+          <div class="tab-content" id="privacy-content" style="margin-top: 0; background: transparent; padding: 0;">
+            <h3>Privacy Settings</h3>
+            <p>Manage data sharing and visibility preferences.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Color Theme Customization -->
+    <div class="section">
+      <div class="section-title">
+        <i class="fas fa-palette"></i>
+        Accent Color
+      </div>
+
+      <div class="customization-grid">
+        <div class="color-option color-blue selected" data-color="#1d9bf0">Blue</div>
+        <div class="color-option color-purple" data-color="#8b5cf6">Purple</div>
+        <div class="color-option color-pink" data-color="#ec4899">Pink</div>
+        <div class="color-option color-green" data-color="#10b981">Green</div>
+        <div class="color-option color-orange" data-color="#f59e0b">Orange</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =============================================
+    // Theme Detection & Toggle
+    // =============================================
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+
+    function updateThemeIcon() {
+      const icon = themeToggle.querySelector('i');
+      if (html.classList.contains('light')) {
+        icon.className = 'fas fa-sun';
+      } else {
+        icon.className = 'fas fa-moon';
+      }
+    }
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+      html.classList.add('light');
+    }
+    updateThemeIcon();
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+      if (event.matches) {
+        html.classList.remove('light');
+      } else {
+        html.classList.add('light');
+      }
+      updateThemeIcon();
+    });
+
+    themeToggle.addEventListener('click', () => {
+      html.classList.toggle('light');
+      updateThemeIcon();
+    });
+
+    // =============================================
+    // Pill Tabs with Animated Indicator
+    // =============================================
+    class PillTabs {
+      constructor(container, contentPrefix = '') {
+        this.container = container;
+        this.contentPrefix = contentPrefix;
+        this.tabs = container.querySelectorAll('.pill-tab');
+        this.indicator = container.querySelector('.pill-indicator');
+        this.init();
+      }
+
+      init() {
+        this.tabs.forEach(tab => {
+          tab.addEventListener('click', () => this.selectTab(tab));
+        });
+
+        // Set initial indicator position on load
+        requestAnimationFrame(() => {
+          const activeTab = this.container.querySelector('.pill-tab.active');
+          if (activeTab) {
+            this.updateIndicator(activeTab);
+          }
+        });
+
+        // Also update on resize
+        window.addEventListener('resize', () => {
+          const activeTab = this.container.querySelector('.pill-tab.active');
+          if (activeTab) {
+            this.updateIndicator(activeTab);
+          }
+        });
+      }
+
+      selectTab(selectedTab) {
+        const tabId = selectedTab.dataset.tab;
+
+        // Update active states
+        this.tabs.forEach(tab => tab.classList.remove('active'));
+        selectedTab.classList.add('active');
+
+        // Update indicator
+        this.updateIndicator(selectedTab);
+
+        // Update content
+        this.updateContent(tabId);
+      }
+
+      updateIndicator(tab) {
+        if (!this.indicator) return;
+        const containerRect = this.container.getBoundingClientRect();
+        const tabRect = tab.getBoundingClientRect();
+
+        this.indicator.style.left = (tabRect.left - containerRect.left) + 'px';
+        this.indicator.style.width = tabRect.width + 'px';
+      }
+
+      updateContent(tabId) {
+        // Find all content panels within parent section
+        const section = this.container.closest('.section');
+        if (!section) return;
+
+        const contents = section.querySelectorAll('.tab-content');
+        contents.forEach(content => {
+          content.classList.remove('active');
+          if (content.id === `${tabId}-content`) {
+            content.classList.add('active');
+          }
+        });
+      }
+    }
+
+    // =============================================
+    // Icon Pill Tabs
+    // =============================================
+    class IconPillTabs {
+      constructor(container) {
+        this.container = container;
+        this.tabs = container.querySelectorAll('.icon-pill-tab');
+        this.init();
+      }
+
+      init() {
+        this.tabs.forEach(tab => {
+          tab.addEventListener('click', () => this.selectTab(tab));
+        });
+      }
+
+      selectTab(selectedTab) {
+        const tabId = selectedTab.dataset.tab;
+
+        this.tabs.forEach(tab => tab.classList.remove('active'));
+        selectedTab.classList.add('active');
+
+        const section = this.container.closest('.section');
+        if (!section) return;
+
+        const contents = section.querySelectorAll('.tab-content');
+        contents.forEach(content => {
+          content.classList.remove('active');
+          if (content.id === `${tabId}-content`) {
+            content.classList.add('active');
+          }
+        });
+      }
+    }
+
+    // =============================================
+    // Underline Tabs with Indicator
+    // =============================================
+    class UnderlineTabs {
+      constructor(container) {
+        this.container = container;
+        this.tabs = container.querySelectorAll('.underline-tab');
+        this.indicator = container.querySelector('.tab-indicator');
+        this.init();
+      }
+
+      init() {
+        this.tabs.forEach(tab => {
+          tab.addEventListener('click', () => this.selectTab(tab));
+        });
+
+        // Set initial position
+        requestAnimationFrame(() => {
+          const activeTab = this.container.querySelector('.underline-tab.active');
+          if (activeTab) {
+            this.updateIndicator(activeTab);
+          }
+        });
+
+        window.addEventListener('resize', () => {
+          const activeTab = this.container.querySelector('.underline-tab.active');
+          if (activeTab) {
+            this.updateIndicator(activeTab);
+          }
+        });
+      }
+
+      selectTab(selectedTab) {
+        const tabId = selectedTab.dataset.tab;
+
+        this.tabs.forEach(tab => tab.classList.remove('active'));
+        selectedTab.classList.add('active');
+
+        this.updateIndicator(selectedTab);
+
+        const section = this.container.closest('.section');
+        if (!section) return;
+
+        const contents = section.querySelectorAll('.tab-content');
+        contents.forEach(content => {
+          content.classList.remove('active');
+          if (content.id === `${tabId}-content`) {
+            content.classList.add('active');
+          }
+        });
+      }
+
+      updateIndicator(tab) {
+        if (!this.indicator) return;
+        const containerRect = this.container.getBoundingClientRect();
+        const tabRect = tab.getBoundingClientRect();
+
+        this.indicator.style.left = (tabRect.left - containerRect.left) + 'px';
+        this.indicator.style.width = tabRect.width + 'px';
+      }
+    }
+
+    // =============================================
+    // Segmented Control
+    // =============================================
+    class SegmentedControl {
+      constructor(container) {
+        this.container = container;
+        this.segments = container.querySelectorAll('.segment');
+        this.init();
+      }
+
+      init() {
+        this.segments.forEach(segment => {
+          segment.addEventListener('click', () => this.selectSegment(segment));
+        });
+      }
+
+      selectSegment(selectedSegment) {
+        const tabId = selectedSegment.dataset.tab;
+
+        this.segments.forEach(seg => seg.classList.remove('active'));
+        selectedSegment.classList.add('active');
+
+        const section = this.container.closest('.section');
+        if (!section) return;
+
+        const contents = section.querySelectorAll('.tab-content');
+        contents.forEach(content => {
+          content.classList.remove('active');
+          if (content.id === `${tabId}-content`) {
+            content.classList.add('active');
+          }
+        });
+      }
+    }
+
+    // =============================================
+    // Vertical Tabs
+    // =============================================
+    class VerticalTabs {
+      constructor(container) {
+        this.container = container;
+        this.tabs = container.querySelectorAll('.vertical-tab');
+        this.init();
+      }
+
+      init() {
+        this.tabs.forEach(tab => {
+          tab.addEventListener('click', () => this.selectTab(tab));
+        });
+      }
+
+      selectTab(selectedTab) {
+        const tabId = selectedTab.dataset.tab;
+
+        this.tabs.forEach(tab => tab.classList.remove('active'));
+        selectedTab.classList.add('active');
+
+        const section = this.container.closest('.section');
+        if (!section) return;
+
+        const contents = section.querySelectorAll('.tab-content');
+        contents.forEach(content => {
+          content.classList.remove('active');
+          if (content.id === `${tabId}-content`) {
+            content.classList.add('active');
+          }
+        });
+      }
+    }
+
+    // =============================================
+    // Color Customization
+    // =============================================
+    const colorOptions = document.querySelectorAll('.color-option');
+    colorOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        colorOptions.forEach(opt => opt.classList.remove('selected'));
+        option.classList.add('selected');
+
+        const color = option.dataset.color;
+        document.documentElement.style.setProperty('--accent', color);
+        document.documentElement.style.setProperty('--accent-hover', color);
+        document.documentElement.style.setProperty('--accent-soft', color + '26');
+      });
+    });
+
+    // =============================================
+    // Initialize All Tab Components
+    // =============================================
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize pill tabs
+      new PillTabs(document.getElementById('authTabs'));
+      new PillTabs(document.getElementById('navTabs'));
+
+      // Initialize icon pills
+      new IconPillTabs(document.getElementById('iconTabs'));
+
+      // Initialize underline tabs
+      new UnderlineTabs(document.getElementById('underlineTabs'));
+
+      // Initialize segmented control
+      new SegmentedControl(document.getElementById('segmentedTabs'));
+
+      // Initialize vertical tabs
+      new VerticalTabs(document.getElementById('verticalTabs'));
+    });
+  </script>
+</body>
+</html>
+
+New Customization Features
+1. Tab Styles
+'pill' - Rounded pill tabs like your screenshot (with optional animated indicator)
+'underline' - Classic underline tabs
+'segmented' - iOS-style segmented control
+'icon-pill' - Icon-only circular pill tabs
+'default' - Original Material Design style
+2. Theming
+Dark/Light themes - Automatic color scheme switching
+Custom accent colors - Change the primary color dynamically
+CSS custom properties - Full color customization support
+3. Animation Options
+'slide' - Slide transitions (default)
+'fade' - Fade in/out
+'scale' - Scale effect
+4. Enhanced Methods
+setTabStyle(style) - Change tab style on the fly
+setAccentColor(color) - Update accent color
+setTheme('light'|'dark') - Toggle theme
+setAnimation(type) - Change animation style
+
+Usage Example
+const tabs = AndroidComponents.TabLayout({
+  tabStyle: 'pill',           // Use pill style
+  animatedIndicator: true,    // Sliding pill indicator
+  theme: 'dark',              // Dark theme
+  accentColor: '#8b5cf6',     // Purple accent
+  animation: 'fade',          // Fade animation
+  mode: 'fixed',
+  tabs: [
+    { icon: 'fas fa-home', text: 'Home' },
+    { icon: 'fas fa-user', text: 'Profile' },
+    { icon: 'fas fa-bell', text: 'Alerts', badge: '3' }
+  ],
+  pages: [
+    document.createElement('div'), // Your content
+    document.createElement('div'),
+    document.createElement('div')
+  ]
+});
+
+// Change style dynamically
+tabs.setTabStyle('underline');
+tabs.setAccentColor('#ec4899');
+tabs.setTheme('light');

@@ -1,5 +1,5 @@
 // ============================================
-// AndroidComponents Bottom Navigation - FIXED TO MATCH OLD
+// AndroidComponents Bottom Navigation - FIXED
 // Requires: components1.js to be loaded first
 // ============================================
 (function() {
@@ -16,7 +16,7 @@
   });
 
   // ==========================================
-  // Bottom Navigation Styles - MATCHING OLD DIMENSIONS
+  // Bottom Navigation Styles - FIXED
   // ==========================================
   const BOTTOM_NAV_STYLES = `
     .md-bottom-nav {
@@ -27,13 +27,12 @@
       z-index: 99;
       background: var(--md-surface-container, #FEF7FF);
       border-top: 1px solid var(--md-outline-variant, #CAC4D0);
-      height: 65px;
-      width: 100%;
+      height: 80px;
       display: flex;
-      align-items: stretch;
+      align-items: center;
       justify-content: space-around;
-      padding: 0;
-      box-shadow: none;
+      padding: 0 8px;
+      box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.05);
     }
 
     .md-bottom-nav-item {
@@ -41,66 +40,68 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
+      justify-content: center;
       height: 100%;
       cursor: pointer;
       position: relative;
       transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
       -webkit-tap-highlight-color: transparent;
-      margin: 7px 0;
-      padding: 0;
+      max-width: 168px;
+      min-width: 80px;
+      padding: 8px 12px 12px;
+      gap: 4px;
     }
 
-    .md-bottom-nav-item-icon-container {
-      width: 55px;
-      height: 50%;
-      margin: auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .md-bottom-nav-item-indicator {
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 64px;
+      height: 32px;
       background: transparent;
       border-radius: 16px;
       transition: background 0.2s cubic-bezier(0.2, 0, 0, 1);
+      pointer-events: none;
     }
 
-    .md-bottom-nav-item.md-selected .md-bottom-nav-item-icon-container {
-      background: rgba(138, 121, 36, 0.2);
+    .md-bottom-nav-item.md-selected .md-bottom-nav-item-indicator {
+      background: var(--md-secondary-container, rgba(138, 121, 36, 0.2));
     }
 
     .md-bottom-nav-item-icon {
-      font-size: 26px;
-      color: #000;
+      font-size: 24px;
+      color: var(--md-on-surface-variant, #49454F);
       transition: color 0.2s ease;
-      margin: 3px 0;
-      height: 100%;
-      width: 100%;
-      text-align: center;
+      position: relative;
+      z-index: 1;
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 24px;
+      height: 24px;
     }
 
     .md-bottom-nav-item.md-selected .md-bottom-nav-item-icon {
-      color: #000;
+      color: var(--md-on-secondary-container, #1D1B20);
     }
 
     .md-bottom-nav-item-label {
-      height: 50%;
-      width: 100%;
       font-size: 12px;
-      font-weight: normal;
-      color: #000;
+      font-weight: 500;
+      color: var(--md-on-surface-variant, #49454F);
       transition: all 0.2s ease;
+      position: relative;
+      z-index: 1;
       text-align: center;
-      padding: 3px 0 0;
-      margin: 0;
-      line-height: normal;
+      line-height: 16px;
+      letter-spacing: 0.5px;
       white-space: nowrap;
     }
 
     .md-bottom-nav-item.md-selected .md-bottom-nav-item-label {
-      font-weight: bold;
-      color: #000;
+      font-weight: 700;
+      color: var(--md-on-surface, #1D1B20);
     }
 
     .md-bottom-nav-item:active {
@@ -124,6 +125,18 @@
       padding: 0 4px;
       z-index: 2;
     }
+
+    @media (max-width: 600px) {
+      .md-bottom-nav {
+        height: 80px;
+        padding: 0 4px;
+      }
+      
+      .md-bottom-nav-item {
+        min-width: 60px;
+        padding: 8px 8px 12px;
+      }
+    }
   `;
 
   // ==========================================
@@ -138,9 +151,9 @@
       container: null,
       element: null,
       onItemSelect: props.onItemSelect || null,
-      itemColor: props.itemColor || '#000',
-      background: props.background || '#FEF7FF',
-      lineColor: props.lineColor || '#CAC4D0'
+      itemColor: props.itemColor || null,
+      background: props.background || null,
+      lineColor: props.lineColor || null
     };
 
     const createNavItem = (item) => {
@@ -148,18 +161,18 @@
       navItem.className = 'md-bottom-nav-item';
       navItem.setAttribute('data-id', item.id);
 
-      // Icon container (replaces indicator - matches old selected div)
-      const iconContainer = document.createElement('div');
-      iconContainer.className = 'md-bottom-nav-item-icon-container';
-      navItem.appendChild(iconContainer);
+      // Indicator (background pill)
+      const indicator = document.createElement('div');
+      indicator.className = 'md-bottom-nav-item-indicator';
+      navItem.appendChild(indicator);
 
       // Icon
       const icon = document.createElement('i');
-      icon.className = `md-bottom-nav-item-icon bx ${item.icon}`;
-      iconContainer.appendChild(icon);
+      icon.className = `md-bottom-nav-item-icon ${item.icon}`;
+      navItem.appendChild(icon);
 
       // Label
-      const label = document.createElement('p');
+      const label = document.createElement('span');
       label.className = 'md-bottom-nav-item-label';
       label.textContent = item.name;
       navItem.appendChild(label);
@@ -182,7 +195,7 @@
     const updateIcon = (itemElement, selected) => {
       const icon = itemElement.querySelector('.md-bottom-nav-item-icon');
       const currentClasses = icon.className.split(' ');
-      const iconClass = currentClasses.find(cls => cls.startsWith('bx-') || cls.startsWith('bxs-'));
+      const iconClass = currentClasses.find(cls => cls.startsWith('bx'));
       
       if (iconClass) {
         icon.classList.remove(iconClass);
@@ -225,10 +238,10 @@
       }
 
       // Apply custom item color if specified
-      if (state.itemColor && state.itemColor !== '#000') {
+      if (state.itemColor) {
         const style = document.createElement('style');
         style.textContent = `
-          .md-bottom-nav-item.md-selected .md-bottom-nav-item-icon-container {
+          .md-bottom-nav-item.md-selected .md-bottom-nav-item-indicator {
             background: ${hexToRgbA(state.itemColor)} !important;
           }
           .md-bottom-nav-item.md-selected .md-bottom-nav-item-icon {
