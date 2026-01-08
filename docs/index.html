@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -288,7 +289,8 @@
             color: #DC2626;
         }
 
-        ul, ol {
+        ul,
+        ol {
             margin: 16px 0 16px 24px;
             color: var(--on-surface-variant);
         }
@@ -365,6 +367,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <aside class="sidebar">
@@ -443,31 +446,31 @@
                 <div class="installation">
                     <h3>Required Scripts <span class="badge required">All Required</span></h3>
                     <pre><code>&lt;!-- Core Layouts --&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/layouts.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/layouts.min.js"&gt;&lt;/script&gt;
 
 &lt;!-- Android Framework --&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/AndroidFramework.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/AndroidFramework.min.js"&gt;&lt;/script&gt;
 
 &lt;!-- Material Components --&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/material-views.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/material-views.min.js"&gt;&lt;/script&gt;
 
 &lt;!-- Material Notifiers --&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/material-notifiers.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/material-notifiers.min.js"&gt;&lt;/script&gt;
 
 &lt;!-- Main Activity --&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/.Mainactivity.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/.Mainactivity.min.js"&gt;&lt;/script&gt;
 
 &lt;!-- Bottom Navigation --&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/bottom_nav.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/bottom_nav.min.js"&gt;&lt;/script&gt;
 
 &lt;!-- Drawer Tools --&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/drawer_tools.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/drawer_tools.min.js"&gt;&lt;/script&gt;
 
 &lt;!-- Tabs --&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/tabs.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/tabs.min.js"&gt;&lt;/script&gt;
 
 &lt;!-- RecyclerView --&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/recycler_view.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/recycler_view.min.js"&gt;&lt;/script&gt;
 
 &lt;!-- Boxicons (for icons) --&gt;
 &lt;link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"&gt;</code></pre>
@@ -2322,13 +2325,13 @@ MaterialSlider({
                             <td>false</td>
                             <td>Disabled state</td>
                         </tr>
-<tr>
+                        <tr>
                             <td><code>strokeWidth</code></td>
                             <td>number</td>
                             <td>0</td>
                             <td>Border width AKA stroke</td>
-<tr>
-<td><code>strokeColor</code></td>
+                        <tr>
+                            <td><code>strokeColor</code></td>
                             <td>string</td>
                             <td>'var(--md-outline)'</td>
                             <td>Border color</td>
@@ -3335,8 +3338,11 @@ Snackbar({
                 const targetId = this.getAttribute('href').substring(1);
                 const targetElement = document.getElementById(targetId);
                 if (targetElement) {
-                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+
                     // Update active state
                     document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
                     this.classList.add('active');
@@ -3357,7 +3363,7 @@ Snackbar({
         // Highlight active section on scroll
         const sections = document.querySelectorAll('section[id]');
         const navItems = document.querySelectorAll('.nav-item');
-        
+
         window.addEventListener('scroll', () => {
             let current = '';
             sections.forEach(section => {
@@ -3377,4 +3383,5 @@ Snackbar({
         });
     </script>
 </body>
+
 </html>
