@@ -1,5 +1,6 @@
 // ============================================
 // AndroidComponents RecyclerView & Enhanced ScrollView
+// OPTIMIZED VERSION - Efficient data updates without full re-renders
 // Requires: components1.js and AndroidLayouts to be loaded first
 // ============================================
 (function() {
@@ -84,19 +85,19 @@
   `;
 
   // ==========================================
-  // RecyclerView Component
+  // RecyclerView Component - OPTIMIZED
   // ==========================================
   const RecyclerView = (props = {}) => {
     _injectStyles('recyclerview', RECYCLERVIEW_STYLES);
 
     const state = {
       data: props.data || [],
-      adapter: props.adapter || null, // function(item, index) => returns element or layout
-      layoutManager: props.layoutManager || 'linear', // 'linear' | 'grid'
+      adapter: props.adapter || null,
+      layoutManager: props.layoutManager || 'linear',
       gridColumns: props.gridColumns || 2,
       divider: props.divider || false,
       onLoadMore: props.onLoadMore || null,
-      loadMoreThreshold: props.loadMoreThreshold || 200, // px from bottom
+      loadMoreThreshold: props.loadMoreThreshold || 200,
       hasMore: props.hasMore !== false,
       emptyView: props.emptyView || null,
       emptyText: props.emptyText || 'No items',
@@ -111,7 +112,8 @@
       isLoading: false,
       hasError: false,
       errorMessage: '',
-      itemElements: []
+      itemElements: [], // Maps to data array indices
+      emptyViewElement: null
     };
 
     const createLoadingView = () => {
@@ -188,11 +190,18 @@
       return error;
     };
 
+    const createDivider = () => {
+      const divider = document.createElement('div');
+      divider.className = 'md-recyclerview-divider';
+      return divider;
+    };
+
     const renderItem = (item, index) => {
       if (!state.adapter) return null;
 
       const itemWrapper = document.createElement('div');
       itemWrapper.className = 'md-recyclerview-item';
+      itemWrapper.dataset.index = index;
       
       const content = state.adapter(item, index);
       
@@ -205,15 +214,21 @@
       return itemWrapper;
     };
 
-    const renderItems = () => {
-      state.container.innerHTML = '';
-      state.itemElements = [];
-
+    const updateEmptyState = () => {
       if (state.data.length === 0 && !state.isLoading) {
-        state.container.appendChild(createEmptyView());
-        return;
+        if (!state.emptyViewElement) {
+          state.emptyViewElement = createEmptyView();
+          state.container.appendChild(state.emptyViewElement);
+        }
+      } else {
+        if (state.emptyViewElement) {
+          state.emptyViewElement.remove();
+          state.emptyViewElement = null;
+        }
       }
+    };
 
+    const applyLayoutStyle = () => {
       if (state.layoutManager === 'grid') {
         state.container.style.display = 'grid';
         state.container.style.gridTemplateColumns = `repeat(${state.gridColumns}, 1fr)`;
@@ -221,8 +236,19 @@
       } else {
         state.container.style.display = 'flex';
         state.container.style.flexDirection = 'column';
-        state.container.style.gap = `${state.gap}px`;
+        state.container.style.gap = state.divider ? '0' : `${state.gap}px`;
       }
+    };
+
+    // OPTIMIZED: Full render only when necessary
+    const renderItems = () => {
+      state.container.innerHTML = '';
+      state.itemElements = [];
+
+      applyLayoutStyle();
+      updateEmptyState();
+
+      if (state.data.length === 0) return;
 
       state.data.forEach((item, index) => {
         const itemEl = renderItem(item, index);
@@ -230,14 +256,140 @@
           state.itemElements.push(itemEl);
           state.container.appendChild(itemEl);
 
-          // Add divider if needed (only for linear layout)
           if (state.divider && state.layoutManager === 'linear' && index < state.data.length - 1) {
-            const divider = document.createElement('div');
-            divider.className = 'md-recyclerview-divider';
-            state.container.appendChild(divider);
+            state.container.appendChild(createDivider());
           }
         }
       });
+    };
+
+    // OPTIMIZED: Insert item at specific index without full re-render
+    const notifyItemInserted = (index) => {
+      if (index < 0 || index > state.data.length - 1) return;
+
+      const item = state.data[index];
+      const itemEl = renderItem(item, index);
+      
+      if (!itemEl) return;
+
+      // Update empty state
+      updateEmptyState();
+
+      // Insert at specific position
+      if (index === 0) {
+        // Insert at beginning
+        state.container.insertBefore(itemEl, state.container.firstChild);
+        state.itemElements.unshift(itemEl);
+        
+        // Add divider after if needed
+        if (state.divider && state.layoutManager === 'linear' && state.data.length > 1) {
+          state.container.insertBefore(createDivider(), itemEl.nextSibling);
+        }
+      } else if (index >= state.itemElements.length) {
+        // Append at end
+        if (state.divider && state.layoutManager === 'linear' && state.itemElements.length > 0) {
+          state.container.appendChild(createDivider());
+        }
+        state.container.appendChild(itemEl);
+        state.itemElements.push(itemEl);
+      } else {
+        // Insert in middle
+        const refElement = state.itemElements[index];
+        state.container.insertBefore(itemEl, refElement);
+        state.itemElements.splice(index, 0, itemEl);
+        
+        // Add divider before if needed
+        if (state.divider && state.layoutManager === 'linear') {
+          state.container.insertBefore(createDivider(), itemEl);
+        }
+      }
+
+      // Update all subsequent indices
+      updateIndices(index + 1);
+    };
+
+    // OPTIMIZED: Remove item at index without full re-render
+    const notifyItemRemoved = (index) => {
+      if (index < 0 || index >= state.itemElements.length) return;
+
+      const itemEl = state.itemElements[index];
+      
+      // Remove divider if present (for linear layout)
+      if (state.divider && state.layoutManager === 'linear') {
+        const nextSibling = itemEl.nextSibling;
+        if (nextSibling && nextSibling.classList.contains('md-recyclerview-divider')) {
+          nextSibling.remove();
+        } else if (index > 0) {
+          const prevSibling = itemEl.previousSibling;
+          if (prevSibling && prevSibling.classList.contains('md-recyclerview-divider')) {
+            prevSibling.remove();
+          }
+        }
+      }
+
+      itemEl.remove();
+      state.itemElements.splice(index, 1);
+
+      // Update indices for remaining items
+      updateIndices(index);
+      updateEmptyState();
+    };
+
+    // OPTIMIZED: Update single item without full re-render
+    const notifyItemChanged = (index) => {
+      if (index < 0 || index >= state.data.length) return;
+
+      const item = state.data[index];
+      const newItemEl = renderItem(item, index);
+      
+      if (!newItemEl) return;
+
+      const oldItemEl = state.itemElements[index];
+      if (oldItemEl) {
+        state.container.replaceChild(newItemEl, oldItemEl);
+        state.itemElements[index] = newItemEl;
+      }
+    };
+
+    // OPTIMIZED: Add range of items efficiently
+    const notifyItemRangeInserted = (startIndex, count) => {
+      const itemsToAdd = state.data.slice(startIndex, startIndex + count);
+      
+      updateEmptyState();
+
+      itemsToAdd.forEach((item, i) => {
+        const index = startIndex + i;
+        const itemEl = renderItem(item, index);
+        
+        if (!itemEl) return;
+
+        if (index >= state.itemElements.length) {
+          // Append
+          if (state.divider && state.layoutManager === 'linear' && state.itemElements.length > 0) {
+            state.container.appendChild(createDivider());
+          }
+          state.container.appendChild(itemEl);
+          state.itemElements.push(itemEl);
+        } else {
+          // Insert
+          const refElement = state.itemElements[index];
+          state.container.insertBefore(itemEl, refElement);
+          state.itemElements.splice(index, 0, itemEl);
+          
+          if (state.divider && state.layoutManager === 'linear' && index > 0) {
+            state.container.insertBefore(createDivider(), itemEl);
+          }
+        }
+      });
+
+      updateIndices(startIndex + count);
+    };
+
+    // Helper: Update dataset indices on DOM elements
+    const updateIndices = (fromIndex = 0) => {
+      for (let i = fromIndex; i < state.itemElements.length; i++) {
+        state.itemElements[i].dataset.index = i;
+      }
     };
 
     const handleScroll = () => {
@@ -271,57 +423,140 @@
       state.loadingElement = createLoadingView();
       state.element.appendChild(state.loadingElement);
 
+      applyLayoutStyle();
       renderItems();
 
-      // Add scroll listener for infinite scroll
       state.element.addEventListener('scroll', handleScroll);
     };
 
     const instance = {
+      // Full dataset replacement - only method that does full re-render
       setData(data) {
         state.data = data;
         renderItems();
         return this;
       },
+
+      // OPTIMIZED: Add multiple items efficiently
       addData(newData) {
+        if (!Array.isArray(newData) || newData.length === 0) return this;
+        
+        const startIndex = state.data.length;
         state.data = state.data.concat(newData);
-        renderItems();
+        notifyItemRangeInserted(startIndex, newData.length);
         return this;
       },
+
+      // OPTIMIZED: Add single item at end
       addItem(item) {
         state.data.push(item);
-        const itemEl = renderItem(item, state.data.length - 1);
-        if (itemEl) {
-          state.itemElements.push(itemEl);
-          state.container.appendChild(itemEl);
-        }
+        notifyItemInserted(state.data.length - 1);
         return this;
       },
+
+      // NEW: Add item at specific index
+      addItemAt(index, item) {
+        if (index < 0) index = 0;
+        if (index > state.data.length) index = state.data.length;
+        
+        state.data.splice(index, 0, item);
+        notifyItemInserted(index);
+        return this;
+      },
+
+      // OPTIMIZED: Remove item without full re-render
       removeItem(index) {
         if (index >= 0 && index < state.data.length) {
           state.data.splice(index, 1);
-          renderItems();
+          notifyItemRemoved(index);
         }
         return this;
       },
+
+      // NEW: Remove range of items
+      removeItemRange(startIndex, count) {
+        if (startIndex < 0 || startIndex >= state.data.length) return this;
+        
+        const actualCount = Math.min(count, state.data.length - startIndex);
+        state.data.splice(startIndex, actualCount);
+        
+        // Remove from DOM
+        for (let i = 0; i < actualCount; i++) {
+          notifyItemRemoved(startIndex);
+        }
+        return this;
+      },
+
+      // OPTIMIZED: Update single item without full re-render
       updateItem(index, newData) {
         if (index >= 0 && index < state.data.length) {
           state.data[index] = newData;
-          renderItems();
+          notifyItemChanged(index);
         }
         return this;
       },
+
+      // NEW: Update multiple items
+      updateItemRange(startIndex, newDataArray) {
+        if (!Array.isArray(newDataArray) || startIndex < 0) return this;
+        
+        newDataArray.forEach((newData, i) => {
+          const index = startIndex + i;
+          if (index < state.data.length) {
+            state.data[index] = newData;
+            notifyItemChanged(index);
+          }
+        });
+        return this;
+      },
+
+      // Clear all items
       clear() {
         state.data = [];
         renderItems();
         return this;
       },
+
+      // Notify methods (Android style)
+      notifyDataSetChanged() {
+        renderItems();
+        return this;
+      },
+
+      notifyItemInserted(index) {
+        notifyItemInserted(index);
+        return this;
+      },
+
+      notifyItemRemoved(index) {
+        notifyItemRemoved(index);
+        return this;
+      },
+
+      notifyItemChanged(index) {
+        notifyItemChanged(index);
+        return this;
+      },
+
+      notifyItemRangeInserted(startIndex, count) {
+        notifyItemRangeInserted(startIndex, count);
+        return this;
+      },
+
+      // Data accessors
       getData() {
         return state.data;
       },
+
+      getItem(index) {
+        return state.data[index];
+      },
+
       getItemCount() {
         return state.data.length;
       },
+
+      // Load more functionality
       async loadMore() {
         if (state.isLoading || !state.hasMore || !state.onLoadMore) return;
 
@@ -352,21 +587,27 @@
 
         return this;
       },
+
       setHasMore(hasMore) {
         state.hasMore = hasMore;
         return this;
       },
+
       isLoading() {
         return state.isLoading;
       },
+
+      // Scroll controls
       scrollToTop() {
         state.element.scrollTop = 0;
         return this;
       },
+
       scrollToBottom() {
         state.element.scrollTop = state.element.scrollHeight;
         return this;
       },
+
       scrollToIndex(index) {
         if (index >= 0 && index < state.itemElements.length) {
           const item = state.itemElements[index];
@@ -374,10 +615,13 @@
         }
         return this;
       },
+
+      // Manual refresh (full re-render)
       refresh() {
         renderItems();
         return this;
       },
+
       getElement() {
         if (!state.element) build();
         return state.element;
@@ -510,7 +754,6 @@
       if (id) state.element.id = id;
       if (className) state.element.className = className;
 
-      // Create content container
       state.contentContainer = document.createElement('div');
       state.children.forEach(child => {
         if (child && typeof child.getElement === 'function') {
@@ -521,13 +764,11 @@
       });
       state.element.appendChild(state.contentContainer);
 
-      // Add loading indicator if load more is enabled
       if (onLoadMore && showLoadingIndicator) {
         state.loadingElement = createLoadingIndicator();
         state.element.appendChild(state.loadingElement);
       }
 
-      // Add scroll listener
       if (onLoadMore) {
         state.element.addEventListener('scroll', handleScroll);
       }

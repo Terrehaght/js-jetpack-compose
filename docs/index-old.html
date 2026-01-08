@@ -1,0 +1,2612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Jetpack Compose - Documentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --bg-card: #16161f;
+            --bg-code: #0d0d14;
+            --accent-primary: #7c3aed;
+            --accent-secondary: #a855f7;
+            --accent-glow: rgba(124, 58, 237, 0.3);
+            --accent-android: #3ddc84;
+            --text-primary: #f0f0f5;
+            --text-secondary: #a0a0b0;
+            --text-muted: #606070;
+            --border-color: #2a2a35;
+            --border-glow: rgba(124, 58, 237, 0.5);
+            --gradient-android: linear-gradient(135deg, #3ddc84 0%, #00bcd4 100%);
+            --gradient-accent: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #ec4899 100%);
+            --shadow-glow: 0 0 40px rgba(124, 58, 237, 0.15);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+        }
+
+        .dark {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --bg-card: #16161f;
+            --bg-code: #0d0d14;
+            --text-primary: #f0f0f5;
+            --text-secondary: #a0a0b0;
+            --text-muted: #606070;
+            --border-color: #2a2a35;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(124, 58, 237, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(61, 220, 132, 0.06) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.04) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Grid Pattern Overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:
+                linear-gradient(rgba(124, 58, 237, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(124, 58, 237, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-primary);
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .header {
+            padding: 80px 0 60px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .logo-icon {
+            width: 72px;
+            height: 72px;
+            background: var(--gradient-android);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: #000;
+            box-shadow: 0 8px 32px rgba(61, 220, 132, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 0.6s ease-out 0.1s both;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 16px auto 32px;
+            font-weight: 400;
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+
+        .badge-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .badge i {
+            font-size: 1rem;
+            color: var(--accent-android);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Navigation */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0;
+        }
+
+        .nav-container {
+            display: flex;
+            gap: 8px;
+            padding: 16px 24px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .nav-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-link {
+            padding: 10px 20px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-radius: 100px;
+            white-space: nowrap;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+        }
+
+        .nav-link.active {
+            color: var(--text-primary);
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        /* Sections */
+        .section {
+            padding: 80px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-header {
+            margin-bottom: 48px;
+        }
+
+        .section-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(124, 58, 237, 0.15);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .section-desc {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            border-color: var(--border-glow);
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-4px);
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .component-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .component-card:hover {
+            border-color: var(--accent-android);
+            box-shadow: 0 0 30px rgba(61, 220, 132, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .component-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(61, 220, 132, 0.1);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            color: var(--accent-android);
+            margin-bottom: 20px;
+        }
+
+        .component-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .component-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: var(--bg-code);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            margin: 24px 0;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-lang {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent-android);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .code-copy {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .code-copy:hover {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .code-content {
+            padding: 20px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            line-height: 1.7;
+            color: var(--text-primary);
+        }
+
+        .code-content code {
+            font-family: inherit;
+        }
+
+        /* Syntax Highlighting */
+        .keyword { color: #c792ea; }
+        .string { color: #c3e88d; }
+        .function { color: #82aaff; }
+        .property { color: #f78c6c; }
+        .comment { color: #546e7a; font-style: italic; }
+        .number { color: #f78c6c; }
+        .operator { color: #89ddff; }
+        .tag { color: #f07178; }
+        .attr { color: #ffcb6b; }
+
+        /* Installation Section */
+        .install-step {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-android);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #000;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .step-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* API Reference */
+        .api-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .api-header {
+            padding: 24px 28px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .api-header:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .api-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent-android);
+        }
+
+        .api-type {
+            padding: 4px 12px;
+            background: rgba(124, 58, 237, 0.15);
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--accent-secondary);
+            text-transform: uppercase;
+        }
+
+        .api-body {
+            padding: 28px;
+        }
+
+        .api-desc {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.7;
+        }
+
+        .props-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .props-table th {
+            text-align: left;
+            padding: 12px 16px;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .props-table th:first-child {
+            border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+        }
+
+        .props-table th:last-child {
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+
+        .props-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: top;
+        }
+
+        .props-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .prop-name {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-android);
+            font-weight: 500;
+        }
+
+        .prop-type {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-secondary);
+            font-size: 0.85rem;
+        }
+
+        .prop-default {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Quick Start Example */
+        .example-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        @media (max-width: 900px) {
+            .example-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .example-preview {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+        }
+
+        .preview-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 16px;
+        }
+
+        /* Alert Box */
+        .alert {
+            display: flex;
+            gap: 16px;
+            padding: 20px 24px;
+            background: rgba(61, 220, 132, 0.08);
+            border: 1px solid rgba(61, 220, 132, 0.2);
+            border-radius: var(--radius-md);
+            margin: 24px 0;
+        }
+
+        .alert-icon {
+            font-size: 1.5rem;
+            color: var(--accent-android);
+            flex-shrink: 0;
+        }
+
+        .alert-content h4 {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .alert-content p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Method List */
+        .method-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .method-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-md);
+        }
+
+        .method-name {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-android);
+            font-weight: 500;
+            min-width: 200px;
+        }
+
+        .method-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 60px 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .footer-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-android);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #000;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .header {
+                padding: 60px 0 40px;
+            }
+
+            .section {
+                padding: 60px 0;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .card {
+                padding: 24px;
+            }
+
+            .install-step {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .method-item {
+                flex-direction: column;
+            }
+
+            .method-name {
+                min-width: auto;
+            }
+
+            .props-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        /* Expandable sections */
+        .expandable-content {
+            display: none;
+        }
+
+        .expandable-content.show {
+            display: block;
+        }
+
+        .expand-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent-primary);
+            cursor: pointer;
+            font-weight: 500;
+            margin-top: 16px;
+            font-size: 0.9rem;
+        }
+
+        .expand-toggle i {
+            transition: transform 0.2s;
+        }
+
+        .expand-toggle.active i {
+            transform: rotate(180deg);
+        }
+
+        /* TOC floating */
+        .toc-float {
+            position: fixed;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 50;
+            display: none;
+        }
+
+        @media (min-width: 1400px) {
+            .toc-float {
+                display: block;
+            }
+        }
+
+        .toc-float a {
+            display: block;
+            width: 8px;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 50%;
+            margin: 12px 0;
+            transition: all 0.2s;
+        }
+
+        .toc-float a:hover,
+        .toc-float a.active {
+            background: var(--accent-primary);
+            transform: scale(1.5);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <i class='bx bxl-android'></i>
+                </div>
+            </div>
+            <h1 class="title">JS Jetpack Compose</h1>
+            <p class="subtitle">Build beautiful, responsive Android-style UIs for the web using declarative JavaScript components inspired by Jetpack Compose.</p>
+            <div class="badge-row">
+                <span class="badge"><i class='bx bx-code-alt'></i> Declarative UI</span>
+                <span class="badge"><i class='bx bx-mobile-alt'></i> Material Design 3</span>
+                <span class="badge"><i class='bx bx-layer'></i> Modular Architecture</span>
+                <span class="badge"><i class='bx bx-moon'></i> Dark Mode Ready</span>
+            </div>
+        </div>
+    </header>
+
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#installation" class="nav-link active">Installation</a>
+            <a href="#layouts" class="nav-link">Layouts</a>
+            <a href="#components" class="nav-link">Components</a>
+            <a href="#inputs" class="nav-link">Inputs</a>
+            <a href="#navigation" class="nav-link">Navigation</a>
+            <a href="#overlays" class="nav-link">Dialogs & Snackbars</a>
+            <a href="#recycler" class="nav-link">RecyclerView</a>
+            <a href="#examples" class="nav-link">Examples</a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Installation Section -->
+        <section id="installation" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag"><i class='bx bx-download'></i> Getting Started</span>
+                    <h2 class="section-title">Installation</h2>
+                    <p class="section-desc">Add the library scripts to your HTML file in the correct order. Each module builds upon the previous ones.</p>
+                </div>
+
+                <div class="alert">
+                    <i class='bx bx-info-circle alert-icon'></i>
+                    <div class="alert-content">
+                        <h4>Dependency Order Matters</h4>
+                        <p>Make sure to include <strong>layouts.js</strong> first, followed by <strong>material-views.js</strong>, then other modules. Also include BoxIcons for icon support.</p>
+                    </div>
+                </div>
+
+                <div class="install-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Include BoxIcons (Required for icons)</h3>
+                        <p class="step-desc">The library uses BoxIcons for all icon components.</p>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">HTML</span>
+                                <button class="code-copy" onclick="copyCode(this)"><i class='bx bx-copy'></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+<code><span class="tag">&lt;link</span> <span class="attr">href</span>=<span class="string">"https://unpkg.com/<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1a78756273797574695a28342b342e">[email&#160;protected]</a>/css/boxicons.min.css"</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span><span class="tag">&gt;</span></code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="install-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Include Core Library Scripts</h3>
+                        <p class="step-desc">Add the library modules in the correct dependency order:</p>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">HTML</span>
+                                <button class="code-copy" onclick="copyCode(this)"><i class='bx bx-copy'></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+<code><span class="comment">&lt;!-- Core Layout System (REQUIRED FIRST) --&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="string">"https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/layouts.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+
+<span class="comment">&lt;!-- Material UI Components (REQUIRED SECOND) --&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="string">"https://cdn.jsdelivr.net/gh/Terrehaught/js-jetpack-compose@main/js-jetpack-compose/material-views.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+
+<span class="comment">&lt;!-- Dialogs & Snackbars --&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="string">"https://cdn.jsdelivr.net/gh/Terrehaught/js-jetpack-compose@main/js-jetpack-compose/material-notifiers.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+
+<span class="comment">&lt;!-- Bottom Navigation --&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="string">"https://cdn.jsdelivr.net/gh/Terrehaught/js-jetpack-compose@main/js-jetpack-compose/bottom_nav.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+
+<span class="comment">&lt;!-- Navigation Drawer & Toolbar --&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="string">"https://cdn.jsdelivr.net/gh/Terrehaught/js-jetpack-compose@main/js-jetpack-compose/drawer_tools.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+
+<span class="comment">&lt;!-- TabLayout & ViewPager --&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="string">"https://cdn.jsdelivr.net/gh/Terrehaught/js-jetpack-compose@main/js-jetpack-compose/tabs.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+
+<span class="comment">&lt;!-- RecyclerView --&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="string">"https://cdn.jsdelivr.net/gh/Terrehaught/js-jetpack-compose@main/js-jetpack-compose/recycler_view.js"</span><span class="tag">&gt;&lt;/script&gt;</span></code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="install-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Create Your App Container</h3>
+                        <p class="step-desc">Add a container element where your app will be mounted.</p>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">HTML</span>
+                                <button class="code-copy" onclick="copyCode(this)"><i class='bx bx-copy'></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+<code><span class="tag">&lt;div</span> <span class="attr">id</span>=<span class="string">"app"</span><span class="tag">&gt;&lt;/div&gt;</span></code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Layouts Section -->
+        <section id="layouts" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag"><i class='bx bx-layout'></i> Layout System</span>
+                    <h2 class="section-title">Layouts</h2>
+                    <p class="section-desc">Powerful layout containers for organizing your UI components using Android-style patterns.</p>
+                </div>
+
+                <div class="card-grid">
+                    <div class="component-card">
+                        <div class="component-icon"><i class='bx bx-menu'></i></div>
+                        <h3 class="component-name">Column / LinearLayout</h3>
+                        <p class="component-desc">Arrange children vertically with flexible spacing, gravity, and weight distribution.</p>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-icon"><i class='bx bx-dots-horizontal'></i></div>
+                        <h3 class="component-name">Row</h3>
+                        <p class="component-desc">Arrange children horizontally with alignment and gap controls.</p>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-icon"><i class='bx bx-grid-alt'></i></div>
+                        <h3 class="component-name">GridLayout</h3>
+                        <p class="component-desc">CSS Grid-based layout with column/row spanning support.</p>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-icon"><i class='bx bx-layer'></i></div>
+                        <h3 class="component-name">FrameLayout</h3>
+                        <p class="component-desc">Stack children on top of each other with gravity positioning.</p>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-icon"><i class='bx bx-move'></i></div>
+                        <h3 class="component-name">ConstraintLayout</h3>
+                        <p class="component-desc">Absolute positioning with constraint-based relationships.</p>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-icon"><i class='bx bx-expand-vertical'></i></div>
+                        <h3 class="component-name">ScrollView</h3>
+                        <p class="component-desc">Scrollable container for content that exceeds viewport.</p>
+                    </div>
+                </div>
+
+                <!-- Column API -->
+                <div class="api-item" style="margin-top: 48px;">
+                    <div class="api-header" onclick="toggleApi(this)">
+                        <span class="api-name">Column / Row / LinearLayout</span>
+                        <span class="api-type">Layout</span>
+                    </div>
+                    <div class="api-body expandable-content">
+                        <p class="api-desc">The fundamental layout containers. Column arranges children vertically, Row arranges horizontally.</p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">JavaScript</span>
+                                <button class="code-copy" onclick="copyCode(this)"><i class='bx bx-copy'></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+<code><span class="keyword">const</span> { Column, Row, LinearLayout } = <span class="property">AndroidLayouts</span>;
+
+<span class="comment">// Vertical layout</span>
+<span class="keyword">const</span> myColumn = <span class="function">Column</span>({
+    <span class="property">padding</span>: <span class="number">16</span>,
+    <span class="property">gap</span>: <span class="number">12</span>,
+    <span class="property">gravity</span>: <span class="string">'center'</span>,
+    <span class="property">width</span>: <span class="string">'match_parent'</span>,
+    <span class="property">background</span>: <span class="string">'#f5f5f5'</span>
+}, [
+    <span class="function">TextView</span>({ <span class="property">text</span>: <span class="string">'Hello'</span> }),
+    <span class="function">TextView</span>({ <span class="property">text</span>: <span class="string">'World'</span> })
+]);
+
+<span class="comment">// Horizontal layout</span>
+<span class="keyword">const</span> myRow = <span class="function">Row</span>({
+    <span class="property">gap</span>: <span class="number">8</span>,
+    <span class="property">gravity</span>: <span class="string">'space_between'</span>
+}, [child1, child2]);
+
+<span class="comment">// Mount to DOM</span>
+<span class="property">AndroidLayouts</span>.<span class="function">mount</span>(myColumn, <span class="string">'app'</span>);</code>
+                            </div>
+                        </div>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">Properties</h4>
+                        <table class="props-table">
+                            <thead>
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Type</th>
+                                    <th>Default</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="prop-name">orientation</span></td>
+                                    <td><span class="prop-type">'vertical' | 'horizontal'</span></td>
+                                    <td><span class="prop-default">'vertical'</span></td>
+                                    <td>Layout direction</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">gravity</span></td>
+                                    <td><span class="prop-type">string</span></td>
+                                    <td><span class="prop-default">undefined</span></td>
+                                    <td>Alignment: 'center', 'start', 'end', 'space_between', 'space_around', 'space_evenly'</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">gap</span></td>
+                                    <td><span class="prop-type">number</span></td>
+                                    <td><span class="prop-default">0</span></td>
+                                    <td>Spacing between children in pixels</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">padding</span></td>
+                                    <td><span class="prop-type">number | object</span></td>
+                                    <td><span class="prop-default">undefined</span></td>
+                                    <td>Internal padding. Can be number or {top, right, bottom, left, horizontal, vertical, all}</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">width</span></td>
+                                    <td><span class="prop-type">'match_parent' | 'wrap_content' | number</span></td>
+                                    <td><span class="prop-default">undefined</span></td>
+                                    <td>Width constraint</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">height</span></td>
+                                    <td><span class="prop-type">'match_parent' | 'wrap_content' | number</span></td>
+                                    <td><span class="prop-default">undefined</span></td>
+                                    <td>Height constraint</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">wrap</span></td>
+                                    <td><span class="prop-type">boolean</span></td>
+                                    <td><span class="prop-default">false</span></td>
+                                    <td>Enable flex-wrap for Row layouts</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">Methods</h4>
+                        <div class="method-list">
+                            <div class="method-item">
+                                <span class="method-name">getElement()</span>
+                                <span class="method-desc">Returns the underlying HTMLElement</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">addChild(child)</span>
+                                <span class="method-desc">Dynamically add a child component</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">removeChild(child)</span>
+                                <span class="method-desc">Remove a child component</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">clear()</span>
+                                <span class="method-desc">Remove all children</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">show() / hide() / invisible()</span>
+                                <span class="method-desc">Visibility controls (visible, gone, invisible)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GridLayout API -->
+                <div class="api-item">
+                    <div class="api-header" onclick="toggleApi(this)">
+                        <span class="api-name">GridLayout</span>
+                        <span class="api-type">Layout</span>
+                    </div>
+                    <div class="api-body expandable-content">
+                        <p class="api-desc">CSS Grid-based layout system with support for spanning columns and rows.</p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">JavaScript</span>
+                                <button class="code-copy" onclick="copyCode(this)"><i class='bx bx-copy'></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+<code><span class="keyword">const</span> { GridLayout, GridParams } = <span class="property">AndroidLayouts</span>;
+
+<span class="keyword">const</span> grid = <span class="function">GridLayout</span>({
+    <span class="property">columns</span>: <span class="number">3</span>,
+    <span class="property">gap</span>: <span class="number">16</span>,
+    <span class="property">padding</span>: <span class="number">16</span>
+}, [
+    <span class="comment">// Span 2 columns</span>
+    <span class="function">GridParams</span>({ <span class="property">columnSpan</span>: <span class="number">2</span> }, card1),
+    card2,
+    card3,
+    <span class="comment">// Span full row</span>
+    <span class="function">GridParams</span>({ <span class="property">columnSpan</span>: <span class="number">3</span> }, card4)
+]);</code>
+                            </div>
+                        </div>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">Properties</h4>
+                        <table class="props-table">
+                            <thead>
+                                <tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="prop-name">columns</span></td>
+                                    <td><span class="prop-type">number</span></td>
+                                    <td><span class="prop-default">2</span></td>
+                                    <td>Number of columns</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">rows</span></td>
+                                    <td><span class="prop-type">number</span></td>
+                                    <td><span class="prop-default">auto</span></td>
+                                    <td>Fixed number of rows</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">gap</span></td>
+                                    <td><span class="prop-type">number</span></td>
+                                    <td><span class="prop-default">0</span></td>
+                                    <td>Gap between cells</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prop-name">columnGap / rowGap</span></td>
+                                    <td><span class="prop-type">number</span></td>
+                                    <td><span class="prop-default">gap</span></td>
+                                    <td>Separate column/row gaps</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">GridParams Helper</h4>
+                        <table class="props-table">
+                            <thead>
+                                <tr><th>Property</th><th>Type</th><th>Description</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="prop-name">columnSpan</span></td><td><span class="prop-type">number</span></td><td>Number of columns to span</td></tr>
+                                <tr><td><span class="prop-name">rowSpan</span></td><td><span class="prop-type">number</span></td><td>Number of rows to span</td></tr>
+                                <tr><td><span class="prop-name">column</span></td><td><span class="prop-type">number</span></td><td>Start column position</td></tr>
+                                <tr><td><span class="prop-name">row</span></td><td><span class="prop-type">number</span></td><td>Start row position</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Components Section -->
+        <section id="components" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag"><i class='bx bx-cube'></i> UI Components</span>
+                    <h2 class="section-title">Material Components</h2>
+                    <p class="section-desc">Ready-to-use Material Design 3 components with full theming support.</p>
+                </div>
+
+                <div class="card-grid">
+                    <div class="component-card">
+                        <div class="component-icon"><i class='bx bx-text'></i></div>
+                        <h3 class="component-name">TextView</h3>
+                        <p class="component-desc">Text display with styling, truncation, max lines, and expandable See more/less support.</p>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-icon"><i class='bx bx-pointer'></i></div>
+                        <h3 class="component-name">MaterialButton</h3>
+                        <p class="component-desc">Material buttons with filled, outlined, text, tonal, and elevated variants.</p>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-icon"><i class='bx bx-card'></i></div>
+                        <h3 class="component-name">Card</h3>
+                        <p class="component-desc">Elevated, filled, or outlined cards for content grouping.</p>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-icon"><i class='bx bx-image'></i></div>
+                        <h3 class="component-name">MaterialImage</h3>
+                        <p class="component-desc">Feature-rich image with blur-up loading, retry logic, and transformations.</p>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-icon"><i class='bx bx-list-ol'></i></div>
+                        <h3 class="component-name">MaterialStepView</h3>
+                        <p class="component-desc">Step-by-step progress indicator for forms, onboarding, and tracking.</p>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-icon"><i class='bx bx-toggle-right'></i></div>
+                        <h3 class="component-name">MaterialSwitch</h3>
+                        <p class="component-desc">Toggle switch with smooth animations and custom colors.</p>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-icon"><i class='bx bx-user-circle'></i></div>
+                        <h3 class="component-name">Avatar</h3>
+                        <p class="component-desc">Circular avatar with icon or text initial support.</p>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-icon"><i class='bx bx-minus'></i></div>
+                        <h3 class="component-name">Divider</h3>
+                        <p class="component-desc">Horizontal or vertical dividers for visual separation.</p>
+                    </div>
+                </div>
+
+                <!-- MaterialButton API -->
+                <div class="api-item" style="margin-top: 48px;">
+                    <div class="api-header" onclick="toggleApi(this)">
+                        <span class="api-name">MaterialButton</span>
+                        <span class="api-type">Component</span>
+                    </div>
+                    <div class="api-body expandable-content">
+                        <p class="api-desc">Material Design 3 buttons with multiple variants and loading states.</p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">JavaScript</span>
+                                <button class="code-copy" onclick="copyCode(this)"><i class='bx bx-copy'></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+<code><span class="keyword">const</span> { MaterialButton } = <span class="property">AndroidComponents</span>;
+
+<span class="comment">// Filled button</span>
+<span class="keyword">const</span> primaryBtn = <span class="function">MaterialButton</span>({
+    <span class="property">text</span>: <span class="string">'Submit'</span>,
+    <span class="property">variant</span>: <span class="string">'filled'</span>,
+    <span class="property">leadingIcon</span>: <span class="string">'bx bx-send'</span>,
+    <span class="property">onClick</span>: () => <span class="function">handleSubmit</span>()
+});
+
+<span class="comment">// Outlined button</span>
+<span class="keyword">const</span> outlinedBtn = <span class="function">MaterialButton</span>({
+    <span class="property">text</span>: <span class="string">'Cancel'</span>,
+    <span class="property">variant</span>: <span class="string">'outlined'</span>
+});
+
+<span class="comment">// Icon-only button</span>
+<span class="keyword">const</span> iconBtn = <span class="function">MaterialButton</span>({
+    <span class="property">leadingIcon</span>: <span class="string">'bx bx-heart'</span>,
+    <span class="property">iconOnly</span>: <span class="keyword">true</span>,
+    <span class="property">variant</span>: <span class="string">'tonal'</span>
+});
+
+<span class="comment">// Loading state</span>
+primaryBtn.<span class="function">setLoading</span>(<span class="keyword">true</span>, <span class="string">'Saving...'</span>);</code>
+                            </div>
+                        </div>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">Variants</h4>
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px;">
+                            <span class="badge">filled</span>
+                            <span class="badge">outlined</span>
+                            <span class="badge">text</span>
+                            <span class="badge">elevated</span>
+                            <span class="badge">tonal</span>
+                        </div>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="prop-name">text</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">'Button'</span></td><td>Button label</td></tr>
+                                <tr><td><span class="prop-name">variant</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">'filled'</span></td><td>Button style variant</td></tr>
+                                <tr><td><span class="prop-name">size</span></td><td><span class="prop-type">'small' | 'medium' | 'large'</span></td><td><span class="prop-default">'medium'</span></td><td>Button size</td></tr>
+                                <tr><td><span class="prop-name">leadingIcon</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">null</span></td><td>Icon class before text</td></tr>
+                                <tr><td><span class="prop-name">trailingIcon</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">null</span></td><td>Icon class after text</td></tr>
+                                <tr><td><span class="prop-name">iconOnly</span></td><td><span class="prop-type">boolean</span></td><td><span class="prop-default">false</span></td><td>Round icon button mode</td></tr>
+                                <tr><td><span class="prop-name">fullWidth</span></td><td><span class="prop-type">boolean</span></td><td><span class="prop-default">false</span></td><td>Take full container width</td></tr>
+                                <tr><td><span class="prop-name">disabled</span></td><td><span class="prop-type">boolean</span></td><td><span class="prop-default">false</span></td><td>Disabled state</td></tr>
+                                <tr><td><span class="prop-name">color</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">null</span></td><td>Custom color hex</td></tr>
+                                <tr><td><span class="prop-name">onClick</span></td><td><span class="prop-type">function</span></td><td><span class="prop-default">null</span></td><td>Click handler</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Card API -->
+                <div class="api-item">
+                    <div class="api-header" onclick="toggleApi(this)">
+                        <span class="api-name">Card</span>
+                        <span class="api-type">Component</span>
+                    </div>
+                    <div class="api-body expandable-content">
+                        <p class="api-desc">Container component with elevation and multiple visual styles.</p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">JavaScript</span>
+                                <button class="code-copy" onclick="copyCode(this)"><i class='bx bx-copy'></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+<code><span class="keyword">const</span> { Card, TextView } = <span class="property">AndroidComponents</span>;
+
+<span class="keyword">const</span> card = <span class="function">Card</span>({
+    <span class="property">variant</span>: <span class="string">'elevated'</span>,
+    <span class="property">elevation</span>: <span class="number">2</span>,
+    <span class="property">padding</span>: <span class="number">20</span>,
+    <span class="property">cornerRadius</span>: <span class="number">16</span>,
+    <span class="property">onClick</span>: () => <span class="function">console</span>.<span class="function">log</span>(<span class="string">'Card clicked'</span>)
+}, [
+    <span class="function">TextView</span>({ <span class="property">text</span>: <span class="string">'Card Title'</span>, <span class="property">textSize</span>: <span class="number">18</span>, <span class="property">textStyle</span>: <span class="string">'bold'</span> }),
+    <span class="function">TextView</span>({ <span class="property">text</span>: <span class="string">'Card content goes here...'</span> })
+]);</code>
+                            </div>
+                        </div>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="prop-name">variant</span></td><td><span class="prop-type">'elevated' | 'filled' | 'outlined'</span></td><td><span class="prop-default">'elevated'</span></td><td>Card style</td></tr>
+                                <tr><td><span class="prop-name">elevation</span></td><td><span class="prop-type">number</span></td><td><span class="prop-default">1</span></td><td>Shadow depth (1-5)</td></tr>
+                                <tr><td><span class="prop-name">padding</span></td><td><span class="prop-type">number</span></td><td><span class="prop-default">16</span></td><td>Internal padding</td></tr>
+                                <tr><td><span class="prop-name">cornerRadius</span></td><td><span class="prop-type">number</span></td><td><span class="prop-default">12</span></td><td>Border radius</td></tr>
+                                <tr><td><span class="prop-name">onClick</span></td><td><span class="prop-type">function</span></td><td><span class="prop-default">null</span></td><td>Click handler (makes card interactive)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TextView API (Enhanced) -->
+                <div class="api-item">
+                    <div class="api-header" onclick="toggleApi(this)">
+                        <span class="api-name">TextView</span>
+                        <span class="api-type">Component</span>
+                    </div>
+                    <div class="api-body expandable-content">
+                        <p class="api-desc">Enhanced TextView component with expandable text functionality. Automatically shows "See more/See less" buttons when text exceeds the specified line count.</p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">JavaScript</span>
+                                <button class="code-copy" onclick="copyCode(this)"><i class='bx bx-copy'></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+<code><span class="keyword">const</span> { TextView } = <span class="property">AndroidComponents</span>;
+
+<span class="comment">// Basic expandable text</span>
+<span class="keyword">const</span> expandableText = <span class="function">TextView</span>({
+    <span class="property">text</span>: <span class="string">'This is a very long text that will be truncated after 3 lines...'</span>,
+    <span class="property">expandable</span>: <span class="keyword">true</span>,
+    <span class="property">collapsedLines</span>: <span class="number">3</span>,
+    <span class="property">seeMoreText</span>: <span class="string">'See more'</span>,
+    <span class="property">seeLessText</span>: <span class="string">'See less'</span>,
+    <span class="property">onExpand</span>: () => <span class="function">console</span>.<span class="function">log</span>(<span class="string">'Text expanded'</span>),
+    <span class="property">onCollapse</span>: () => <span class="function">console</span>.<span class="function">log</span>(<span class="string">'Text collapsed'</span>)
+});
+
+<span class="comment">// Non-expandable with max lines</span>
+<span class="keyword">const</span> limitedText = <span class="function">TextView</span>({
+    <span class="property">text</span>: <span class="string">'Regular text with line limit'</span>,
+    <span class="property">maxLines</span>: <span class="number">2</span>,
+    <span class="property">ellipsize</span>: <span class="keyword">true</span>
+});</code>
+                            </div>
+                        </div>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="prop-name">text</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">''</span></td><td>Text content to display</td></tr>
+                                <tr><td><span class="prop-name">textSize</span></td><td><span class="prop-type">number</span></td><td><span class="prop-default">14</span></td><td>Font size in pixels</td></tr>
+                                <tr><td><span class="prop-name">textColor</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">var(--md-on-surface)</span></td><td>Text color</td></tr>
+                                <tr><td><span class="prop-name">textStyle</span></td><td><span class="prop-type">'normal' | 'bold' | 'italic'</span></td><td><span class="prop-default">'normal'</span></td><td>Font style</td></tr>
+                                <tr><td><span class="prop-name">gravity</span></td><td><span class="prop-type">'center' | 'end' | 'right'</span></td><td><span class="prop-default">undefined</span></td><td>Text alignment</td></tr>
+                                <tr><td><span class="prop-name">maxLines</span></td><td><span class="prop-type">number</span></td><td><span class="prop-default">undefined</span></td><td>Maximum lines (non-expandable)</td></tr>
+                                <tr><td><span class="prop-name">ellipsize</span></td><td><span class="prop-type">boolean</span></td><td><span class="prop-default">false</span></td><td>Show ellipsis when truncated</td></tr>
+                                <tr><td><span class="prop-name">expandable</span></td><td><span class="prop-type">boolean</span></td><td><span class="prop-default">false</span></td><td>Enable see more/less functionality</td></tr>
+                                <tr><td><span class="prop-name">collapsedLines</span></td><td><span class="prop-type">number</span></td><td><span class="prop-default">3</span></td><td>Lines to show when collapsed</td></tr>
+                                <tr><td><span class="prop-name">seeMoreText</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">'See more'</span></td><td>Text for expand button</td></tr>
+                                <tr><td><span class="prop-name">seeLessText</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">'See less'</span></td><td>Text for collapse button</td></tr>
+                                <tr><td><span class="prop-name">onExpand</span></td><td><span class="prop-type">function</span></td><td><span class="prop-default">null</span></td><td>Callback when text is expanded</td></tr>
+                                <tr><td><span class="prop-name">onCollapse</span></td><td><span class="prop-type">function</span></td><td><span class="prop-default">null</span></td><td>Callback when text is collapsed</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">Methods</h4>
+                        <div class="method-list">
+                            <div class="method-item">
+                                <span class="method-name">setText(text) / getText()</span>
+                                <span class="method-desc">Set or get text content</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">expand()</span>
+                                <span class="method-desc">Programmatically expand text</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">collapse()</span>
+                                <span class="method-desc">Programmatically collapse text</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">isExpanded()</span>
+                                <span class="method-desc">Check if text is currently expanded</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">getElement()</span>
+                                <span class="method-desc">Returns the underlying HTMLElement</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MaterialImage API -->
+                <div class="api-item">
+                    <div class="api-header" onclick="toggleApi(this)">
+                        <span class="api-name">MaterialImage</span>
+                        <span class="api-type">Component</span>
+                    </div>
+                    <div class="api-body expandable-content">
+                        <p class="api-desc">Feature-rich image component with progressive loading, blur-up effect, retry logic, error handling, and extensive transformation options.</p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">JavaScript</span>
+                                <button class="code-copy" onclick="copyCode(this)"><i class='bx bx-copy'></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+<code><span class="keyword">const</span> { MaterialImage } = <span class="property">AndroidComponents</span>;
+
+<span class="comment">// Simple image</span>
+<span class="keyword">const</span> simpleImg = <span class="function">MaterialImage</span>({
+    <span class="property">src</span>: <span class="string">'https://example.com/photo.jpg'</span>,
+    <span class="property">alt</span>: <span class="string">'Photo description'</span>,
+    <span class="property">width</span>: <span class="number">300</span>,
+    <span class="property">height</span>: <span class="number">200</span>,
+    <span class="property">cornerRadius</span>: <span class="number">12</span>
+});
+
+<span class="comment">// Image with blur-up loading</span>
+<span class="keyword">const</span> progressiveImg = <span class="function">MaterialImage</span>({
+    <span class="property">src</span>: <span class="string">'https://example.com/high-res.jpg'</span>,
+    <span class="property">lowQualitySrc</span>: <span class="string">'https://example.com/low-res-tiny.jpg'</span>,
+    <span class="property">enableBlurUp</span>: <span class="keyword">true</span>,
+    <span class="property">blurUpIntensity</span>: <span class="number">20</span>,
+    <span class="property">aspectRatio</span>: <span class="string">'16:9'</span>,
+    <span class="property">fit</span>: <span class="string">'cover'</span>
+});
+
+<span class="comment">// With retry and transformations</span>
+<span class="keyword">const</span> styledImg = <span class="function">MaterialImage</span>({
+    <span class="property">src</span>: <span class="string">'https://example.com/image.jpg'</span>,
+    <span class="property">fallback</span>: <span class="string">'https://example.com/fallback.jpg'</span>,
+    <span class="property">enableRetry</span>: <span class="keyword">true</span>,
+    <span class="property">maxRetries</span>: <span class="number">3</span>,
+    <span class="property">elevation</span>: <span class="number">4</span>,
+    <span class="property">overlay</span>: <span class="keyword">true</span>,
+    <span class="property">overlayOpacity</span>: <span class="number">0.3</span>,
+    <span class="property">onLoad</span>: () => <span class="function">console</span>.<span class="function">log</span>(<span class="string">'Loaded'</span>),
+    <span class="property">onClick</span>: () => <span class="function">openLightbox</span>()
+});</code>
+                            </div>
+                        </div>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">Basic Properties</h4>
+                        <table class="props-table">
+                            <thead>
+                                <tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="prop-name">src</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">''</span></td><td>Image source URL</td></tr>
+                                <tr><td><span class="prop-name">alt</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">''</span></td><td>Alternative text</td></tr>
+                                <tr><td><span class="prop-name">width</span></td><td><span class="prop-type">number | 'match_parent' | 'wrap_content'</span></td><td><span class="prop-default">undefined</span></td><td>Image width</td></tr>
+                                <tr><td><span class="prop-name">height</span></td><td><span class="prop-type">number | 'match_parent' | 'wrap_content'</span></td><td><span class="prop-default">undefined</span></td><td>Image height</td></tr>
+                                <tr><td><span class="prop-name">aspectRatio</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">undefined</span></td><td>'16:9', '4:3', '1:1', 'square', '9:16', etc.</td></tr>
+                                <tr><td><span class="prop-name">fit</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">'cover'</span></td><td>cover, contain, fill, none, scale-down</td></tr>
+                                <tr><td><span class="prop-name">position</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">'center'</span></td><td>center, top, bottom, left, right</td></tr>
+                                <tr><td><span class="prop-name">cornerRadius</span></td><td><span class="prop-type">number</span></td><td><span class="prop-default">0</span></td><td>Border radius in pixels</td></tr>
+                                <tr><td><span class="prop-name">elevation</span></td><td><span class="prop-type">number</span></td><td><span class="prop-default">0</span></td><td>Shadow elevation (0-24)</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">Progressive Loading</h4>
+                        <table class="props-table">
+                            <thead>
+                                <tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="prop-name">loading</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">'lazy'</span></td><td>lazy or eager</td></tr>
+                                <tr><td><span class="prop-name">placeholder</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">undefined</span></td><td>Placeholder image URL</td></tr>
+                                <tr><td><span class="prop-name">lowQualitySrc</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">undefined</span></td><td>Low quality version for blur-up</td></tr>
+                                <tr><td><span class="prop-name">enableBlurUp</span></td><td><span class="prop-type">boolean</span></td><td><span class="prop-default">true</span></td><td>Enable blur-up progressive loading</td></tr>
+                                <tr><td><span class="prop-name">blurUpIntensity</span></td><td><span class="prop-type">number</span></td><td><span class="prop-default">20</span></td><td>Blur intensity for blur-up effect</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">Error Handling & Retry</h4>
+                        <table class="props-table">
+                            <thead>
+                                <tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="prop-name">fallback</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">undefined</span></td><td>Fallback image on error</td></tr>
+                                <tr><td><span class="prop-name">enableRetry</span></td><td><span class="prop-type">boolean</span></td><td><span class="prop-default">true</span></td><td>Enable retry on network errors</td></tr>
+                                <tr><td><span class="prop-name">maxRetries</span></td><td><span class="prop-type">number</span></td><td><span class="prop-default">3</span></td><td>Maximum retry attempts</td></tr>
+                                <tr><td><span class="prop-name">retryDelay</span></td><td><span class="prop-type">number</span></td><td><span class="prop-default">2000</span></td><td>Delay between retries (ms)</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">Visual Effects</h4>
+                        <table class="props-table">
+                            <thead>
+                                <tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="prop-name">overlay</span></td><td><span class="prop-type">boolean</span></td><td><span class="prop-default">false</span></td><td>Show dark overlay</td></tr>
+                                <tr><td><span class="prop-name">overlayOpacity</span></td><td><span class="prop-type">number</span></td><td><span class="prop-default">0.3</span></td><td>Overlay opacity</td></tr>
+                                <tr><td><span class="prop-name">blur</span></td><td><span class="prop-type">number</span></td><td><span class="prop-default">0</span></td><td>Blur effect in pixels</td></tr>
+                                <tr><td><span class="prop-name">grayscale</span></td><td><span class="prop-type">boolean</span></td><td><span class="prop-default">false</span></td><td>Apply grayscale filter</td></tr>
+                                <tr><td><span class="prop-name">opacity</span></td><td><span class="prop-type">number</span></td><td><span class="prop-default">1</span></td><td>Image opacity</td></tr>
+                                <tr><td><span class="prop-name">rotate</span></td><td><span class="prop-type">number</span></td><td><span class="prop-default">0</span></td><td>Rotation in degrees</td></tr>
+                                <tr><td><span class="prop-name">flipX / flipY</span></td><td><span class="prop-type">boolean</span></td><td><span class="prop-default">false</span></td><td>Flip horizontally / vertically</td></tr>
+                                <tr><td><span class="prop-name">border</span></td><td><span class="prop-type">number</span></td><td><span class="prop-default">null</span></td><td>Border width</td></tr>
+                                <tr><td><span class="prop-name">borderColor</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">'var(--md-outline)'</span></td><td>Border color</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">Events</h4>
+                        <table class="props-table">
+                            <thead>
+                                <tr><th>Property</th><th>Type</th><th>Description</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="prop-name">onClick</span></td><td><span class="prop-type">function</span></td><td>Click handler</td></tr>
+                                <tr><td><span class="prop-name">onLoad</span></td><td><span class="prop-type">function</span></td><td>Callback when image loads successfully</td></tr>
+                                <tr><td><span class="prop-name">onError</span></td><td><span class="prop-type">function(error, retryCount)</span></td><td>Callback on error</td></tr>
+                                <tr><td><span class="prop-name">onRetry</span></td><td><span class="prop-type">function(attempt)</span></td><td>Callback when retry is attempted</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">Methods</h4>
+                        <div class="method-list">
+                            <div class="method-item">
+                                <span class="method-name">setSrc(src, lowQualitySrc?)</span>
+                                <span class="method-desc">Change image source</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">setOpacity(value) / setBlur(px) / setGrayscale(bool)</span>
+                                <span class="method-desc">Update visual properties</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">setRotation(degrees) / setOverlay(show, opacity?)</span>
+                                <span class="method-desc">Update transformations</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">setBorder(width, color?, style?) / setCornerRadius(px) / setElevation(level)</span>
+                                <span class="method-desc">Update styling</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">reload() / retry()</span>
+                                <span class="method-desc">Reload or manually trigger retry</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">hide() / show() / destroy()</span>
+                                <span class="method-desc">Visibility and cleanup</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">hasLoaded() / hasError() / getRetryCount()</span>
+                                <span class="method-desc">State checks</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">getElement() / getImage() / getSrc()</span>
+                                <span class="method-desc">Get elements and current source</span>
+                            </div>
+                        </div>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">Aspect Ratios</h4>
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px;">
+                            <span class="badge">16:9 (Widescreen)</span>
+                            <span class="badge">4:3 (Standard)</span>
+                            <span class="badge">3:2 (Classic)</span>
+                            <span class="badge">1:1 / square</span>
+                            <span class="badge">9:16 (Portrait)</span>
+                            <span class="badge">3:4 / 2:3</span>
+                            <span class="badge">21:9 / 5:4 (Custom)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MaterialStepView API -->
+                <div class="api-item">
+                    <div class="api-header" onclick="toggleApi(this)">
+                        <span class="api-name">MaterialStepView</span>
+                        <span class="api-type">Component</span>
+                    </div>
+                    <div class="api-body expandable-content">
+                        <p class="api-desc">Step-by-step progress indicator perfect for multi-step forms, onboarding flows, order tracking, and process visualization.</p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">JavaScript</span>
+                                <button class="code-copy" onclick="copyCode(this)"><i class='bx bx-copy'></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+<code><span class="keyword">const</span> { MaterialStepView } = <span class="property">AndroidComponents</span>;
+
+<span class="keyword">const</span> stepper = <span class="function">MaterialStepView</span>({
+    <span class="property">title</span>: <span class="string">'Order Progress'</span>,
+    <span class="property">subtitle</span>: <span class="string">'Track your order status'</span>,
+    <span class="property">steps</span>: [
+        {
+            <span class="property">title</span>: <span class="string">'Order Placed'</span>,
+            <span class="property">subtitle</span>: <span class="string">'Your order has been received'</span>,
+            <span class="property">description</span>: <span class="string">'Jan 8, 2026 at 10:30 AM'</span>,
+            <span class="property">status</span>: <span class="string">'completed'</span>
+        },
+        {
+            <span class="property">title</span>: <span class="string">'Processing'</span>,
+            <span class="property">subtitle</span>: <span class="string">'We are preparing your items'</span>,
+            <span class="property">status</span>: <span class="string">'active'</span>,
+            <span class="property">loading</span>: <span class="keyword">true</span>
+        },
+        {
+            <span class="property">title</span>: <span class="string">'Shipped'</span>,
+            <span class="property">status</span>: <span class="string">'pending'</span>
+        },
+        {
+            <span class="property">title</span>: <span class="string">'Delivered'</span>,
+            <span class="property">status</span>: <span class="string">'pending'</span>
+        }
+    ],
+    <span class="property">orientation</span>: <span class="string">'vertical'</span>,
+    <span class="property">variant</span>: <span class="string">'default'</span>,
+    <span class="property">clickable</span>: <span class="keyword">false</span>,
+    <span class="property">showNumbers</span>: <span class="keyword">true</span>,
+    <span class="property">onStepClick</span>: (index, step) => <span class="function">console</span>.<span class="function">log</span>(<span class="string">'Clicked:'</span>, index)
+});</code>
+                            </div>
+                        </div>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">Step Status Types</h4>
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px;">
+                            <span class="badge">pending (gray)</span>
+                            <span class="badge">active (primary + shadow)</span>
+                            <span class="badge">completed (checkmark)</span>
+                            <span class="badge">error (red X)</span>
+                            <span class="badge">warning (orange alert)</span>
+                            <span class="badge">disabled (grayed out)</span>
+                        </div>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="prop-name">title</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">''</span></td><td>Main title above steps</td></tr>
+                                <tr><td><span class="prop-name">subtitle</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">''</span></td><td>Subtitle below title</td></tr>
+                                <tr><td><span class="prop-name">steps</span></td><td><span class="prop-type">array</span></td><td><span class="prop-default">[]</span></td><td>Array of step objects</td></tr>
+                                <tr><td><span class="prop-name">orientation</span></td><td><span class="prop-type">'vertical' | 'horizontal'</span></td><td><span class="prop-default">'vertical'</span></td><td>Layout direction</td></tr>
+                                <tr><td><span class="prop-name">variant</span></td><td><span class="prop-type">'default' | 'compact'</span></td><td><span class="prop-default">'default'</span></td><td>Visual variant</td></tr>
+                                <tr><td><span class="prop-name">activeStep</span></td><td><span class="prop-type">number</span></td><td><span class="prop-default">0</span></td><td>Currently active step index</td></tr>
+                                <tr><td><span class="prop-name">clickable</span></td><td><span class="prop-type">boolean</span></td><td><span class="prop-default">false</span></td><td>Enable clicking steps</td></tr>
+                                <tr><td><span class="prop-name">showNumbers</span></td><td><span class="prop-type">boolean</span></td><td><span class="prop-default">true</span></td><td>Show step numbers</td></tr>
+                                <tr><td><span class="prop-name">onStepClick</span></td><td><span class="prop-type">function(index, step)</span></td><td><span class="prop-default">null</span></td><td>Callback when step is clicked</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">Step Object Structure</h4>
+                        <table class="props-table">
+                            <thead>
+                                <tr><th>Property</th><th>Type</th><th>Description</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="prop-name">title</span></td><td><span class="prop-type">string</span></td><td>Step title (required)</td></tr>
+                                <tr><td><span class="prop-name">subtitle</span></td><td><span class="prop-type">string</span></td><td>Step description (optional)</td></tr>
+                                <tr><td><span class="prop-name">description</span></td><td><span class="prop-type">string</span></td><td>Extra details (optional)</td></tr>
+                                <tr><td><span class="prop-name">status</span></td><td><span class="prop-type">string</span></td><td>pending, active, completed, error, warning, disabled</td></tr>
+                                <tr><td><span class="prop-name">icon / customIcon</span></td><td><span class="prop-type">string</span></td><td>Custom icon class (optional)</td></tr>
+                                <tr><td><span class="prop-name">loading</span></td><td><span class="prop-type">boolean</span></td><td>Show loading spinner (optional)</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">Methods</h4>
+                        <div class="method-list">
+                            <div class="method-item">
+                                <span class="method-name">addStep(step) / insertStep(index, step) / removeStep(index)</span>
+                                <span class="method-desc">Manage steps dynamically</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">updateStep(index, updates) / setSteps(steps) / clearSteps()</span>
+                                <span class="method-desc">Update step data</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">setStepStatus(index, status) / setStepLoading(index, bool)</span>
+                                <span class="method-desc">Update step status</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">completeStep(index) / setStepError(index, message?)</span>
+                                <span class="method-desc">Complete or set error on step</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">setActiveStep(index) / getActiveStep()</span>
+                                <span class="method-desc">Get or set active step</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">nextStep() / previousStep()</span>
+                                <span class="method-desc">Navigate between steps</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">getStep(index) / getAllSteps() / getTotalSteps()</span>
+                                <span class="method-desc">Access step data</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">isLastStep() / isFirstStep() / reset()</span>
+                                <span class="method-desc">Utility methods</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">setTitle(text) / setSubtitle(text)</span>
+                                <span class="method-desc">Update header text</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Inputs Section -->
+        <section id="inputs" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag"><i class='bx bx-edit'></i> Form Inputs</span>
+                    <h2 class="section-title">Input Components</h2>
+                    <p class="section-desc">Material Design form controls with validation, icons, and helper text.</p>
+                </div>
+
+                <div class="api-item">
+                    <div class="api-header" onclick="toggleApi(this)">
+                        <span class="api-name">MaterialInput</span>
+                        <span class="api-type">Component</span>
+                    </div>
+                    <div class="api-body expandable-content">
+                        <p class="api-desc">Text input field with floating label, icons, validation states, and password toggle.</p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">JavaScript</span>
+                                <button class="code-copy" onclick="copyCode(this)"><i class='bx bx-copy'></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+<code><span class="keyword">const</span> { MaterialInput } = <span class="property">AndroidComponents</span>;
+
+<span class="comment">// Email input with validation</span>
+<span class="keyword">const</span> emailInput = <span class="function">MaterialInput</span>({
+    <span class="property">label</span>: <span class="string">'Email Address'</span>,
+    <span class="property">type</span>: <span class="string">'email'</span>,
+    <span class="property">leadingIcon</span>: <span class="string">'bx bx-envelope'</span>,
+    <span class="property">helperText</span>: <span class="string">'Enter your email'</span>,
+    <span class="property">required</span>: <span class="keyword">true</span>,
+    <span class="property">onInput</span>: (value) => <span class="function">validateEmail</span>(value)
+});
+
+<span class="comment">// Password input with toggle</span>
+<span class="keyword">const</span> passwordInput = <span class="function">MaterialInput</span>({
+    <span class="property">label</span>: <span class="string">'Password'</span>,
+    <span class="property">type</span>: <span class="string">'password'</span>,
+    <span class="property">leadingIcon</span>: <span class="string">'bx bx-lock'</span>,
+    <span class="property">passwordToggle</span>: <span class="keyword">true</span>,
+    <span class="property">maxLength</span>: <span class="number">50</span>,
+    <span class="property">showCounter</span>: <span class="keyword">true</span>
+});
+
+<span class="comment">// Textarea</span>
+<span class="keyword">const</span> bioInput = <span class="function">MaterialInput</span>({
+    <span class="property">label</span>: <span class="string">'Bio'</span>,
+    <span class="property">type</span>: <span class="string">'textarea'</span>,
+    <span class="property">rows</span>: <span class="number">4</span>,
+    <span class="property">maxLength</span>: <span class="number">200</span>,
+    <span class="property">showCounter</span>: <span class="keyword">true</span>
+});
+
+<span class="comment">// Set states programmatically</span>
+emailInput.<span class="function">setError</span>(<span class="string">'Invalid email format'</span>);
+emailInput.<span class="function">setSuccess</span>(<span class="string">'Email available!'</span>);
+emailInput.<span class="function">clearState</span>();</code>
+                            </div>
+                        </div>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="prop-name">label</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">'Label'</span></td><td>Floating label text</td></tr>
+                                <tr><td><span class="prop-name">type</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">'text'</span></td><td>text, password, email, number, tel, url, textarea</td></tr>
+                                <tr><td><span class="prop-name">value</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">''</span></td><td>Initial value</td></tr>
+                                <tr><td><span class="prop-name">helperText</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">''</span></td><td>Helper text below input</td></tr>
+                                <tr><td><span class="prop-name">errorText</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">''</span></td><td>Default error message</td></tr>
+                                <tr><td><span class="prop-name">leadingIcon</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">null</span></td><td>Icon class for start</td></tr>
+                                <tr><td><span class="prop-name">trailingIcon</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">null</span></td><td>Icon class for end</td></tr>
+                                <tr><td><span class="prop-name">passwordToggle</span></td><td><span class="prop-type">boolean</span></td><td><span class="prop-default">true</span></td><td>Show password visibility toggle</td></tr>
+                                <tr><td><span class="prop-name">maxLength</span></td><td><span class="prop-type">number</span></td><td><span class="prop-default">null</span></td><td>Maximum character length</td></tr>
+                                <tr><td><span class="prop-name">showCounter</span></td><td><span class="prop-type">boolean</span></td><td><span class="prop-default">false</span></td><td>Show character counter</td></tr>
+                                <tr><td><span class="prop-name">required</span></td><td><span class="prop-type">boolean</span></td><td><span class="prop-default">false</span></td><td>Mark as required field</td></tr>
+                                <tr><td><span class="prop-name">disabled</span></td><td><span class="prop-type">boolean</span></td><td><span class="prop-default">false</span></td><td>Disable input</td></tr>
+                                <tr><td><span class="prop-name">color</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">null</span></td><td>Custom accent color</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">Methods</h4>
+                        <div class="method-list">
+                            <div class="method-item">
+                                <span class="method-name">getValue() / setValue(value)</span>
+                                <span class="method-desc">Get or set the input value</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">setError(message)</span>
+                                <span class="method-desc">Show error state with message</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">setSuccess(message)</span>
+                                <span class="method-desc">Show success state with message</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">clearState()</span>
+                                <span class="method-desc">Clear error/success state</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">validate()</span>
+                                <span class="method-desc">Run HTML5 validation, returns boolean</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">focus() / blur()</span>
+                                <span class="method-desc">Focus or blur the input</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">reset()</span>
+                                <span class="method-desc">Clear value and reset to initial state</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="api-item">
+                    <div class="api-header" onclick="toggleApi(this)">
+                        <span class="api-name">MaterialSpinner</span>
+                        <span class="api-type">Component</span>
+                    </div>
+                    <div class="api-body expandable-content">
+                        <p class="api-desc">Dropdown select/spinner with search functionality and custom icons.</p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">JavaScript</span>
+                                <button class="code-copy" onclick="copyCode(this)"><i class='bx bx-copy'></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+<code><span class="keyword">const</span> { MaterialSpinner } = <span class="property">AndroidComponents</span>;
+
+<span class="keyword">const</span> countrySpinner = <span class="function">MaterialSpinner</span>({
+    <span class="property">label</span>: <span class="string">'Country'</span>,
+    <span class="property">placeholder</span>: <span class="string">'Select a country'</span>,
+    <span class="property">searchable</span>: <span class="keyword">true</span>,
+    <span class="property">leadingIcon</span>: <span class="string">'bx bx-globe'</span>,
+    <span class="property">options</span>: [
+        { <span class="property">value</span>: <span class="string">'us'</span>, <span class="property">label</span>: <span class="string">'United States'</span>, <span class="property">icon</span>: <span class="string">'bx bxs-flag'</span> },
+        { <span class="property">value</span>: <span class="string">'uk'</span>, <span class="property">label</span>: <span class="string">'United Kingdom'</span> },
+        { <span class="property">value</span>: <span class="string">'ca'</span>, <span class="property">label</span>: <span class="string">'Canada'</span> },
+        { <span class="property">value</span>: <span class="string">'de'</span>, <span class="property">label</span>: <span class="string">'Germany'</span>, <span class="property">disabled</span>: <span class="keyword">true</span> }
+    ],
+    <span class="property">onChange</span>: (value, option) => {
+        <span class="function">console</span>.<span class="function">log</span>(<span class="string">'Selected:'</span>, value, option);
+    }
+});
+
+<span class="comment">// Dynamic options</span>
+countrySpinner.<span class="function">setOptions</span>(newOptions);
+countrySpinner.<span class="function">addOption</span>({ <span class="property">value</span>: <span class="string">'fr'</span>, <span class="property">label</span>: <span class="string">'France'</span> });</code>
+                            </div>
+                        </div>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="prop-name">label</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">'Select'</span></td><td>Floating label</td></tr>
+                                <tr><td><span class="prop-name">options</span></td><td><span class="prop-type">array</span></td><td><span class="prop-default">[]</span></td><td>Array of {value, label, icon?, disabled?}</td></tr>
+                                <tr><td><span class="prop-name">value</span></td><td><span class="prop-type">any</span></td><td><span class="prop-default">null</span></td><td>Initially selected value</td></tr>
+                                <tr><td><span class="prop-name">searchable</span></td><td><span class="prop-type">boolean</span></td><td><span class="prop-default">false</span></td><td>Enable search/filter</td></tr>
+                                <tr><td><span class="prop-name">leadingIcon</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">null</span></td><td>Icon before selection</td></tr>
+                                <tr><td><span class="prop-name">showCheckmark</span></td><td><span class="prop-type">boolean</span></td><td><span class="prop-default">true</span></td><td>Show checkmark on selected</td></tr>
+                                <tr><td><span class="prop-name">emptyText</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">'No options'</span></td><td>Text when no options</td></tr>
+                                <tr><td><span class="prop-name">onChange</span></td><td><span class="prop-type">function</span></td><td><span class="prop-default">null</span></td><td>Callback on selection change</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation Section -->
+        <section id="navigation" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag"><i class='bx bx-navigation'></i> Navigation</span>
+                    <h2 class="section-title">Navigation Components</h2>
+                    <p class="section-desc">Complete navigation system including bottom nav, drawers, toolbars, and tabs.</p>
+                </div>
+
+                <div class="card-grid">
+                    <div class="component-card">
+                        <div class="component-icon"><i class='bx bx-dock-bottom'></i></div>
+                        <h3 class="component-name">BottomNavigation</h3>
+                        <p class="component-desc">Material 3 bottom navigation bar with badges and animated indicators.</p>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-icon"><i class='bx bx-menu'></i></div>
+                        <h3 class="component-name">MaterialDrawer</h3>
+                        <p class="component-desc">Slide-out navigation drawer with header, sections, and custom layouts.</p>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-icon"><i class='bx bx-window'></i></div>
+                        <h3 class="component-name">MaterialToolbar</h3>
+                        <p class="component-desc">App bar with navigation icon, title, actions, and overflow menu.</p>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-icon"><i class='bx bx-dock-top'></i></div>
+                        <h3 class="component-name">TabLayout</h3>
+                        <p class="component-desc">Swipeable tabs with multiple styles: default, pill, underline, segmented.</p>
+                    </div>
+                </div>
+
+                <!-- BottomNavigation API -->
+                <div class="api-item" style="margin-top: 48px;">
+                    <div class="api-header" onclick="toggleApi(this)">
+                        <span class="api-name">BottomNavigation</span>
+                        <span class="api-type">Component</span>
+                    </div>
+                    <div class="api-body expandable-content">
+                        <p class="api-desc">Fixed bottom navigation bar for primary app destinations.</p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">JavaScript</span>
+                                <button class="code-copy" onclick="copyCode(this)"><i class='bx bx-copy'></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+<code><span class="keyword">const</span> { BottomNavigation } = <span class="property">AndroidComponents</span>;
+
+<span class="keyword">const</span> bottomNav = <span class="function">BottomNavigation</span>({
+    <span class="property">onItemSelect</span>: (id) => <span class="function">handleNavigation</span>(id)
+})
+.<span class="function">setItems</span>([
+    { <span class="property">id</span>: <span class="string">'home'</span>, <span class="property">name</span>: <span class="string">'Home'</span>, <span class="property">icon</span>: <span class="string">'bx-home'</span> },
+    { <span class="property">id</span>: <span class="string">'search'</span>, <span class="property">name</span>: <span class="string">'Search'</span>, <span class="property">icon</span>: <span class="string">'bx-search'</span> },
+    { <span class="property">id</span>: <span class="string">'notifications'</span>, <span class="property">name</span>: <span class="string">'Alerts'</span>, <span class="property">icon</span>: <span class="string">'bx-bell'</span>, <span class="property">badge</span>: <span class="string">'5'</span> },
+    { <span class="property">id</span>: <span class="string">'profile'</span>, <span class="property">name</span>: <span class="string">'Profile'</span>, <span class="property">icon</span>: <span class="string">'bx-user'</span> }
+])
+.<span class="function">setItemColor</span>(<span class="string">'#6750a4'</span>)
+.<span class="function">show</span>();
+
+<span class="comment">// Update badge dynamically</span>
+bottomNav.<span class="function">setBadge</span>(<span class="string">'notifications'</span>, <span class="string">'10'</span>);
+
+<span class="comment">// Programmatic selection</span>
+bottomNav.<span class="function">selectItem</span>(<span class="string">'search'</span>);</code>
+                            </div>
+                        </div>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr><th>Method</th><th>Parameters</th><th>Description</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="prop-name">setItems(items)</span></td><td>Array of {id, name, icon, badge?}</td><td>Set navigation items</td></tr>
+                                <tr><td><span class="prop-name">addItem(item)</span></td><td>{id, name, icon, badge?}</td><td>Add single item</td></tr>
+                                <tr><td><span class="prop-name">selectItem(id)</span></td><td>string</td><td>Select item programmatically</td></tr>
+                                <tr><td><span class="prop-name">setBadge(id, badge)</span></td><td>id, badge text</td><td>Set or remove badge</td></tr>
+                                <tr><td><span class="prop-name">setItemColor(color)</span></td><td>hex color</td><td>Set active item color</td></tr>
+                                <tr><td><span class="prop-name">setBackground(color)</span></td><td>hex color</td><td>Set background color</td></tr>
+                                <tr><td><span class="prop-name">show() / hide()</span></td><td>-</td><td>Show or hide nav</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TabLayout API -->
+                <div class="api-item">
+                    <div class="api-header" onclick="toggleApi(this)">
+                        <span class="api-name">TabLayout</span>
+                        <span class="api-type">Component</span>
+                    </div>
+                    <div class="api-body expandable-content">
+                        <p class="api-desc">Horizontal tab layout with swipeable content pages and multiple visual styles.</p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">JavaScript</span>
+                                <button class="code-copy" onclick="copyCode(this)"><i class='bx bx-copy'></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+<code><span class="keyword">const</span> { TabLayout, Column, TextView } = <span class="property">AndroidComponents</span>;
+
+<span class="keyword">const</span> tabs = <span class="function">TabLayout</span>({
+    <span class="property">tabs</span>: [
+        { <span class="property">text</span>: <span class="string">'Home'</span>, <span class="property">icon</span>: <span class="string">'bx bx-home'</span> },
+        { <span class="property">text</span>: <span class="string">'Explore'</span>, <span class="property">icon</span>: <span class="string">'bx bx-compass'</span> },
+        { <span class="property">text</span>: <span class="string">'Settings'</span>, <span class="property">badge</span>: <span class="string">'3'</span> }
+    ],
+    <span class="property">pages</span>: [
+        <span class="function">Column</span>({ <span class="property">padding</span>: <span class="number">20</span> }, [<span class="function">TextView</span>({ <span class="property">text</span>: <span class="string">'Home content'</span> })]),
+        <span class="function">Column</span>({ <span class="property">padding</span>: <span class="number">20</span> }, [<span class="function">TextView</span>({ <span class="property">text</span>: <span class="string">'Explore content'</span> })]),
+        <span class="function">Column</span>({ <span class="property">padding</span>: <span class="number">20</span> }, [<span class="function">TextView</span>({ <span class="property">text</span>: <span class="string">'Settings content'</span> })])
+    ],
+    <span class="property">tabStyle</span>: <span class="string">'pill'</span>,  <span class="comment">// default, pill, underline, segmented</span>
+    <span class="property">mode</span>: <span class="string">'fixed'</span>,       <span class="comment">// fixed or scrollable</span>
+    <span class="property">swipeable</span>: <span class="keyword">true</span>,
+    <span class="property">animation</span>: <span class="string">'slide'</span>,  <span class="comment">// slide, fade, scale</span>
+    <span class="property">accentColor</span>: <span class="string">'#6750a4'</span>,
+    <span class="property">onTabSelected</span>: (index, tab) => {
+        <span class="function">console</span>.<span class="function">log</span>(<span class="string">'Selected:'</span>, index, tab);
+    }
+});
+
+<span class="property">AndroidLayouts</span>.<span class="function">mount</span>(tabs, <span class="string">'app'</span>);</code>
+                            </div>
+                        </div>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">Tab Styles</h4>
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px;">
+                            <span class="badge">default (Material primary)</span>
+                            <span class="badge">pill</span>
+                            <span class="badge">underline</span>
+                            <span class="badge">segmented</span>
+                            <span class="badge">icon-pill</span>
+                        </div>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="prop-name">tabs</span></td><td><span class="prop-type">array</span></td><td><span class="prop-default">[]</span></td><td>{text?, icon?, badge?}</td></tr>
+                                <tr><td><span class="prop-name">pages</span></td><td><span class="prop-type">array</span></td><td><span class="prop-default">[]</span></td><td>Array of page components</td></tr>
+                                <tr><td><span class="prop-name">tabStyle</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">'default'</span></td><td>Visual style of tabs</td></tr>
+                                <tr><td><span class="prop-name">mode</span></td><td><span class="prop-type">'fixed' | 'scrollable'</span></td><td><span class="prop-default">'fixed'</span></td><td>Tab width behavior</td></tr>
+                                <tr><td><span class="prop-name">animation</span></td><td><span class="prop-type">'slide' | 'fade' | 'scale'</span></td><td><span class="prop-default">'slide'</span></td><td>Page transition animation</td></tr>
+                                <tr><td><span class="prop-name">swipeable</span></td><td><span class="prop-type">boolean</span></td><td><span class="prop-default">true</span></td><td>Enable swipe gestures</td></tr>
+                                <tr><td><span class="prop-name">lazyLoad</span></td><td><span class="prop-type">boolean</span></td><td><span class="prop-default">false</span></td><td>Only load pages when viewed</td></tr>
+                                <tr><td><span class="prop-name">accentColor</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">'#1d9bf0'</span></td><td>Active tab color</td></tr>
+                                <tr><td><span class="prop-name">theme</span></td><td><span class="prop-type">'dark' | 'light'</span></td><td><span class="prop-default">'dark'</span></td><td>Color theme</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Overlays Section -->
+        <section id="overlays" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag"><i class='bx bx-message-square-dots'></i> Feedback</span>
+                    <h2 class="section-title">Dialogs & Snackbars</h2>
+                    <p class="section-desc">User feedback components for alerts, confirmations, and notifications.</p>
+                </div>
+
+                <div class="api-item">
+                    <div class="api-header" onclick="toggleApi(this)">
+                        <span class="api-name">MaterialDialog</span>
+                        <span class="api-type">Component</span>
+                    </div>
+                    <div class="api-body expandable-content">
+                        <p class="api-desc">Modal dialogs for alerts, confirmations, prompts, and custom content.</p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">JavaScript</span>
+                                <button class="code-copy" onclick="copyCode(this)"><i class='bx bx-copy'></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+<code><span class="keyword">const</span> { MaterialDialog } = <span class="property">AndroidComponents</span>;
+
+<span class="comment">// Simple alert</span>
+<span class="property">MaterialDialog</span>.<span class="function">alert</span>(<span class="string">'Success'</span>, <span class="string">'Your changes have been saved.'</span>);
+
+<span class="comment">// Confirmation dialog</span>
+<span class="property">MaterialDialog</span>.<span class="function">confirm</span>(<span class="string">'Delete Item?'</span>, <span class="string">'This action cannot be undone.'</span>, {
+    <span class="property">confirmText</span>: <span class="string">'Delete'</span>,
+    <span class="property">confirmError</span>: <span class="keyword">true</span>,  <span class="comment">// Red button</span>
+    <span class="property">onConfirm</span>: () => <span class="function">deleteItem</span>(),
+    <span class="property">onCancel</span>: () => <span class="function">console</span>.<span class="function">log</span>(<span class="string">'Cancelled'</span>)
+});
+
+<span class="comment">// Prompt dialog</span>
+<span class="property">MaterialDialog</span>.<span class="function">prompt</span>(<span class="string">'Rename File'</span>, <span class="string">'Enter a new name:'</span>, {
+    <span class="property">placeholder</span>: <span class="string">'File name'</span>,
+    <span class="property">defaultValue</span>: <span class="string">'document.txt'</span>,
+    <span class="property">onConfirm</span>: (value) => <span class="function">renameFile</span>(value)
+});
+
+<span class="comment">// Custom dialog (builder pattern)</span>
+<span class="function">MaterialDialog</span>()
+    .<span class="function">setTitle</span>(<span class="string">'Settings'</span>)
+    .<span class="function">setIcon</span>(<span class="string">'bx bx-cog'</span>)
+    .<span class="function">setMessage</span>(<span class="string">'Choose your preferences below.'</span>)
+    .<span class="function">setView</span>(myCustomLayout)
+    .<span class="function">setPositiveButton</span>(<span class="string">'Save'</span>, () => <span class="function">saveSettings</span>(), { <span class="property">style</span>: <span class="string">'filled'</span> })
+    .<span class="function">setNegativeButton</span>(<span class="string">'Cancel'</span>)
+    .<span class="function">setDismissOnBackdrop</span>(<span class="keyword">false</span>)
+    .<span class="function">show</span>();</code>
+                            </div>
+                        </div>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">Static Methods</h4>
+                        <div class="method-list">
+                            <div class="method-item">
+                                <span class="method-name">MaterialDialog.alert(title, message, options)</span>
+                                <span class="method-desc">Show simple alert with OK button</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">MaterialDialog.confirm(title, message, options)</span>
+                                <span class="method-desc">Show confirmation with Cancel/Confirm buttons</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">MaterialDialog.prompt(title, message, options)</span>
+                                <span class="method-desc">Show input dialog with text field</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="api-item">
+                    <div class="api-header" onclick="toggleApi(this)">
+                        <span class="api-name">Snackbar</span>
+                        <span class="api-type">Component</span>
+                    </div>
+                    <div class="api-body expandable-content">
+                        <p class="api-desc">Brief message bars that appear at the bottom of the screen.</p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">JavaScript</span>
+                                <button class="code-copy" onclick="copyCode(this)"><i class='bx bx-copy'></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+<code><span class="keyword">const</span> { Snackbar } = <span class="property">AndroidComponents</span>;
+
+<span class="comment">// Simple snackbar</span>
+<span class="property">Snackbar</span>.<span class="function">show</span>(<span class="string">'Item added to cart'</span>);
+
+<span class="comment">// Error snackbar</span>
+<span class="property">Snackbar</span>.<span class="function">error</span>(<span class="string">'Failed to save changes'</span>);
+
+<span class="comment">// Success snackbar</span>
+<span class="property">Snackbar</span>.<span class="function">success</span>(<span class="string">'Profile updated successfully!'</span>);
+
+<span class="comment">// Snackbar with action</span>
+<span class="function">Snackbar</span>({
+    <span class="property">message</span>: <span class="string">'Email archived'</span>,
+    <span class="property">duration</span>: <span class="number">5000</span>,
+    <span class="property">position</span>: <span class="string">'bottom'</span>,
+    <span class="property">showClose</span>: <span class="keyword">true</span>,
+    <span class="property">action</span>: {
+        <span class="property">text</span>: <span class="string">'Undo'</span>,
+        <span class="property">onClick</span>: () => <span class="function">undoArchive</span>()
+    }
+}).<span class="function">show</span>();
+
+<span class="comment">// Dismiss all snackbars</span>
+<span class="property">Snackbar</span>.<span class="function">dismissAll</span>();</code>
+                            </div>
+                        </div>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="prop-name">message</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">''</span></td><td>Snackbar message</td></tr>
+                                <tr><td><span class="prop-name">duration</span></td><td><span class="prop-type">number</span></td><td><span class="prop-default">4000</span></td><td>Auto-dismiss time (ms), 0 = persistent</td></tr>
+                                <tr><td><span class="prop-name">position</span></td><td><span class="prop-type">'bottom' | 'top'</span></td><td><span class="prop-default">'bottom'</span></td><td>Screen position</td></tr>
+                                <tr><td><span class="prop-name">type</span></td><td><span class="prop-type">'default' | 'error' | 'success'</span></td><td><span class="prop-default">'default'</span></td><td>Visual type</td></tr>
+                                <tr><td><span class="prop-name">icon</span></td><td><span class="prop-type">string</span></td><td><span class="prop-default">null</span></td><td>Icon class</td></tr>
+                                <tr><td><span class="prop-name">showClose</span></td><td><span class="prop-type">boolean</span></td><td><span class="prop-default">false</span></td><td>Show close button</td></tr>
+                                <tr><td><span class="prop-name">action</span></td><td><span class="prop-type">{text, onClick}</span></td><td><span class="prop-default">null</span></td><td>Action button config</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RecyclerView Section -->
+        <section id="recycler" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag"><i class='bx bx-list-ul'></i> Lists</span>
+                    <h2 class="section-title">RecyclerView</h2>
+                    <p class="section-desc">High-performance list component with optimized data updates, infinite scroll, and layout managers.</p>
+                </div>
+
+                <div class="alert">
+                    <i class='bx bx-rocket alert-icon'></i>
+                    <div class="alert-content">
+                        <h4>Optimized Updates</h4>
+                        <p>New version supports granular updates without full re-renders: <code>addItem()</code>, <code>updateItem()</code>, <code>removeItem()</code> for better performance with large datasets.</p>
+                    </div>
+                </div>
+
+                <div class="api-item">
+                    <div class="api-header" onclick="toggleApi(this)">
+                        <span class="api-name">RecyclerView</span>
+                        <span class="api-type">Component</span>
+                    </div>
+                    <div class="api-body expandable-content">
+                        <p class="api-desc">High-performance list component with adapter pattern, optimized data updates, and infinite scrolling.</p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">JavaScript</span>
+                                <button class="code-copy" onclick="copyCode(this)"><i class='bx bx-copy'></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+<code><span class="keyword">const</span> { RecyclerView, Card, Row, Column, TextView, Avatar } = <span class="property">AndroidComponents</span>;
+
+<span class="comment">// Define your adapter (item renderer)</span>
+<span class="keyword">const</span> userAdapter = (user, index) => {
+    <span class="keyword">return</span> <span class="function">Card</span>({ <span class="property">margin</span>: <span class="number">8</span>, <span class="property">padding</span>: <span class="number">16</span> }, [
+        <span class="function">Row</span>({ <span class="property">gap</span>: <span class="number">16</span>, <span class="property">gravity</span>: <span class="string">'center'</span> }, [
+            <span class="function">Avatar</span>({ <span class="property">text</span>: user.name }),
+            <span class="function">Column</span>({}, [
+                <span class="function">TextView</span>({ <span class="property">text</span>: user.name, <span class="property">textStyle</span>: <span class="string">'bold'</span> }),
+                <span class="function">TextView</span>({ <span class="property">text</span>: user.email, <span class="property">textSize</span>: <span class="number">12</span> })
+            ])
+        ])
+    ]);
+};
+
+<span class="comment">// Create RecyclerView</span>
+<span class="keyword">const</span> userList = <span class="function">RecyclerView</span>({
+    <span class="property">data</span>: users,
+    <span class="property">adapter</span>: userAdapter,
+    <span class="property">layoutManager</span>: <span class="string">'linear'</span>,
+    <span class="property">height</span>: <span class="string">'100vh'</span>,
+    <span class="property">divider</span>: <span class="keyword">true</span>,
+    <span class="property">gap</span>: <span class="number">8</span>,
+    <span class="property">emptyText</span>: <span class="string">'No users found'</span>,
+    <span class="property">emptyIcon</span>: <span class="string">'bx bx-user-x'</span>,
+    <span class="property">onLoadMore</span>: <span class="keyword">async</span> (offset) => {
+        <span class="keyword">const</span> newUsers = <span class="keyword">await</span> <span class="function">fetchUsers</span>(offset);
+        <span class="keyword">return</span> { <span class="property">data</span>: newUsers, <span class="property">hasMore</span>: newUsers.length > <span class="number">0</span> };
+    }
+});</code>
+                            </div>
+                        </div>
+
+                        <table class="props-table">
+                            <thead>
+                                <tr><th>Property</th><th>Type</th><th>Description</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="prop-name">data</span></td><td><span class="prop-type">array</span></td><td>Array of data items</td></tr>
+                                <tr><td><span class="prop-name">adapter</span></td><td><span class="prop-type">function(item, index)</span></td><td>Returns component for each item</td></tr>
+                                <tr><td><span class="prop-name">layoutManager</span></td><td><span class="prop-type">'linear' | 'grid'</span></td><td>Layout type</td></tr>
+                                <tr><td><span class="prop-name">gridColumns</span></td><td><span class="prop-type">number</span></td><td>Columns for grid layout</td></tr>
+                                <tr><td><span class="prop-name">divider</span></td><td><span class="prop-type">boolean</span></td><td>Show dividers between items</td></tr>
+                                <tr><td><span class="prop-name">gap</span></td><td><span class="prop-type">number</span></td><td>Spacing between items</td></tr>
+                                <tr><td><span class="prop-name">height</span></td><td><span class="prop-type">number | string</span></td><td>Container height</td></tr>
+                                <tr><td><span class="prop-name">hasMore</span></td><td><span class="prop-type">boolean</span></td><td>Whether more data is available</td></tr>
+                                <tr><td><span class="prop-name">loadMoreThreshold</span></td><td><span class="prop-type">number</span></td><td>Pixels from bottom to trigger load (default: 200)</td></tr>
+                                <tr><td><span class="prop-name">onLoadMore</span></td><td><span class="prop-type">async function(offset)</span></td><td>Returns { data, hasMore }</td></tr>
+                                <tr><td><span class="prop-name">emptyText</span></td><td><span class="prop-type">string</span></td><td>Text when list is empty</td></tr>
+                                <tr><td><span class="prop-name">emptySubtext</span></td><td><span class="prop-type">string</span></td><td>Subtext when list is empty</td></tr>
+                                <tr><td><span class="prop-name">emptyIcon</span></td><td><span class="prop-type">string</span></td><td>Icon when list is empty</td></tr>
+                                <tr><td><span class="prop-name">emptyView</span></td><td><span class="prop-type">Component</span></td><td>Custom empty state component</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">Optimized Methods (No Full Re-render)</h4>
+                        <div class="method-list">
+                            <div class="method-item">
+                                <span class="method-name">addItem(item)</span>
+                                <span class="method-desc">Add item at end (optimized)</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">addItemAt(index, item)</span>
+                                <span class="method-desc">Add item at specific index (optimized)</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">updateItem(index, item)</span>
+                                <span class="method-desc">Update single item (optimized)</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">removeItem(index)</span>
+                                <span class="method-desc">Remove single item (optimized)</span>
+                            </div>
+                        </div>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">Batch Operations</h4>
+                        <div class="method-list">
+                            <div class="method-item">
+                                <span class="method-name">addData(items)</span>
+                                <span class="method-desc">Add multiple items at once</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">updateItemRange(startIndex, items)</span>
+                                <span class="method-desc">Update range of items</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">removeItemRange(startIndex, count)</span>
+                                <span class="method-desc">Remove range of items</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">setData(items)</span>
+                                <span class="method-desc">Replace entire dataset (full re-render)</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">clear()</span>
+                                <span class="method-desc">Remove all items</span>
+                            </div>
+                        </div>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">Android-Style Notify Methods</h4>
+                        <div class="method-list">
+                            <div class="method-item">
+                                <span class="method-name">notifyDataSetChanged()</span>
+                                <span class="method-desc">Full dataset changed (re-render)</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">notifyItemInserted(index)</span>
+                                <span class="method-desc">Single item inserted</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">notifyItemRemoved(index)</span>
+                                <span class="method-desc">Single item removed</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">notifyItemChanged(index)</span>
+                                <span class="method-desc">Single item changed</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">notifyItemRangeInserted(index, count)</span>
+                                <span class="method-desc">Range of items inserted</span>
+                            </div>
+                        </div>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">Data Access & Scroll Methods</h4>
+                        <div class="method-list">
+                            <div class="method-item">
+                                <span class="method-name">getData() / getItem(index) / getItemCount()</span>
+                                <span class="method-desc">Access list data</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">scrollToTop() / scrollToBottom() / scrollToIndex(index)</span>
+                                <span class="method-desc">Scroll control</span>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-name">setHasMore(bool) / loadMore() / isLoading()</span>
+                                <span class="method-desc">Infinite scroll control</span>
+                            </div>
+                        </div>
+
+                        <h4 style="margin: 24px 0 16px; font-weight: 600;">Real-time Updates Example</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">JavaScript</span>
+                                <button class="code-copy" onclick="copyCode(this)"><i class='bx bx-copy'></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+<code><span class="comment">// Real-time updates without re-rendering</span>
+socket.<span class="function">on</span>(<span class="string">'user:added'</span>, (user) => {
+    userList.<span class="function">addItem</span>(user); <span class="comment">// Optimized, no re-render</span>
+});
+
+socket.<span class="function">on</span>(<span class="string">'user:updated'</span>, (user) => {
+    <span class="keyword">const</span> index = userList.<span class="function">getData</span>().<span class="function">findIndex</span>(u => u.id === user.id);
+    <span class="keyword">if</span> (index >= <span class="number">0</span>) {
+        userList.<span class="function">updateItem</span>(index, user); <span class="comment">// Optimized</span>
+    }
+});
+
+socket.<span class="function">on</span>(<span class="string">'user:removed'</span>, (userId) => {
+    <span class="keyword">const</span> index = userList.<span class="function">getData</span>().<span class="function">findIndex</span>(u => u.id === userId);
+    <span class="keyword">if</span> (index >= <span class="number">0</span>) {
+        userList.<span class="function">removeItem</span>(index); <span class="comment">// Optimized</span>
+    }
+});</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Examples Section -->
+        <section id="examples" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag"><i class='bx bx-code-curly'></i> Examples</span>
+                    <h2 class="section-title">Complete Examples</h2>
+                    <p class="section-desc">Full working examples to get you started quickly.</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">Complete App Example</span>
+                        <button class="code-copy" onclick="copyCode(this)"><i class='bx bx-copy'></i> Copy</button>
+                    </div>
+                    <div class="code-content">
+<code><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="string">"en"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;title&gt;</span>My App<span class="tag">&lt;/title&gt;</span>
+    <span class="tag">&lt;link</span> <span class="attr">href</span>=<span class="string">"https://unpkg.com/<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="88eae7f0e1ebe7e6fbc8baa6b9a6bc">[email&#160;protected]</a>/css/boxicons.min.css"</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;style&gt;</span>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: system-ui, sans-serif; }
+        #app { padding-bottom: 80px; } <span class="comment">/* Space for bottom nav */</span>
+    <span class="tag">&lt;/style&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">id</span>=<span class="string">"app"</span><span class="tag">&gt;&lt;/div&gt;</span>
+
+    <span class="comment">&lt;!-- Include libraries --&gt;</span>
+    <span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="string">"https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/layouts.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+    <span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="string">"https://cdn.jsdelivr.net/gh/Terrehaught/js-jetpack-compose@main/js-jetpack-compose/material-views.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+    <span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="string">"https://cdn.jsdelivr.net/gh/Terrehaught/js-jetpack-compose@main/js-jetpack-compose/material-notifiers.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+    <span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="string">"https://cdn.jsdelivr.net/gh/Terrehaught/js-jetpack-compose@main/js-jetpack-compose/bottom_nav.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+
+    <span class="tag">&lt;script&gt;</span>
+    <span class="keyword">const</span> { Column, Row, mount } = <span class="property">AndroidLayouts</span>;
+    <span class="keyword">const</span> {
+        TextView, MaterialButton, MaterialInput,
+        Card, Avatar, Snackbar, BottomNavigation
+    } = <span class="property">AndroidComponents</span>;
+
+    <span class="comment">// Create pages</span>
+    <span class="keyword">const</span> homePage = <span class="function">Column</span>({
+        <span class="property">padding</span>: <span class="number">20</span>,
+        <span class="property">gap</span>: <span class="number">16</span>,
+        <span class="property">id</span>: <span class="string">'home'</span>
+    }, [
+        <span class="function">Card</span>({ <span class="property">padding</span>: <span class="number">24</span> }, [
+            <span class="function">Row</span>({ <span class="property">gap</span>: <span class="number">16</span> }, [
+                <span class="function">Avatar</span>({ <span class="property">text</span>: <span class="string">'J'</span>, <span class="property">size</span>: <span class="number">48</span> }),
+                <span class="function">Column</span>({}, [
+                    <span class="function">TextView</span>({ <span class="property">text</span>: <span class="string">'Welcome Back!'</span>, <span class="property">textSize</span>: <span class="number">20</span>, <span class="property">textStyle</span>: <span class="string">'bold'</span> }),
+                    <span class="function">TextView</span>({ <span class="property">text</span>: <span class="string">'What would you like to do today?'</span> })
+                ])
+            ])
+        ]),
+        <span class="function">MaterialButton</span>({
+            <span class="property">text</span>: <span class="string">'Get Started'</span>,
+            <span class="property">leadingIcon</span>: <span class="string">'bx bx-rocket'</span>,
+            <span class="property">fullWidth</span>: <span class="keyword">true</span>,
+            <span class="property">onClick</span>: () => <span class="property">Snackbar</span>.<span class="function">success</span>(<span class="string">'Let\'s go!'</span>)
+        })
+    ]);
+
+    <span class="comment">// Mount app</span>
+    <span class="function">mount</span>(homePage, <span class="string">'app'</span>);
+
+    <span class="comment">// Add bottom navigation</span>
+    <span class="function">BottomNavigation</span>()
+        .<span class="function">setItems</span>([
+            { <span class="property">id</span>: <span class="string">'home'</span>, <span class="property">name</span>: <span class="string">'Home'</span>, <span class="property">icon</span>: <span class="string">'bx-home'</span> },
+            { <span class="property">id</span>: <span class="string">'search'</span>, <span class="property">name</span>: <span class="string">'Search'</span>, <span class="property">icon</span>: <span class="string">'bx-search'</span> },
+            { <span class="property">id</span>: <span class="string">'profile'</span>, <span class="property">name</span>: <span class="string">'Profile'</span>, <span class="property">icon</span>: <span class="string">'bx-user'</span> }
+        ])
+        .<span class="function">setOnItemSelect</span>((id) => <span class="function">console</span>.<span class="function">log</span>(<span class="string">'Navigate to:'</span>, id))
+        .<span class="function">show</span>();
+    <span class="tag">&lt;/script&gt;</span>
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></code>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-logo">
+                <div class="footer-logo-icon">
+                    <i class='bx bxl-android'></i>
+                </div>
+                <span style="font-weight: 600; font-size: 1.1rem;">JS Jetpack Compose</span>
+            </div>
+            <p class="footer-text">Build Android-style UIs for the web with declarative JavaScript.</p>
+            <p class="footer-text" style="margin-top: 16px; opacity: 0.6;">
+                <a href="https://github.com/Terrehaght/js-jetpack-compose" style="color: var(--accent-android); text-decoration: none;">
+                    <i class='bx bxl-github'></i> View on GitHub
+                </a>
+            </p>
+        </div>
+    </footer>
+
+    <div class="toc-float">
+        <a href="#installation" title="Installation"></a>
+        <a href="#layouts" title="Layouts"></a>
+        <a href="#components" title="Components"></a>
+        <a href="#inputs" title="Inputs"></a>
+        <a href="#navigation" title="Navigation"></a>
+        <a href="#overlays" title="Overlays"></a>
+        <a href="#recycler" title="RecyclerView"></a>
+        <a href="#examples" title="Examples"></a>
+    </div>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Copy code functionality
+        function copyCode(btn) {
+            const codeBlock = btn.closest('.code-block');
+            const code = codeBlock.querySelector('.code-content code').textContent;
+
+            navigator.clipboard.writeText(code).then(() => {
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<i class="bx bx-check"></i> Copied!';
+                btn.style.color = 'var(--accent-android)';
+                btn.style.borderColor = 'var(--accent-android)';
+
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.style.color = '';
+                    btn.style.borderColor = '';
+                }, 2000);
+            });
+        }
+
+        // Toggle API sections
+        function toggleApi(header) {
+            const body = header.nextElementSibling;
+            body.classList.toggle('show');
+            header.classList.toggle('active');
+        }
+
+        // Navigation active state
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.section');
+        const tocLinks = document.querySelectorAll('.toc-float a');
+
+        function updateActiveNav() {
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+
+            tocLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveNav);
+        updateActiveNav();
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
