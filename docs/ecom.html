@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Gallery</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        #app {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <!-- Framework Scripts -->
+    <script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/layouts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/AndroidFramework.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/material-views.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/material-notifiers.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/.Mainactivity.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/bottom_nav.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/drawer_tools.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/tabs.min.js"></script>
+    <script src="../js-jetpack-compose/recycler_view.js"></script>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+    <script>
+        const { Activity, Intent, Application } = AndroidFramework;
+        const { Column, Row, GridLayout, GridParams, ScrollView, FrameLayout, Constrained } = AndroidLayouts;
+        const { TextView, MaterialButton, Card, MaterialImage, RecyclerView, MaterialToolbar, 
+                MaterialSpinner, MaterialSlider, Snackbar, MaterialDialog } = AndroidComponents;
+
+        // Product Categories with Images
+        const categories = [
+            { id: 1, name: 'Electronics', image: 'https://picsum.photos/seed/cat1/100/100' },
+            { id: 2, name: 'Fashion', image: 'https://picsum.photos/seed/cat2/100/100' },
+            { id: 3, name: 'Home', image: 'https://picsum.photos/seed/cat3/100/100' },
+            { id: 4, name: 'Sports', image: 'https://picsum.photos/seed/cat4/100/100' },
+            { id: 5, name: 'Books', image: 'https://picsum.photos/seed/cat5/100/100' },
+            { id: 6, name: 'Toys', image: 'https://picsum.photos/seed/cat6/100/100' }
+        ];
+
+        // Products Data
+        const products = [
+            {
+                id: 1,
+                name: 'Wireless Headphones',
+                price: 79.99,
+                image: 'https://picsum.photos/seed/prod1/400/400',
+                rating: 4.5,
+                category: 'Electronics'
+            },
+            {
+                id: 2,
+                name: 'Smart Watch',
+                price: 199.99,
+                image: 'https://picsum.photos/seed/prod2/400/400',
+                rating: 4.8,
+                category: 'Electronics'
+            },
+            {
+                id: 3,
+                name: 'Running Shoes',
+                price: 89.99,
+                image: 'https://picsum.photos/seed/prod3/400/400',
+                rating: 4.3,
+                category: 'Sports'
+            },
+            {
+                id: 4,
+                name: 'Coffee Maker',
+                price: 129.99,
+                image: 'https://picsum.photos/seed/prod4/400/400',
+                rating: 4.6,
+                category: 'Home'
+            },
+            {
+                id: 5,
+                name: 'Backpack',
+                price: 49.99,
+                image: 'https://picsum.photos/seed/prod5/400/400',
+                rating: 4.4,
+                category: 'Fashion'
+            },
+            {
+                id: 6,
+                name: 'Yoga Mat',
+                price: 29.99,
+                image: 'https://picsum.photos/seed/prod6/400/400',
+                rating: 4.7,
+                category: 'Sports'
+            }
+        ];
+
+        class ShopActivity extends Activity {
+            constructor() {
+                super();
+                this.cart = [];
+            }
+
+            onCreate(savedInstanceState) {
+                super.onCreate(savedInstanceState);
+
+                // Toolbar with Cart Badge
+                const toolbar = MaterialToolbar({
+                    title: 'Shop',
+                    actions: [
+                        {
+                            icon: 'bx bx-cart',
+                            badge: '0',
+                            label: 'Cart',
+                            onClick: () => this.openCart()
+                        }
+                    ]
+                });
+
+                // Horizontal Categories RecyclerView
+                const categoriesRecycler = RecyclerView({
+                    data: categories,
+orientation: 'horizontal',
+                    layoutManager: 'linear',
+                    adapter: (category, index) => {
+                        return Card({
+                            variant: 'outlined',
+                            cornerRadius: 12,
+                            hoverable: true, gap:12,
+                            margin: { right: 12, left:20 },
+                            padding: 8,
+                            onClick: () => {
+                                Snackbar.show(`Selected: ${category.name}`);
+                            }
+                        }, [
+                            Column({
+                                gravity: 'center',
+                                gap: 8,
+                                width: 100
+                            }, [
+                                MaterialImage({
+                                    src: category.image,
+                                    width: 100,
+                                    height: 100,
+                                    cornerRadius: 8,
+                                    aspectRatio: '1:1',
+                                    fit: 'cover'
+                                }),
+                                TextView({
+                                    text: category.name,
+                                    textSize: 12,
+                                    textStyle: 'bold',
+                                    gravity: 'center'
+                                })
+                            ])
+                        ]).getElement();
+                    }
+                });
+
+                // Make categories scroll horizontally
+                const categoriesContainer = categoriesRecycler.getElement();
+                categoriesContainer.style.display = 'flex';
+                categoriesContainer.style.flexDirection = 'row';
+                categoriesContainer.style.overflowX = 'auto';
+                categoriesContainer.style.overflowY = 'hidden';
+                categoriesContainer.style.padding = '16px';
+
+                // Price Filter
+                const priceSlider = MaterialSlider({
+                    min: 0,
+                    max: 500,
+                    value: [0, 500],
+                    step: 10,
+                    showValue: true,
+                    showMinMax: true,
+                    formatValue: (val) => `$${val}`,
+                    onChange: (range) => {
+                        console.log('Price range:', range);
+                    }
+                });
+
+                // Products Grid
+                const productsRecycler = RecyclerView({
+                    data: products,
+                    layoutManager: 'grid',
+                    gridColumns: 2,
+                    adapter: (product, index) => {
+                        return Card({
+                            variant: 'elevated',
+                            elevation: 2,
+                            cornerRadius: 16,
+                            hoverable: true,
+                            hoverElevation: 8,
+                            padding: 0,
+                            margin: 8
+                        }, [
+                            Column({ gap: 0 }, [
+                                // Product Image
+                                FrameLayout({
+                                    width: '100%',
+                                    height: 160
+                                }, [
+                                    MaterialImage({
+                                        src: product.image,
+                                        aspectRatio: '1:1',
+                                        fit: 'cover',
+                                        cornerRadius: 16,
+                                        onClick: () => this.openProductDetail(product)
+                                    }),
+                                    Constrained({
+                                        top: 8,
+                                        right: 8,
+                                        zIndex: 1
+                                    },
+                                        Card({
+                                            variant: 'filled',
+                                            cornerRadius: 20,
+                                            padding: 8,
+                                            background: 'rgba(255, 255, 255, 0.9)'
+                                        }, [
+                                            MaterialButton({
+                                                iconOnly: true,
+                                                variant: 'text',
+                                                trailingIcon: 'bx bx-heart',
+                                                onClick: () => {
+                                                    Snackbar.success('Added to wishlist');
+                                                }
+                                            })
+                                        ])
+                                    )
+                                ]),
+                                // Product Info
+                                Column({
+                                    padding: 12,
+                                    gap: 8
+                                }, [
+                                    TextView({
+                                        text: product.name,
+                                        textSize: 14,
+                                        textStyle: 'bold',
+                                        maxLines: 2,
+                                        ellipsize: true
+                                    }),
+                                    Row({
+                                        gravity: 'center_vertical',
+                                        gap: 4
+                                    }, [
+                                        TextView({
+                                            text: '★',
+                                            textColor: '#FFC107',
+                                            textSize: 14
+                                        }),
+                                        TextView({
+                                            text: product.rating.toString(),
+                                            textSize: 12,
+                                            textColor: '#666'
+                                        })
+                                    ]),
+                                    Row({
+                                        gravity: 'space_between'
+                                    }, [
+                                        TextView({
+                                            text: `$${product.price}`,
+                                            textSize: 18,
+                                            textStyle: 'bold',
+                                            textColor: '#6750A4'
+                                        }),
+                                        MaterialButton({
+                                            iconOnly: true,
+                                            variant: 'filled',
+                                            trailingIcon: 'bx bx-plus',
+                                            onClick: () => this.addToCart(product, toolbar)
+                                        })
+                                    ])
+                                ])
+                            ])
+                        ]).getElement();
+                    }
+                });
+
+                // Main Layout
+                const mainLayout = Column({
+                    width: 'match_parent',
+                    height: 'match_parent',
+                    background: '#fafafa'
+                }, [
+                    toolbar,
+                    ScrollView({ width: 'match_parent', height: 'match_parent' }, [
+                        Column({ gap: 0 }, [
+                            // Categories Section
+                            Column({ padding: { left: 16, top: 16, bottom: 8 } }, [
+                                TextView({
+                                    text: 'Categories',
+                                    textSize: 18,
+                                    textStyle: 'bold'
+                                })
+                            ]),
+                            categoriesRecycler,
+                            // Price Filter Section
+                            Column({ padding: 16, gap: 8 }, [
+                                TextView({
+                                    text: 'Price Range',
+                                    textSize: 18,
+                                    textStyle: 'bold'
+                                }),
+                                priceSlider
+                            ]),
+                            // Products Section
+                            Column({ padding: { left: 16, right: 16, top: 8 } }, [
+                                TextView({
+                                    text: 'Featured Products',
+                                    textSize: 18,
+                                    textStyle: 'bold',
+                                    margin: { bottom: 8 }
+                                })
+                            ]),
+                            productsRecycler
+                        ])
+                    ])
+                ]);
+
+                this.setContentView(mainLayout);
+            }
+
+            addToCart(product, toolbar) {
+                this.cart.push(product);
+                const badge = this.cart.length.toString();
+                
+                // Update toolbar badge
+                toolbar.actions[0].badge = badge;
+                
+                Snackbar.show(`${product.name} added to cart`, {
+                    duration: 3000,
+                    action: {
+                        text: 'VIEW CART',
+                        onClick: () => this.openCart()
+                    }
+                });
+            }
+
+            openCart() {
+                const intent = new Intent(CartActivity);
+                intent.putExtra('cart', this.cart);
+                this.startActivity(intent);
+            }
+
+            openProductDetail(product) {
+                const intent = new Intent(ProductDetailActivity);
+                intent.putExtra('product', product);
+                this.startActivity(intent);
+            }
+        }
+
+        class ProductDetailActivity extends Activity {
+            onCreate(savedInstanceState) {
+                super.onCreate(savedInstanceState);
+
+                const product = this.getIntent().getExtra('product');
+
+                const toolbar = MaterialToolbar({
+                    title: product.name,
+                    navigationIcon: 'bx bx-arrow-back',
+                    onNavigationClick: () => this.finish()
+                });
+
+                const layout = Column({
+                    width: 'match_parent',
+                    height: 'match_parent'
+                }, [
+                    toolbar,
+                    ScrollView({ width: 'match_parent', height: 'match_parent' }, [
+                        Column({ gap: 16 }, [
+                            MaterialImage({
+                                src: product.image,
+                                aspectRatio: '1:1',
+                                fit: 'contain',
+                                cornerRadius: 0
+                            }),
+                            Column({ padding: 16, gap: 16 }, [
+                                TextView({
+                                    text: product.name,
+                                    textSize: 24,
+                                    textStyle: 'bold'
+                                }),
+                                TextView({
+                                    text: `$${product.price}`,
+                                    textSize: 32,
+                                    textStyle: 'bold',
+                                    textColor: '#6750A4'
+                                }),
+                                Row({ gap: 8 }, [
+                                    TextView({
+                                        text: '★★★★★',
+                                        textColor: '#FFC107'
+                                    }),
+                                    TextView({
+                                        text: `${product.rating} (128 reviews)`,
+                                        textColor: '#666'
+                                    })
+                                ]),
+                                TextView({
+                                    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                                    textSize: 14,
+                                    margin: { top: 8 }
+                                }),
+                                MaterialButton({
+                                    text: 'Add to Cart',
+                                    variant: 'filled',
+                                    fullWidth: true,
+                                    leadingIcon: 'bx bx-cart',
+                                    onClick: () => {
+                                        Snackbar.success('Added to cart!');
+                                        this.finish();
+                                    }
+                                })
+                            ])
+                        ])
+                    ])
+                ]);
+
+                this.setContentView(layout);
+            }
+        }
+
+        class CartActivity extends Activity {
+            onCreate(savedInstanceState) {
+                super.onCreate(savedInstanceState);
+
+                const cart = this.getIntent().getExtra('cart', []);
+
+                const toolbar = MaterialToolbar({
+                    title: `Cart (${cart.length} items)`,
+                    navigationIcon: 'bx bx-arrow-back',
+                    onNavigationClick: () => this.finish()
+                });
+
+                const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+                const layout = Column({
+                    width: 'match_parent',
+                    height: 'match_parent'
+                }, [
+                    toolbar,
+                    LayoutParams({ weight: 1 },
+                        ScrollView({ width: 'match_parent', height: 'match_parent' }, [
+                            Column({ padding: 16, gap: 16 }, 
+                                cart.map(item => 
+                                    Card({ padding: 12 }, [
+                                        Row({ gap: 12 }, [
+                                            MaterialImage({
+                                                src: item.image,
+                                                width: 80,
+                                                height: 80,
+                                                cornerRadius: 8
+                                            }),
+                                            Column({ gap: 4 }, [
+                                                TextView({
+                                                    text: item.name,
+                                                    textStyle: 'bold'
+                                                }),
+                                                TextView({
+                                                    text: `$${item.price}`,
+                                                    textColor: '#6750A4'
+                                                })
+                                            ])
+                                        ])
+                                    ])
+                                )
+                            )
+                        ])
+                    ),
+                    Card({
+                        variant: 'elevated',
+                        elevation: 8,
+                        cornerRadius: 0,
+                        padding: 16
+                    }, [
+                        Column({ gap: 12 }, [
+                            Row({ gravity: 'space_between' }, [
+                                TextView({ text: 'Total:', textStyle: 'bold', textSize: 18 }),
+                                TextView({ text: `$${total.toFixed(2)}`, textStyle: 'bold', textSize: 24, textColor: '#6750A4' })
+                            ]),
+                            MaterialButton({
+                                text: 'Checkout',
+                                variant: 'filled',
+                                fullWidth: true,
+                                onClick: () => {
+                                    MaterialDialog.alert('Success', 'Order placed successfully!');
+                                }
+                            })
+                        ])
+                    ])
+                ]);
+
+                this.setContentView(layout);
+            }
+        }
+
+        Application.setupBackButton();
+        Application.launch(ShopActivity);
+    </script>
+</body>
+</html>

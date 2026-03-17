@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JetPack Compose Style Components Demo</title>
+
+  <!-- External Dependencies -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --demo-bg: linear-gradient(135deg, #f8f4ff 0%, #e8e4f0 100%);
+      --demo-card-shadow: 0 4px 20px rgba(103, 80, 164, 0.12);
+      --demo-section-title: #4a3b6a;
+      --demo-subtitle: #6b5b8a;
+      --demo-border: rgba(103, 80, 164, 0.15);
+    }
+
+    .dark {
+      --demo-bg: linear-gradient(135deg, #1a1625 0%, #2d2640 100%);
+      --demo-card-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      --demo-section-title: #e0d0ff;
+      --demo-subtitle: #b8a8d8;
+      --demo-border: rgba(208, 188, 255, 0.2);
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--demo-bg);
+      overflow: hidden;
+    }
+
+    #app {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .demo-header {
+      background: linear-gradient(135deg, #6750a4 0%, #7b5fc7 50%, #9370db 100%);
+      color: white;
+      padding: 20px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .demo-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 20px 20px;
+      animation: headerPattern 20s linear infinite;
+    }
+
+    @keyframes headerPattern {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(20px, 20px); }
+    }
+
+    .demo-header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .demo-header p {
+      font-size: 0.875rem;
+      opacity: 0.85;
+      margin-top: 4px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .demo-section {
+      padding: 20px;
+      border-bottom: 1px solid var(--demo-border);
+    }
+
+    .demo-section-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--demo-section-title);
+      margin-bottom: 6px;
+      font-family: 'Space Mono', monospace;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .demo-section-title i {
+      color: var(--md-primary);
+    }
+
+    .demo-subtitle {
+      font-size: 0.8125rem;
+      color: var(--demo-subtitle);
+      margin-bottom: 16px;
+    }
+
+    .demo-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .demo-column {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .demo-card {
+      background: var(--md-surface);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: var(--demo-card-shadow);
+      margin-bottom: 12px;
+    }
+
+    .demo-card-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--md-primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .input-demo-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .switch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+    }
+
+    .card-demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .layout-demo-box {
+      background: var(--md-primary-container);
+      color: var(--md-on-primary-container);
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .recycler-demo-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: var(--md-surface);
+      border-radius: 12px;
+      transition: background 0.2s;
+    }
+
+    .recycler-demo-item:hover {
+      background: var(--md-surface-variant);
+    }
+
+    .recycler-demo-item .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .recycler-demo-item .content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .recycler-demo-item .title {
+      font-weight: 600;
+      color: var(--md-on-surface);
+      font-size: 0.9375rem;
+    }
+
+    .recycler-demo-item .subtitle {
+      font-size: 0.8125rem;
+      color: var(--md-on-surface-variant);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tabs-demo-content {
+      padding: 20px;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .tabs-demo-content i {
+      font-size: 3rem;
+      color: var(--md-primary);
+      opacity: 0.6;
+    }
+
+    .tabs-demo-content p {
+      color: var(--md-on-surface-variant);
+      font-size: 0.875rem;
+    }
+
+    .bottom-nav-placeholder {
+      height: 80px;
+    }
+
+    /* Animation for demo elements */
+    .demo-section {
+      animation: fadeInUp 0.5s ease-out backwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Code tag styling */
+    code {
+      font-family: 'Space Mono', monospace;
+      background: var(--md-surface-variant);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      color: var(--md-primary);
+    }
+
+    /* Grid layout demo */
+    .grid-demo-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .grid-demo-item {
+      background: var(--md-secondary-container);
+      color: var(--md-on-secondary-container);
+      padding: 16px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 500;
+      font-size: 0.75rem;
+    }
+
+    .grid-demo-item.span-2 {
+      grid-column: span 2;
+    }
+
+    .constraint-demo {
+      position: relative;
+      height: 180px;
+      background: var(--md-surface-variant);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .constraint-demo .corner-item {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: var(--md-tertiary-container, var(--md-primary-container));
+      color: var(--md-on-tertiary-container, var(--md-on-primary-container));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.625rem;
+      font-weight: 600;
+      border-radius: 8px;
+    }
+
+    .constraint-demo .center-item {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 12px 20px;
+      background: var(--md-primary);
+      color: var(--md-on-primary);
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <!-- Load scripts in order -->
+  <script src="../js-jetpack-compose/layouts.js"></script>
+    <script src="../js-jetpack-compose/material-views.js"></script>
+    <script src="../js-jetpack-compose/material-notifiers.js"></script>
+    <script src="../js-jetpack-compose/tabs.js"></script>
+    <script src="../js-jetpack-compose/recycler_view.js"></script>
+    <script src="../js-jetpack-compose/drawer_tools.js"></script>
+    <script src="../js-jetpack-compose/bottom_nav.js"></script>
+    <script src="../js-jetpack-compose/AndroidFramework.js"></script>
+    <script src="../js-jetpack-compose/spinner"></script>
+
+  <script>
+    // Dark mode detection
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.classList.add('dark');
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+      document.documentElement.classList.toggle('dark', event.matches);
+    });
+
+    // Wait for all scripts to load
+    window.addEventListener('load', () => {
+      const { Column, Row, GridLayout, ScrollView, FrameLayout, mount } = AndroidLayouts;
+      const {
+        TextView, MaterialButton, MaterialSwitch, MaterialInput,
+        Card, Icon, Divider, Avatar, RecyclerView,
+        MaterialToolbar, MaterialDrawer, BottomNavigation,
+        MaterialDialog, Snackbar, TabLayout
+      } = AndroidComponents;
+
+      // ==========================================
+      // Create Drawer
+      // ==========================================
+      const drawer = MaterialDrawer({
+        header: { title: 'Components Demo', subtitle: 'JetPack Compose Style' },
+        items: [
+          { type: 'section', title: 'Navigation', items: [
+            { id: 'home', icon: 'bx bx-home', text: 'Home' },
+            { id: 'components', icon: 'bx bx-cube', text: 'Components' },
+            { id: 'layouts', icon: 'bx bx-layout', text: 'Layouts' },
+          ]},
+          { type: 'divider' },
+          { type: 'section', title: 'Settings', items: [
+            { id: 'theme', icon: 'bx bx-palette', text: 'Theme' },
+            { id: 'about', icon: 'bx bx-info-circle', text: 'About', badge: 'NEW' },
+          ]}
+        ],
+        onItemClick: (id) => {
+          Snackbar.show(`Selected: ${id}`, { duration: 2000 });
+        }
+      });
+
+      // ==========================================
+      // Create Toolbar
+      // ==========================================
+      const toolbar = MaterialToolbar({
+        title: 'Compose Demo',
+        navigationIcon: 'bx bx-menu',
+        onNavigationClick: () => drawer.open(),
+        actions: [
+          { icon: 'bx bx-search', label: 'Search', onClick: () => Snackbar.show('Search clicked') },
+          { icon: 'bx bx-bell', label: 'Notifications', badge: '3', onClick: () => Snackbar.show('Notifications clicked') }
+        ],
+        overflowMenu: [
+          { text: 'Refresh', icon: 'bx bx-refresh', onClick: () => location.reload() },
+          { text: 'Settings', icon: 'bx bx-cog', onClick: () => Snackbar.show('Settings clicked') }
+        ]
+      });
+
+      // ==========================================
+      // Buttons Demo Section
+      // ==========================================
+      const buttonsSection = Column({ padding: 20, gap: 16, className: 'demo-section' }, [
+        Column({ gap: 4 }, [
+          Row({ gap: 8 }, [
+            Icon({ name: 'bx bx-pointer', size: 20, color: 'var(--md-primary)' }),
+            TextView({ text: 'MaterialButton', textSize: 18, textStyle: 'bold', textColor: 'var(--demo-section-title)' })
+          ]),
+          TextView({ text: 'Filled, Outlined, Text, Elevated & Tonal variants', textSize: 13, textColor: 'var(--demo-subtitle)' })
+        ]),
+
+        Row({ gap: 8, wrap: true }, [
+          MaterialButton({ text: 'Filled', variant: 'filled', onClick: () => Snackbar.show('Filled button clicked') }),
+          MaterialButton({ text: 'Outlined', variant: 'outlined', onClick: () => Snackbar.show('Outlined button clicked') }),
+          MaterialButton({ text: 'Text', variant: 'text', onClick: () => Snackbar.show('Text button clicked') })
+        ]),
+
+        Row({ gap: 8, wrap: true }, [
+          MaterialButton({ text: 'Elevated', variant: 'elevated', leadingIcon: 'bx bx-cloud' }),
+          MaterialButton({ text: 'Tonal', variant: 'tonal', trailingIcon: 'bx bx-right-arrow-alt' })
+        ]),
+
+        Row({ gap: 8 }, [
+          MaterialButton({ text: 'S', variant: 'filled', size: 'small' }),
+          MaterialButton({ text: 'Medium', variant: 'filled', size: 'medium' }),
+          MaterialButton({ text: 'Large', variant: 'filled', size: 'large' })
+        ]),
+
+        Row({ gap: 8 }, [
+          (() => {
+            const loadBtn = MaterialButton({
+              text: 'Click to Load',
+              variant: 'tonal',
+              onClick: () => {
+                loadBtn.setLoading(true, 'Loading...');
+                setTimeout(() => {
+                  loadBtn.setLoading(false);
+                  Snackbar.success('Loaded successfully!');
+                }, 2000);
+              }
+            });
+            return loadBtn;
+          })(),
+          MaterialButton({ leadingIcon: 'bx bx-heart', iconOnly: true, variant: 'tonal' }),
+          MaterialButton({ leadingIcon: 'bx bx-share-alt', iconOnly: true, variant: 'outlined' })
+        ])
+      ]);
+
+      // ==========================================
+      // Inputs Demo Section
+      // ==========================================
+      const inputsSection = Column({ padding: 20, gap: 16, className: 'demo-section' }, [
+        Column({ gap: 4 }, [
+          Row({ gap: 8 }, [
+            Icon({ name: 'bx bx-text', size: 20, color: 'var(--md-primary)' }),
+            TextView({ text: 'MaterialInput', textSize: 18, textStyle: 'bold', textColor: 'var(--demo-section-title)' })
+          ]),
+          TextView({ text: 'Text fields with floating labels and validation', textSize: 13, textColor: 'var(--demo-subtitle)' })
+        ]),
+
+        Column({ gap: 16, className: 'input-demo-grid' }, [
+          MaterialInput({
+            label: 'Username',
+            leadingIcon: 'bx bx-user',
+            helperText: 'Enter your username'
+          }),
+          MaterialInput({
+            label: 'Email',
+            type: 'email',
+            leadingIcon: 'bx bx-envelope',
+            required: true
+          }),
+          MaterialInput({
+            label: 'Password',
+            type: 'password',
+            leadingIcon: 'bx bx-lock-alt'
+          }),
+          MaterialInput({
+            label: 'With Counter',
+            maxLength: 50,
+            showCounter: true,
+            helperText: 'Max 50 characters'
+          }),
+          (() => {
+            const errorInput = MaterialInput({
+              label: 'Validate Me',
+              helperText: 'Click outside to validate',
+              onBlur: (val) => {
+                if (val.length < 3) {
+                  errorInput.setError('Must be at least 3 characters');
+                } else {
+                  errorInput.setSuccess('Looks good!');
+                }
+              }
+            });
+            return errorInput;
+          })()
+        ])
+      ]);
+
+      // ==========================================
+      // Switches Demo Section
+      // ==========================================
+      const switchesSection = Column({ padding: 20, gap: 16, className: 'demo-section' }, [
+        Column({ gap: 4 }, [
+          Row({ gap: 8 }, [
+            Icon({ name: 'bx bx-toggle-right', size: 20, color: 'var(--md-primary)' }),
+            TextView({ text: 'MaterialSwitch', textSize: 18, textStyle: 'bold', textColor: 'var(--demo-section-title)' })
+          ]),
+          TextView({ text: 'Toggle switches with labels and icons', textSize: 13, textColor: 'var(--demo-subtitle)' })
+        ]),
+
+        Column({ gap: 12, className: 'switch-grid' }, [
+          MaterialSwitch({ label: 'Notifications', checked: true, onChange: (c) => Snackbar.show(`Notifications: ${c ? 'On' : 'Off'}`) }),
+          MaterialSwitch({ label: 'Dark Mode', onChange: (c) => document.documentElement.classList.toggle('dark', c) }),
+          MaterialSwitch({ label: 'Disabled', disabled: true }),
+          MaterialSwitch({ label: 'No Icon', showIcon: false, checked: true })
+        ])
+      ]);
+
+      // ==========================================
+      // Cards Demo Section
+      // ==========================================
+      const cardsSection = Column({ padding: 20, gap: 16, className: 'demo-section' }, [
+        Column({ gap: 4 }, [
+          Row({ gap: 8 }, [
+            Icon({ name: 'bx bx-card', size: 20, color: 'var(--md-primary)' }),
+            TextView({ text: 'Card', textSize: 18, textStyle: 'bold', textColor: 'var(--demo-section-title)' })
+          ]),
+          TextView({ text: 'Elevated, Filled, and Outlined card variants', textSize: 13, textColor: 'var(--demo-subtitle)' })
+        ]),
+
+        Row({ gap: 12, wrap: true, className: 'card-demo-grid' }, [
+          Card({ variant: 'elevated', padding: 16 }, [
+            Column({ gap: 8 }, [
+              Avatar({ icon: 'bx bx-star', background: 'var(--md-primary)', color: 'white' }),
+              TextView({ text: 'Elevated', textStyle: 'bold' }),
+              TextView({ text: 'Shadow effect', textSize: 12, textColor: 'var(--md-on-surface-variant)' })
+            ])
+          ]),
+          Card({ variant: 'filled', padding: 16 }, [
+            Column({ gap: 8 }, [
+              Avatar({ icon: 'bx bx-cube', background: 'var(--md-secondary-container)', color: 'var(--md-on-secondary-container)' }),
+              TextView({ text: 'Filled', textStyle: 'bold' }),
+              TextView({ text: 'Solid background', textSize: 12, textColor: 'var(--md-on-surface-variant)' })
+            ])
+          ]),
+          Card({ variant: 'outlined', padding: 16 }, [
+            Column({ gap: 8 }, [
+              Avatar({ icon: 'bx bx-shape-square', background: 'transparent', color: 'var(--md-primary)' }),
+              TextView({ text: 'Outlined', textStyle: 'bold' }),
+              TextView({ text: 'Border only', textSize: 12, textColor: 'var(--md-on-surface-variant)' })
+            ])
+          ])
+        ])
+      ]);
+
+      // ==========================================
+      // Layouts Demo Section
+      // ==========================================
+      const layoutsSection = Column({ padding: 20, gap: 16, className: 'demo-section' }, [
+        Column({ gap: 4 }, [
+          Row({ gap: 8 }, [
+            Icon({ name: 'bx bx-layout', size: 20, color: 'var(--md-primary)' }),
+            TextView({ text: 'Layouts', textSize: 18, textStyle: 'bold', textColor: 'var(--demo-section-title)' })
+          ]),
+          TextView({ text: 'Column, Row, Grid, and Constraint layouts', textSize: 13, textColor: 'var(--demo-subtitle)' })
+        ]),
+
+        // Row Layout Demo
+        Card({ variant: 'outlined', padding: 12 }, [
+          Column({ gap: 8 }, [
+            TextView({ text: 'Row Layout', textSize: 12, textStyle: 'bold', textColor: 'var(--md-primary)' }),
+            Row({ gap: 8, gravity: 'center' }, [
+              (() => { const d = document.createElement('div'); d.className = 'layout-demo-box'; d.textContent = 'Item 1'; return { getElement: () => d }; })(),
+              (() => { const d = document.createElement('div'); d.className = 'layout-demo-box'; d.textContent = 'Item 2'; return { getElement: () => d }; })(),
+              (() => { const d = document.createElement('div'); d.className = 'layout-demo-box'; d.textContent = 'Item 3'; return { getElement: () => d }; })()
+            ])
+          ])
+        ]),
+
+        // Grid Layout Demo
+        Card({ variant: 'outlined', padding: 12 }, [
+          Column({ gap: 8 }, [
+            TextView({ text: 'Grid Layout (3 columns)', textSize: 12, textStyle: 'bold', textColor: 'var(--md-primary)' }),
+            (() => {
+              const grid = document.createElement('div');
+              grid.className = 'grid-demo-container';
+              for (let i = 1; i <= 5; i++) {
+                const item = document.createElement('div');
+                item.className = 'grid-demo-item' + (i === 4 ? ' span-2' : '');
+                item.textContent = i === 4 ? 'Span 2' : `Cell ${i}`;
+                grid.appendChild(item);
+              }
+              return { getElement: () => grid };
+            })()
+          ])
+        ]),
+
+        // Constraint Layout Demo
+        Card({ variant: 'outlined', padding: 12 }, [
+          Column({ gap: 8 }, [
+            TextView({ text: 'Constraint Layout', textSize: 12, textStyle: 'bold', textColor: 'var(--md-primary)' }),
+            (() => {
+              const container = document.createElement('div');
+              container.className = 'constraint-demo';
+
+              const positions = [
+                { style: 'top: 8px; left: 8px;', text: 'TL' },
+                { style: 'top: 8px; right: 8px;', text: 'TR' },
+                { style: 'bottom: 8px; left: 8px;', text: 'BL' },
+                { style: 'bottom: 8px; right: 8px;', text: 'BR' }
+              ];
+
+              positions.forEach(p => {
+                const item = document.createElement('div');
+                item.className = 'corner-item';
+                item.style.cssText = p.style;
+                item.textContent = p.text;
+                container.appendChild(item);
+              });
+
+              const center = document.createElement('div');
+              center.className = 'center-item';
+              center.textContent = 'CENTERED';
+              container.appendChild(center);
+
+              return { getElement: () => container };
+            })()
+          ])
+        ])
+      ]);
+
+      // ==========================================
+      // RecyclerView Demo Section
+      // ==========================================
+      const recyclerData = [
+        { id: 1, name: 'Alice Johnson', role: 'Designer', color: '#e91e63' },
+        { id: 2, name: 'Bob Smith', role: 'Developer', color: '#2196f3' },
+        { id: 3, name: 'Carol Williams', role: 'Manager', color: '#4caf50' },
+        { id: 4, name: 'David Brown', role: 'Analyst', color: '#ff9800' },
+        { id: 5, name: 'Eva Martinez', role: 'Engineer', color: '#9c27b0' }
+      ];
+
+      const recyclerSection = Column({ padding: 20, gap: 16, className: 'demo-section' }, [
+        Column({ gap: 4 }, [
+          Row({ gap: 8 }, [
+            Icon({ name: 'bx bx-list-ul', size: 20, color: 'var(--md-primary)' }),
+            TextView({ text: 'RecyclerView', textSize: 18, textStyle: 'bold', textColor: 'var(--demo-section-title)' })
+          ]),
+          TextView({ text: 'Efficient list rendering with adapters', textSize: 13, textColor: 'var(--demo-subtitle)' })
+        ]),
+
+        RecyclerView({
+          data: recyclerData,
+          height: 250,
+          gap: 8,
+          padding: 4,
+          adapter: (item) => {
+            const container = document.createElement('div');
+            container.className = 'recycler-demo-item';
+            container.innerHTML = `
+              <div class="avatar" style="background: ${item.color}; color: white;">
+                ${item.name.charAt(0)}
+              </div>
+              <div class="content">
+                <div class="title">${item.name}</div>
+                <div class="subtitle">${item.role}</div>
+              </div>
+              <i class="bx bx-chevron-right" style="color: var(--md-on-surface-variant); font-size: 1.5rem;"></i>
+            `;
+            container.addEventListener('click', () => Snackbar.show(`Selected: ${item.name}`));
+            return { getElement: () => container };
+          },
+          emptyText: 'No users found',
+          emptyIcon: 'bx bx-user-x'
+        })
+      ]);
+
+      // ==========================================
+      // TabLayout Demo Section
+      // ==========================================
+      const createTabContent = (icon, text) => {
+        const div = document.createElement('div');
+        div.className = 'tabs-demo-content';
+        div.innerHTML = `<i class="${icon}"></i><p>${text}</p>`;
+        return { getElement: () => div };
+      };
+
+      const tabsSection = Column({ padding: 20, gap: 16, className: 'demo-section' }, [
+        Column({ gap: 4 }, [
+          Row({ gap: 8 }, [
+            Icon({ name: 'bx bx-tab', size: 20, color: 'var(--md-primary)' }),
+            TextView({ text: 'TabLayout', textSize: 18, textStyle: 'bold', textColor: 'var(--demo-section-title)' })
+          ]),
+          TextView({ text: 'Swipeable tabs with indicators', textSize: 13, textColor: 'var(--demo-subtitle)' })
+        ]),
+
+        Card({ variant: 'outlined', padding: 0 }, [
+          TabLayout({
+            tabs: [
+              { text: 'Photos', icon: 'bx bx-image' },
+              { text: 'Videos', icon: 'bx bx-video' },
+              { text: 'Music', icon: 'bx bx-music' }
+            ],
+            pages: [
+              createTabContent('bx bx-image-alt', 'Photos Content'),
+              createTabContent('bx bx-play-circle', 'Videos Content'),
+              createTabContent('bx bx-headphone', 'Music Content')
+            ],
+            style: 'secondary',
+            onTabSelected: (idx, tab) => { /* Silent */ }
+          })
+        ])
+      ]);
+
+      // ==========================================
+      // Dialogs & Snackbars Demo Section
+      // ==========================================
+      const dialogsSection = Column({ padding: 20, gap: 16, className: 'demo-section' }, [
+        Column({ gap: 4 }, [
+          Row({ gap: 8 }, [
+            Icon({ name: 'bx bx-message-rounded', size: 20, color: 'var(--md-primary)' }),
+            TextView({ text: 'Dialogs & Snackbars', textSize: 18, textStyle: 'bold', textColor: 'var(--demo-section-title)' })
+          ]),
+          TextView({ text: 'Modal dialogs and toast notifications', textSize: 13, textColor: 'var(--demo-subtitle)' })
+        ]),
+
+        Row({ gap: 8, wrap: true }, [
+          MaterialButton({
+            text: 'Alert',
+            variant: 'outlined',
+            leadingIcon: 'bx bx-info-circle',
+            onClick: () => MaterialDialog.alert('Information', 'This is an alert dialog with a simple message.')
+          }),
+          MaterialButton({
+            text: 'Confirm',
+            variant: 'outlined',
+            leadingIcon: 'bx bx-question-mark',
+            onClick: () => MaterialDialog.confirm(
+              'Confirm Action',
+              'Are you sure you want to proceed with this action?',
+              {
+                onConfirm: () => Snackbar.success('Action confirmed!'),
+                onCancel: () => Snackbar.show('Action cancelled')
+              }
+            )
+          }),
+          MaterialButton({
+            text: 'Prompt',
+            variant: 'outlined',
+            leadingIcon: 'bx bx-edit',
+            onClick: () => MaterialDialog.prompt(
+              'Enter Name',
+              'What would you like to be called?',
+              {
+                placeholder: 'Your name',
+                onConfirm: (value) => value && Snackbar.show(`Hello, ${value}!`)
+              }
+            )
+          })
+        ]),
+
+        Divider({ margin: 8 }),
+
+        Row({ gap: 8, wrap: true }, [
+          MaterialButton({
+            text: 'Success',
+            variant: 'tonal',
+            color: '#2e7d32',
+            onClick: () => Snackbar.success('Operation completed successfully!')
+          }),
+          MaterialButton({
+            text: 'Error',
+            variant: 'tonal',
+            color: '#c62828',
+            onClick: () => Snackbar.error('Something went wrong!')
+          }),
+          MaterialButton({
+            text: 'With Action',
+            variant: 'tonal',
+            onClick: () => Snackbar.show('Item deleted', {
+              action: { text: 'UNDO', onClick: () => Snackbar.show('Restored!') },
+              duration: 5000
+            })
+          })
+        ])
+      ]);
+
+      // ==========================================
+      // Bottom Navigation Setup
+      // ==========================================
+      const bottomNav = BottomNavigation({
+        onItemSelect: (id) => {
+          const sections = {
+            'home': 'Home section',
+            'components': 'Components section',
+            'layouts': 'Layouts section',
+            'settings': 'Settings section'
+          };
+          // Could scroll to sections or show different content
+        }
+      })
+        .setItems([
+          { id: 'home', name: 'Home', icon: 'bx bx-home' },
+          { id: 'components', name: 'Components', icon: 'bx bx-cube' },
+          { id: 'layouts', name: 'Layouts', icon: 'bx bx-layout' },
+          { id: 'settings', name: 'Settings', icon: 'bx bx-cog' }
+        ])
+        .setItemColor('#6750a4');
+
+      // ==========================================
+      // Build Main App
+      // ==========================================
+      const mainContent = ScrollView({ height: 'match_parent' }, [
+        Column({ gap: 0 }, [
+          // Demo Header
+          (() => {
+            const header = document.createElement('div');
+            header.className = 'demo-header';
+            header.innerHTML = `
+              <h1>🎨 JetPack Compose Style</h1>
+              <p>Material Design 3 Components for Web</p>
+            `;
+            return { getElement: () => header };
+          })(),
+
+          buttonsSection,
+          inputsSection,
+          switchesSection,
+          cardsSection,
+          layoutsSection,
+          recyclerSection,
+          tabsSection,
+          dialogsSection,
+
+          // Bottom spacing for bottom nav
+          (() => {
+            const spacer = document.createElement('div');
+            spacer.className = 'bottom-nav-placeholder';
+            return { getElement: () => spacer };
+          })()
+        ])
+      ]);
+
+      const app = Column({ height: 'match_parent' }, [
+        toolbar,
+        mainContent
+      ]);
+
+      mount(app);
+      bottomNav.show();
+
+      // Show welcome snackbar
+      setTimeout(() => {
+        Snackbar.show('Welcome to the Components Demo! 👋', {
+          duration: 3000,
+          position: 'top'
+        });
+      }, 500);
+    });
+  </script>
+</body>
+</html>
+

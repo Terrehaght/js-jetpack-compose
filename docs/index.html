@@ -1,0 +1,3387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Jetpack Compose - Complete Documentation</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6750A4;
+            --primary-dark: #4F378B;
+            --surface: #FFFBFE;
+            --surface-variant: #E7E0EC;
+            --on-surface: #1C1B1F;
+            --on-surface-variant: #49454F;
+            --outline: #79747E;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --code-bg: #F5F5F5;
+            --sidebar-width: 280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--on-surface);
+            background: var(--surface);
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: white;
+            border-right: 1px solid var(--outline);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .sidebar-header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .sidebar-header p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .nav-section {
+            padding: 16px 0;
+        }
+
+        .nav-section-title {
+            padding: 8px 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--on-surface-variant);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 10px 20px;
+            color: var(--on-surface);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: var(--surface-variant);
+            border-left-color: var(--primary);
+        }
+
+        .nav-item.active {
+            background: var(--surface-variant);
+            border-left-color: var(--primary);
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 40px 60px;
+            max-width: 1200px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 60px;
+            border-radius: 16px;
+            margin-bottom: 48px;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 18px;
+            opacity: 0.95;
+            max-width: 800px;
+            line-height: 1.7;
+        }
+
+        .installation {
+            background: white;
+            border: 2px solid var(--outline);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 32px 0;
+        }
+
+        .installation h3 {
+            color: var(--primary);
+            margin-bottom: 16px;
+            font-size: 20px;
+        }
+
+        section {
+            margin-bottom: 64px;
+        }
+
+        h2 {
+            font-size: 32px;
+            color: var(--primary);
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--surface-variant);
+        }
+
+        h3 {
+            font-size: 24px;
+            color: var(--on-surface);
+            margin: 32px 0 16px;
+        }
+
+        h4 {
+            font-size: 18px;
+            color: var(--primary);
+            margin: 24px 0 12px;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: var(--on-surface-variant);
+        }
+
+        code {
+            background: var(--code-bg);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: var(--primary-dark);
+        }
+
+        pre {
+            background: var(--code-bg);
+            border: 1px solid var(--outline);
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 16px 0;
+            line-height: 1.5;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            color: var(--on-surface);
+        }
+
+        .prop-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .prop-table th {
+            background: var(--primary);
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .prop-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--surface-variant);
+            font-size: 14px;
+        }
+
+        .prop-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .prop-table tr:hover {
+            background: var(--surface-variant);
+        }
+
+        .example-box {
+            background: white;
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .example-box h4 {
+            margin-top: 0;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .badge.new {
+            background: #10B981;
+        }
+
+        .badge.required {
+            background: #EF4444;
+        }
+
+        .note {
+            background: #FFF9E6;
+            border-left: 4px solid #FFC107;
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 4px;
+        }
+
+        .note strong {
+            color: #F59E0B;
+        }
+
+        .warning {
+            background: #FEE;
+            border-left: 4px solid #EF4444;
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 4px;
+        }
+
+        .warning strong {
+            color: #DC2626;
+        }
+
+        ul,
+        ol {
+            margin: 16px 0 16px 24px;
+            color: var(--on-surface-variant);
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        .method-list {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .method-list li {
+            background: white;
+            padding: 12px 16px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            font-family: 'Courier New', monospace;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .hero {
+                padding: 32px 24px;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            background: var(--primary);
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px var(--shadow);
+            transition: all 0.3s;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px var(--shadow);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>JS Jetpack Compose</h1>
+                <p>Android-like UI Framework for Web</p>
+            </div>
+
+            <nav>
+                <div class="nav-section">
+                    <div class="nav-section-title">Getting Started</div>
+                    <a href="#installation" class="nav-item">Installation</a>
+                    <a href="#quick-start" class="nav-item">Quick Start</a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Layouts (layouts.js)</div>
+                    <a href="#linear-layout" class="nav-item">LinearLayout</a>
+                    <a href="#column-row" class="nav-item">Column & Row</a>
+                    <a href="#grid-layout" class="nav-item">GridLayout</a>
+                    <a href="#constraint-layout" class="nav-item">ConstraintLayout</a>
+                    <a href="#scroll-view" class="nav-item">ScrollView</a>
+                    <a href="#frame-layout" class="nav-item">FrameLayout</a>
+                    <a href="#layout-params" class="nav-item">Layout Parameters</a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Material Views</div>
+                    <a href="#textview" class="nav-item">TextView</a>
+                    <a href="#material-button" class="nav-item">MaterialButton</a>
+                    <a href="#material-input" class="nav-item">MaterialInput</a>
+                    <a href="#material-switch" class="nav-item">MaterialSwitch</a>
+                    <a href="#material-checkbox" class="nav-item">MaterialCheckbox</a>
+                    <a href="#material-radio" class="nav-item">MaterialRadioButton</a>
+                    <a href="#material-slider" class="nav-item">MaterialSlider</a>
+                    <a href="#material-spinner" class="nav-item">MaterialSpinner</a>
+                    <a href="#material-image" class="nav-item">MaterialImage</a>
+                    <a href="#otp-input" class="nav-item">OTPInput</a>
+                    <a href="#card" class="nav-item">Card</a>
+                    <a href="#step-view" class="nav-item">MaterialStepView</a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Navigation</div>
+                    <a href="#toolbar" class="nav-item">MaterialToolbar</a>
+                    <a href="#drawer" class="nav-item">MaterialDrawer</a>
+                    <a href="#bottom-nav" class="nav-item">BottomNavigation</a>
+                    <a href="#tabs" class="nav-item">TabLayout</a>
+                    <a href="#viewpager" class="nav-item">ViewPager</a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Lists & Scrolling</div>
+                    <a href="#recyclerview" class="nav-item">RecyclerView</a>
+                    <a href="#enhanced-scroll" class="nav-item">EnhancedScrollView</a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Notifiers</div>
+                    <a href="#dialog" class="nav-item">MaterialDialog</a>
+                    <a href="#snackbar" class="nav-item">Snackbar</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <div class="hero">
+                <h1>JS Jetpack Compose</h1>
+                <p>A comprehensive JavaScript UI framework that brings Android's Jetpack Compose paradigm to the web. Build beautiful, responsive applications with familiar Android-like layouts and Material Design components.</p>
+            </div>
+
+            <section id="installation">
+                <h2>Installation</h2>
+                <p>To use JS Jetpack Compose, include all required libraries in your HTML file in the correct order:</p>
+
+                <div class="installation">
+                    <h3>Required Scripts <span class="badge required">All Required</span></h3>
+                    <pre><code>&lt;!-- Core Layouts --&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/layouts.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- Android Framework --&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/AndroidFramework.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- Material Components --&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/material-views.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- Material Notifiers --&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/material-notifiers.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- Main Activity --&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/.Mainactivity.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- Bottom Navigation --&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/bottom_nav.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- Drawer Tools --&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/drawer_tools.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- Tabs --&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/tabs.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- RecyclerView --&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/Terrehaght/js-jetpack-compose@main/js-jetpack-compose/recycler_view.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- Boxicons (for icons) --&gt;
+&lt;link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"&gt;</code></pre>
+                </div>
+
+                <div class="note">
+                    <strong>Important:</strong> Load the scripts in the exact order shown above. Some libraries depend on others being loaded first (e.g., material-views.js requires layouts.js).
+                </div>
+            </section>
+
+            <section id="quick-start">
+                <h2>Quick Start Example</h2>
+                <p>Here's a complete example showing how to build a simple app with login and signup forms:</p>
+
+                <div class="example-box">
+                    <h4>Complete Example</h4>
+                    <pre><code>const loginForm = Column({
+    gap: 16,
+    padding: 24
+}, [
+    MaterialInput({
+        label: 'Email',
+        type: 'email',
+        leadingIcon: 'bx bx-envelope'
+    }),
+    MaterialInput({
+        label: 'Password',
+        type: 'password',
+        leadingIcon: 'bx bx-lock'
+    }),
+    MaterialButton({
+        text: 'Login',
+        variant: 'filled',
+        fullWidth: true
+    })
+]);
+
+const signupForm = Column({
+    gap: 16,
+    padding: 24
+}, [
+    MaterialInput({
+        label: 'Full Name',
+        leadingIcon: 'bx bx-user'
+    }),
+    MaterialInput({
+        label: 'Email',
+        type: 'email',
+        leadingIcon: 'bx bx-envelope'
+    }),
+    MaterialInput({
+        label: 'Password',
+        type: 'password',
+        leadingIcon: 'bx bx-lock'
+    }),
+    MaterialButton({
+        text: 'Sign Up',
+        variant: 'filled',
+        fullWidth: true
+    })
+]);
+
+const app = ScrollView({
+    width: 'match_parent',
+    height: 'match_parent'
+}, [
+    Column({
+        width: 'match_parent',
+        padding: 24,
+        gap: 24,
+        background: '#ffffff'
+    }, [
+        Column({
+            gap: 4,
+            margin: { top: 32 }
+        }, [
+            TextView({
+                text: 'Welcome',
+                textSize: 36,
+                textStyle: 'bold',
+                textColor: '#1976d2',
+                gravity: 'center'
+            }),
+            TextView({
+                text: 'Please login or create an account',
+                textSize: 14,
+                textColor: '#666',
+                gravity: 'center'
+            })
+        ]),
+
+        TabLayout({
+            tabStyle: 'pill',
+            animation: 'fade',
+            tabs: [
+                { text: 'Login', icon: 'bx bx-log-in' },
+                { text: 'Register', icon: 'bx bx-user-plus' }
+            ],
+            pages: [loginForm, signupForm],
+            mode: 'fixed',
+            swipeable: false
+        })
+    ])
+]);
+
+AndroidLayouts.mount(app, 'app');</code></pre>
+                </div>
+            </section>
+
+            <section id="linear-layout">
+                <h2>LinearLayout</h2>
+                <p>A flexible layout container that arranges children in a single direction (vertical or horizontal), similar to Android's LinearLayout.</p>
+
+                <h3>Usage</h3>
+                <pre><code>LinearLayout(props = {}, children = [])</code></pre>
+
+                <h3>Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>orientation</code></td>
+                            <td>string</td>
+                            <td>'vertical'</td>
+                            <td>'vertical' | 'horizontal' - Direction of child layout</td>
+                        </tr>
+                        <tr>
+                            <td><code>gravity</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>center | start | end | center_horizontal | center_vertical | space_between | space_around | space_evenly</td>
+                        </tr>
+                        <tr>
+                            <td><code>padding</code></td>
+                            <td>number/object</td>
+                            <td>-</td>
+                            <td>Padding as number or object with all/vertical/horizontal/top/right/bottom/left</td>
+                        </tr>
+                        <tr>
+                            <td><code>margin</code></td>
+                            <td>number/string</td>
+                            <td>-</td>
+                            <td>Margin value</td>
+                        </tr>
+                        <tr>
+                            <td><code>background</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>CSS background value</td>
+                        </tr>
+                        <tr>
+                            <td><code>gap</code></td>
+                            <td>number/string</td>
+                            <td>0</td>
+                            <td>Space between children</td>
+                        </tr>
+                        <tr>
+                            <td><code>width</code></td>
+                            <td>string/number</td>
+                            <td>-</td>
+                            <td>'match_parent' | 'wrap_content' | number/string value</td>
+                        </tr>
+                        <tr>
+                            <td><code>height</code></td>
+                            <td>string/number</td>
+                            <td>-</td>
+                            <td>'match_parent' | 'wrap_content' | number/string value</td>
+                        </tr>
+                        <tr>
+                            <td><code>wrap</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Enable flex wrap</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Methods</h3>
+                <ul class="method-list">
+                    <li>getElement() → HTMLElement</li>
+                    <li>addChild(child)</li>
+                    <li>removeChild(child)</li>
+                    <li>clear()</li>
+                    <li>setVisibility('visible' | 'invisible' | 'gone')</li>
+                    <li>show()</li>
+                    <li>hide()</li>
+                    <li>invisible()</li>
+                    <li>isVisible() → boolean</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example</h4>
+                    <pre><code>const layout = LinearLayout({
+    orientation: 'vertical',
+    gravity: 'center',
+    gap: 16,
+    padding: 24,
+    background: '#f5f5f5'
+}, [
+    TextView({ text: 'Hello World' }),
+    MaterialButton({ text: 'Click Me' })
+]);</code></pre>
+                </div>
+            </section>
+
+            <section id="column-row">
+                <h2>Column & Row</h2>
+                <p>Convenient shorthand components for vertical and horizontal LinearLayouts.</p>
+
+                <h3>Column</h3>
+                <p>Vertical LinearLayout shorthand.</p>
+                <pre><code>Column(props, children) === LinearLayout({ ...props, orientation: 'vertical' }, children)</code></pre>
+
+                <h3>Row</h3>
+                <p>Horizontal LinearLayout shorthand.</p>
+                <pre><code>Row(props, children) === LinearLayout({ ...props, orientation: 'horizontal' }, children)</code></pre>
+
+                <div class="example-box">
+                    <h4>Example</h4>
+                    <pre><code>// Vertical layout
+const form = Column({
+    gap: 16,
+    padding: 24
+}, [
+    MaterialInput({ label: 'Name' }),
+    MaterialInput({ label: 'Email' }),
+    MaterialButton({ text: 'Submit' })
+]);
+
+// Horizontal layout
+const header = Row({
+    gap: 12,
+    padding: 16
+}, [
+    Icon({ name: 'bx bx-menu' }),
+    TextView({ text: 'App Title' })
+]);</code></pre>
+                </div>
+            </section>
+
+            <section id="grid-layout">
+                <h2>GridLayout</h2>
+                <p>A CSS Grid-based container for creating grid layouts.</p>
+
+                <h3>Usage</h3>
+                <pre><code>GridLayout(props = {}, children = [])</code></pre>
+
+                <h3>Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>columns</code></td>
+                            <td>number</td>
+                            <td>2</td>
+                            <td>Number of columns</td>
+                        </tr>
+                        <tr>
+                            <td><code>rows</code></td>
+                            <td>number</td>
+                            <td>-</td>
+                            <td>Number of rows (optional)</td>
+                        </tr>
+                        <tr>
+                            <td><code>gap</code></td>
+                            <td>number/string</td>
+                            <td>0</td>
+                            <td>Gap between items</td>
+                        </tr>
+                        <tr>
+                            <td><code>columnGap</code></td>
+                            <td>number/string</td>
+                            <td>-</td>
+                            <td>Override column gap</td>
+                        </tr>
+                        <tr>
+                            <td><code>rowGap</code></td>
+                            <td>number/string</td>
+                            <td>-</td>
+                            <td>Override row gap</td>
+                        </tr>
+                        <tr>
+                            <td><code>autoFlow</code></td>
+                            <td>string</td>
+                            <td>'row'</td>
+                            <td>'row' | 'column' | 'dense'</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Grid Parameters (for children)</h3>
+                <p>Use <code>GridParams(params, child)</code> to set grid-specific positioning:</p>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>columnSpan</code></td>
+                            <td>number</td>
+                            <td>Number of columns to span</td>
+                        </tr>
+                        <tr>
+                            <td><code>rowSpan</code></td>
+                            <td>number</td>
+                            <td>Number of rows to span</td>
+                        </tr>
+                        <tr>
+                            <td><code>column</code></td>
+                            <td>number</td>
+                            <td>Starting column position</td>
+                        </tr>
+                        <tr>
+                            <td><code>row</code></td>
+                            <td>number</td>
+                            <td>Starting row position</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="example-box">
+                    <h4>Example</h4>
+                    <pre><code>const grid = GridLayout({
+    columns: 3,
+    gap: 16,
+    padding: 24
+}, [
+    Card({ padding: 16 }, [TextView({ text: 'Item 1' })]),
+    GridParams({ columnSpan: 2 }, 
+        Card({ padding: 16 }, [TextView({ text: 'Item 2 (spans 2 columns)' })])
+    ),
+    Card({ padding: 16 }, [TextView({ text: 'Item 3' })])
+]);</code></pre>
+                </div>
+            </section>
+
+            <section id="constraint-layout">
+                <h2>ConstraintLayout</h2>
+                <p>A constraint-based layout using position: relative/absolute for flexible positioning.</p>
+
+                <h3>Usage</h3>
+                <pre><code>ConstraintLayout(props = {}, children = [])</code></pre>
+
+                <h3>Constraint Parameters (for children)</h3>
+                <p>Use <code>Constrained(constraints, child)</code> to position children:</p>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Constraint</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>top</code></td>
+                            <td>number/string</td>
+                            <td>Distance from top</td>
+                        </tr>
+                        <tr>
+                            <td><code>right</code></td>
+                            <td>number/string</td>
+                            <td>Distance from right</td>
+                        </tr>
+                        <tr>
+                            <td><code>bottom</code></td>
+                            <td>number/string</td>
+                            <td>Distance from bottom</td>
+                        </tr>
+                        <tr>
+                            <td><code>left</code></td>
+                            <td>number/string</td>
+                            <td>Distance from left</td>
+                        </tr>
+                        <tr>
+                            <td><code>centerHorizontally</code></td>
+                            <td>boolean</td>
+                            <td>Center horizontally in parent</td>
+                        </tr>
+                        <tr>
+                            <td><code>centerVertically</code></td>
+                            <td>boolean</td>
+                            <td>Center vertically in parent</td>
+                        </tr>
+                        <tr>
+                            <td><code>horizontalBias</code></td>
+                            <td>number</td>
+                            <td>0-1 bias for horizontal centering</td>
+                        </tr>
+                        <tr>
+                            <td><code>verticalBias</code></td>
+                            <td>number</td>
+                            <td>0-1 bias for vertical centering</td>
+                        </tr>
+                        <tr>
+                            <td><code>width</code></td>
+                            <td>string/number</td>
+                            <td>'match_parent' | 'match_constraint' | value</td>
+                        </tr>
+                        <tr>
+                            <td><code>height</code></td>
+                            <td>string/number</td>
+                            <td>'match_parent' | 'match_constraint' | value</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="example-box">
+                    <h4>Example</h4>
+                    <pre><code>const layout = ConstraintLayout({
+    width: 'match_parent',
+    height: 400,
+    background: '#f5f5f5'
+}, [
+    Constrained({
+        top: 16,
+        left: 16
+    }, TextView({ text: 'Top Left' })),
+    
+    Constrained({
+        centerHorizontally: true,
+        centerVertically: true
+    }, TextView({ text: 'Centered' })),
+    
+    Constrained({
+        bottom: 16,
+        right: 16
+    }, MaterialButton({ text: 'Action' }))
+]);</code></pre>
+                </div>
+            </section>
+
+            <section id="scroll-view">
+                <h2>ScrollView</h2>
+                <p>A scrollable container with vertical or horizontal scrolling.</p>
+
+                <h3>Usage</h3>
+                <pre><code>ScrollView(props = {}, children = [])</code></pre>
+
+                <h3>Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>orientation</code></td>
+                            <td>string</td>
+                            <td>'vertical'</td>
+                            <td>'vertical' | 'horizontal'</td>
+                        </tr>
+                        <tr>
+                            <td><code>width</code></td>
+                            <td>string/number</td>
+                            <td>'match_parent'</td>
+                            <td>Container width</td>
+                        </tr>
+                        <tr>
+                            <td><code>height</code></td>
+                            <td>string/number</td>
+                            <td>'match_parent'</td>
+                            <td>Container height</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Methods</h3>
+                <ul class="method-list">
+                    <li>scrollTo(x, y)</li>
+                    <li>scrollToTop()</li>
+                    <li>scrollToBottom()</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example</h4>
+                    <pre><code>const scroll = ScrollView({
+    width: 'match_parent',
+    height: 'match_parent'
+}, [
+    Column({
+        padding: 24,
+        gap: 16
+    }, [
+        // Your scrollable content
+        ...Array(20).fill(0).map((_, i) => 
+            Card({ padding: 16 }, [
+                TextView({ text: `Item ${i + 1}` })
+            ])
+        )
+    ])
+]);</code></pre>
+                </div>
+            </section>
+
+            <section id="frame-layout">
+                <h2>FrameLayout</h2>
+                <p>An overlapping container where children can be positioned with gravity or absolute positioning.</p>
+
+                <h3>Usage</h3>
+                <pre><code>FrameLayout(props = {}, children = [])</code></pre>
+
+                <h3>Frame Position Parameters (for children)</h3>
+                <p>Use <code>Positioned(positionProps, child)</code> to position children:</p>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>top</code>, <code>right</code>, <code>bottom</code>, <code>left</code></td>
+                            <td>Absolute positioning values</td>
+                        </tr>
+                        <tr>
+                            <td><code>zIndex</code></td>
+                            <td>Stack order</td>
+                        </tr>
+                        <tr>
+                            <td><code>gravity</code></td>
+                            <td>center | top | bottom | left | right | top_left | top_right | bottom_left | bottom_right</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="example-box">
+                    <h4>Example</h4>
+                    <pre><code>const frame = FrameLayout({
+    width: 400,
+    height: 400,
+    background: '#f5f5f5'
+}, [
+    // Background image
+    Positioned({ gravity: 'center' },
+        MaterialImage({ src: 'background.jpg', width: '100%' })
+    ),
+    
+    // Centered content
+    Positioned({ gravity: 'center', zIndex: 1 },
+        Card({ padding: 24 }, [
+            TextView({ text: 'Overlay Content' })
+        ])
+    ),
+    
+    // Bottom-right button
+    Positioned({ gravity: 'bottom_right', bottom: 16, right: 16, zIndex: 2 },
+        MaterialButton({ text: 'Action', variant: 'filled' })
+    )
+]);</code></pre>
+                </div>
+            </section>
+
+            <section id="layout-params">
+                <h2>Layout Parameters</h2>
+                <p>Layout parameters control how children behave within parent layouts.</p>
+
+                <h3>LayoutParams (for LinearLayout/Column/Row)</h3>
+                <pre><code>LayoutParams(params, child)</code></pre>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>weight</code></td>
+                            <td>number</td>
+                            <td>Flex weight (similar to flex-grow)</td>
+                        </tr>
+                        <tr>
+                            <td><code>gravity</code></td>
+                            <td>string</td>
+                            <td>center | start | end | stretch</td>
+                        </tr>
+                        <tr>
+                            <td><code>margin</code></td>
+                            <td>object/number</td>
+                            <td>Margin configuration</td>
+                        </tr>
+                        <tr>
+                            <td><code>zIndex</code></td>
+                            <td>number</td>
+                            <td>Stack order</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="example-box">
+                    <h4>Example</h4>
+                    <pre><code>Row({
+    gap: 16,
+    padding: 16
+}, [
+    LayoutParams({ weight: 1 },
+        MaterialInput({ label: 'Search' })
+    ),
+    LayoutParams({ margin: { left: 8 } },
+        MaterialButton({ text: 'Go' })
+    )
+]);</code></pre>
+                </div>
+            </section>
+
+            <section id="textview">
+                <h2>TextView</h2>
+                <p>A versatile text display component with support for truncation, expansion, and HTML rendering.</p>
+
+                <h3>Usage</h3>
+                <pre><code>TextView(props = {})</code></pre>
+
+                <h3>Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>text</code></td>
+                            <td>string</td>
+                            <td>''</td>
+                            <td>Text content</td>
+                        </tr>
+                        <tr>
+                            <td><code>isHtml</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Render as HTML instead of plain text</td>
+                        </tr>
+                        <tr>
+                            <td><code>textSize</code></td>
+                            <td>number</td>
+                            <td>14</td>
+                            <td>Font size in pixels</td>
+                        </tr>
+                        <tr>
+                            <td><code>textColor</code></td>
+                            <td>string</td>
+                            <td>CSS var</td>
+                            <td>Text color</td>
+                        </tr>
+                        <tr>
+                            <td><code>textStyle</code></td>
+                            <td>string</td>
+                            <td>'normal'</td>
+                            <td>'normal' | 'bold' | 'italic'</td>
+                        </tr>
+                        <tr>
+                            <td><code>gravity</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>start | center | end/right</td>
+                        </tr>
+                        <tr>
+                            <td><code>expandable</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Enable "See more/less" functionality</td>
+                        </tr>
+                        <tr>
+                            <td><code>collapsedLines</code></td>
+                            <td>number</td>
+                            <td>3</td>
+                            <td>Lines to show when collapsed</td>
+                        </tr>
+                        <tr>
+                            <td><code>seeMoreText</code></td>
+                            <td>string</td>
+                            <td>'See more'</td>
+                            <td>Expand button text</td>
+                        </tr>
+                        <tr>
+                            <td><code>seeLessText</code></td>
+                            <td>string</td>
+                            <td>'See less'</td>
+                            <td>Collapse button text</td>
+                        </tr>
+                        <tr>
+                            <td><code>maxLines</code></td>
+                            <td>number</td>
+                            <td>-</td>
+                            <td>Max lines (uses line-clamp)</td>
+                        </tr>
+                        <tr>
+                            <td><code>ellipsize</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Single-line ellipsis</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Methods</h3>
+                <ul class="method-list">
+                    <li>setText(newText)</li>
+                    <li>setTextColor(color)</li>
+                    <li>getText()</li>
+                    <li>expand()</li>
+                    <li>collapse()</li>
+                    <li>isExpanded() → boolean</li>
+                    <li>destroy()</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example</h4>
+                    <pre><code>TextView({
+    text: 'This is a very long text that will be truncated...',
+    expandable: true,
+    collapsedLines: 2,
+    seeMoreText: 'Read more',
+    seeLessText: 'Read less',
+    onExpand: () => console.log('Expanded'),
+    onCollapse: () => console.log('Collapsed')
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="material-button">
+                <h2>MaterialButton</h2>
+                <p>Material Design 3 button with multiple variants and loading states.</p>
+
+                <h3>Usage</h3>
+                <pre><code>MaterialButton(props = {})</code></pre>
+
+                <h3>Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>text</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>Button text</td>
+                        </tr>
+                        <tr>
+                            <td><code>variant</code></td>
+                            <td>string</td>
+                            <td>'filled'</td>
+                            <td>filled | outlined | text | elevated | tonal</td>
+                        </tr>
+                        <tr>
+                            <td><code>size</code></td>
+                            <td>string</td>
+                            <td>'medium'</td>
+                            <td>small | medium | large</td>
+                        </tr>
+                        <tr>
+                            <td><code>leadingIcon</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>Icon class for leading icon</td>
+                        </tr>
+                        <tr>
+                            <td><code>trailingIcon</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>Icon class for trailing icon</td>
+                        </tr>
+                        <tr>
+                            <td><code>iconOnly</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Show only icon (no text)</td>
+                        </tr>
+                        <tr>
+                            <td><code>disabled</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Disable button</td>
+                        </tr>
+                        <tr>
+                            <td><code>fullWidth</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Take full width of container</td>
+                        </tr>
+                        <tr>
+                            <td><code>color</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>Custom accent color</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Methods</h3>
+                <ul class="method-list">
+                    <li>setLoading(loading, loadingText?)</li>
+                    <li>isLoading() → boolean</li>
+                    <li>setDisabled(disabled)</li>
+                    <li>setVariant(variant)</li>
+                    <li>setText(text)</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Examples</h4>
+                    <pre><code>// Filled button
+MaterialButton({
+    text: 'Submit',
+    variant: 'filled',
+    onClick: () => console.log('Clicked')
+})
+
+// Outlined with icon
+MaterialButton({
+    text: 'Download',
+    variant: 'outlined',
+    leadingIcon: 'bx bx-download',
+    onClick: handleDownload
+})
+
+// Loading state
+const button = MaterialButton({
+    text: 'Save',
+    variant: 'filled'
+});
+button.setLoading(true, 'Saving...');</code></pre>
+                </div>
+            </section>
+
+            <section id="material-input">
+                <h2>MaterialInput</h2>
+                <p>Material Design text input with floating label, icons, validation, and character counter.</p>
+
+                <h3>Usage</h3>
+                <pre><code>MaterialInput(props = {})</code></pre>
+
+                <h3>Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>label</code></td>
+                            <td>string</td>
+                            <td>'Label'</td>
+                            <td>Input label text</td>
+                        </tr>
+                        <tr>
+                            <td><code>type</code></td>
+                            <td>string</td>
+                            <td>'text'</td>
+                            <td>text | password | email | number | tel | url | textarea</td>
+                        </tr>
+                        <tr>
+                            <td><code>placeholder</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>Placeholder text</td>
+                        </tr>
+                        <tr>
+                            <td><code>value</code></td>
+                            <td>string</td>
+                            <td>''</td>
+                            <td>Initial value</td>
+                        </tr>
+                        <tr>
+                            <td><code>helperText</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>Helper text below input</td>
+                        </tr>
+                        <tr>
+                            <td><code>errorText</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>Error message</td>
+                        </tr>
+                        <tr>
+                            <td><code>required</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Mark as required</td>
+                        </tr>
+                        <tr>
+                            <td><code>disabled</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Disable input</td>
+                        </tr>
+                        <tr>
+                            <td><code>leadingIcon</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>Icon class for leading icon</td>
+                        </tr>
+                        <tr>
+                            <td><code>trailingIcon</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>Icon class for trailing icon</td>
+                        </tr>
+                        <tr>
+                            <td><code>passwordToggle</code></td>
+                            <td>boolean</td>
+                            <td>true</td>
+                            <td>Show password visibility toggle (for password type)</td>
+                        </tr>
+                        <tr>
+                            <td><code>maxLength</code></td>
+                            <td>number</td>
+                            <td>-</td>
+                            <td>Maximum character length</td>
+                        </tr>
+                        <tr>
+                            <td><code>showCounter</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Show character counter</td>
+                        </tr>
+                        <tr>
+                            <td><code>rows</code></td>
+                            <td>number</td>
+                            <td>-</td>
+                            <td>Number of rows for textarea</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Methods</h3>
+                <ul class="method-list">
+                    <li>getValue() → string</li>
+                    <li>setValue(value)</li>
+                    <li>setError(message)</li>
+                    <li>setSuccess(message)</li>
+                    <li>clearState()</li>
+                    <li>setDisabled(disabled)</li>
+                    <li>focus()</li>
+                    <li>blur()</li>
+                    <li>reset()</li>
+                    <li>validate() → boolean</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Examples</h4>
+                    <pre><code>// Email input with validation
+const emailInput = MaterialInput({
+    label: 'Email Address',
+    type: 'email',
+    leadingIcon: 'bx bx-envelope',
+    required: true,
+    helperText: 'We will never share your email',
+    onInput: (value) => {
+        if (!value.includes('@')) {
+            emailInput.setError('Invalid email format');
+        } else {
+            emailInput.clearState();
+        }
+    }
+});
+
+// Password with counter
+MaterialInput({
+    label: 'Password',
+    type: 'password',
+    leadingIcon: 'bx bx-lock',
+    maxLength: 20,
+    showCounter: true,
+    passwordToggle: true
+});
+
+// Textarea
+MaterialInput({
+    label: 'Description',
+    type: 'textarea',
+    rows: 4,
+    maxLength: 500,
+    showCounter: true
+});</code></pre>
+                </div>
+            </section>
+
+            <section id="material-switch">
+                <h2>MaterialSwitch</h2>
+                <p>Material Design toggle switch component.</p>
+
+                <h3>Usage</h3>
+                <pre><code>MaterialSwitch(props = {})</code></pre>
+
+                <h3>Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>checked</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Initial checked state</td>
+                        </tr>
+                        <tr>
+                            <td><code>disabled</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Disable switch</td>
+                        </tr>
+                        <tr>
+                            <td><code>label</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>Label text</td>
+                        </tr>
+                        <tr>
+                            <td><code>labelPosition</code></td>
+                            <td>string</td>
+                            <td>'right'</td>
+                            <td>left | right</td>
+                        </tr>
+                        <tr>
+                            <td><code>showIcon</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Show check/close icons</td>
+                        </tr>
+                        <tr>
+                            <td><code>onChange</code></td>
+                            <td>function</td>
+                            <td>-</td>
+                            <td>Callback (checked) => void</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Methods</h3>
+                <ul class="method-list">
+                    <li>getChecked() → boolean</li>
+                    <li>setChecked(checked)</li>
+                    <li>toggle()</li>
+                    <li>setDisabled(disabled)</li>
+                    <li>setLabel(label)</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example</h4>
+                    <pre><code>MaterialSwitch({
+    label: 'Enable notifications',
+    checked: true,
+    showIcon: true,
+    onChange: (checked) => {
+        console.log('Notifications:', checked ? 'On' : 'Off');
+    }
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="material-checkbox">
+                <h2>MaterialCheckbox</h2>
+                <p>Material Design 3 checkbox with ripple effect and indeterminate state support.</p>
+
+                <h3>Usage</h3>
+                <pre><code>MaterialCheckbox(props = {})</code></pre>
+
+                <h3>Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>checked</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Initial checked state</td>
+                        </tr>
+                        <tr>
+                            <td><code>indeterminate</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Indeterminate state (overrides checked)</td>
+                        </tr>
+                        <tr>
+                            <td><code>disabled</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Disable checkbox</td>
+                        </tr>
+                        <tr>
+                            <td><code>label</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>Label text</td>
+                        </tr>
+                        <tr>
+                            <td><code>error</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Error state styling</td>
+                        </tr>
+                        <tr>
+                            <td><code>checkedIcon</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>Custom icon class or SVG for checked state</td>
+                        </tr>
+                        <tr>
+                            <td><code>ripple</code></td>
+                            <td>boolean</td>
+                            <td>true</td>
+                            <td>Enable ripple effect</td>
+                        </tr>
+                        <tr>
+                            <td><code>onChange</code></td>
+                            <td>function</td>
+                            <td>-</td>
+                            <td>Callback (event, checked) => void</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Methods</h3>
+                <ul class="method-list">
+                    <li>setChecked(checked)</li>
+                    <li>setIndeterminate(indeterminate)</li>
+                    <li>isChecked() → boolean</li>
+                    <li>setDisabled(disabled)</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Examples</h4>
+                    <pre><code>// Basic checkbox
+MaterialCheckbox({
+    label: 'Accept terms and conditions',
+    onChange: (e, checked) => console.log('Accepted:', checked)
+})
+
+// Indeterminate state
+MaterialCheckbox({
+    label: 'Select all',
+    indeterminate: true,
+    onChange: handleSelectAll
+})
+
+// Custom icon
+MaterialCheckbox({
+    label: 'Mark as favorite',
+    checkedIcon: 'bx bxs-heart',
+    color: '#E91E63'
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="material-radio">
+                <h2>MaterialRadioButton</h2>
+                <p>Material Design 3 radio button with ripple effect and group support.</p>
+
+                <h3>Usage</h3>
+                <pre><code>MaterialRadioButton(props = {})</code></pre>
+
+                <h3>Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>name</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>Radio group name (required for grouping)</td>
+                        </tr>
+                        <tr>
+                            <td><code>value</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>Radio button value</td>
+                        </tr>
+                        <tr>
+                            <td><code>checked</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Initial checked state</td>
+                        </tr>
+                        <tr>
+                            <td><code>disabled</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Disable radio button</td>
+                        </tr>
+                        <tr>
+                            <td><code>label</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>Label text</td>
+                        </tr>
+                        <tr>
+                            <td><code>error</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Error state styling</td>
+                        </tr>
+                        <tr>
+                            <td><code>checkedIcon</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>Custom icon to replace dot when checked</td>
+                        </tr>
+                        <tr>
+                            <td><code>onChange</code></td>
+                            <td>function</td>
+                            <td>-</td>
+                            <td>Callback (event, value) => void</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Methods</h3>
+                <ul class="method-list">
+                    <li>setChecked(checked)</li>
+                    <li>isChecked() → boolean</li>
+                    <li>getValue() → string</li>
+                    <li>setDisabled(disabled)</li>
+                    <li>destroy()</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example - Radio Group</h4>
+                    <pre><code>Column({ gap: 12 }, [
+    MaterialRadioButton({
+        name: 'payment',
+        value: 'credit-card',
+        label: 'Credit Card',
+        checked: true,
+        onChange: (e, value) => console.log('Selected:', value)
+    }),
+    MaterialRadioButton({
+        name: 'payment',
+        value: 'paypal',
+        label: 'PayPal'
+    }),
+    MaterialRadioButton({
+        name: 'payment',
+        value: 'bank-transfer',
+        label: 'Bank Transfer'
+    })
+])</code></pre>
+                </div>
+            </section>
+
+            <section id="material-slider">
+                <h2>MaterialSlider</h2>
+                <p>Material Design slider with single or range selection, ticks, and custom marks.</p>
+
+                <h3>Usage</h3>
+                <pre><code>MaterialSlider(props = {})</code></pre>
+
+                <h3>Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>min</code></td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>Minimum value</td>
+                        </tr>
+                        <tr>
+                            <td><code>max</code></td>
+                            <td>number</td>
+                            <td>100</td>
+                            <td>Maximum value</td>
+                        </tr>
+                        <tr>
+                            <td><code>step</code></td>
+                            <td>number</td>
+                            <td>1</td>
+                            <td>Step increment</td>
+                        </tr>
+                        <tr>
+                            <td><code>value</code></td>
+                            <td>number/array</td>
+                            <td>0</td>
+                            <td>Single value or [start, end] for range</td>
+                        </tr>
+                        <tr>
+                            <td><code>disabled</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Disable slider</td>
+                        </tr>
+                        <tr>
+                            <td><code>vertical</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Vertical orientation</td>
+                        </tr>
+                        <tr>
+                            <td><code>showValue</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Show value bubble(s)</td>
+                        </tr>
+                        <tr>
+                            <td><code>showMinMax</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Show min/max labels</td>
+                        </tr>
+                        <tr>
+                            <td><code>showTicks</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Show tick marks</td>
+                        </tr>
+                        <tr>
+                            <td><code>tickStep</code></td>
+                            <td>number</td>
+                            <td>-</td>
+                            <td>Custom tick interval</td>
+                        </tr>
+                        <tr>
+                            <td><code>marks</code></td>
+                            <td>array</td>
+                            <td>-</td>
+                            <td>Array of {value, label} for custom marks</td>
+                        </tr>
+                        <tr>
+                            <td><code>formatValue</code></td>
+                            <td>function</td>
+                            <td>-</td>
+                            <td>Format displayed value</td>
+                        </tr>
+                        <tr>
+                            <td><code>onChange</code></td>
+                            <td>function</td>
+                            <td>-</td>
+                            <td>Live change callback</td>
+                        </tr>
+                        <tr>
+                            <td><code>onChangeCommitted</code></td>
+                            <td>function</td>
+                            <td>-</td>
+                            <td>Called on mouse/touch release</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Methods</h3>
+                <ul class="method-list">
+                    <li>getValue() → number | [number, number]</li>
+                    <li>setValue(value)</li>
+                    <li>setDisabled(disabled)</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Examples</h4>
+                    <pre><code>// Basic slider with ticks
+MaterialSlider({
+    min: 0,
+    max: 10,
+    value: 5,
+    step: 1,
+    showTicks: true,
+    marks: [
+        { value: 0, label: 'Min' },
+        { value: 5, label: 'Mid' },
+        { value: 10, label: 'Max' }
+    ]
+})
+
+// Range slider with formatting
+MaterialSlider({
+    min: 0,
+    max: 1000,
+    value: [200, 800],
+    step: 10,
+    showValue: true,
+    showMinMax: true,
+    formatValue: (val) => `$${val}`,
+    onChange: (val) => console.log('Range:', val)
+})
+
+// Vertical slider
+MaterialSlider({
+    min: 0,
+    max: 100,
+    value: 30,
+    vertical: true,
+    height: 300,
+    showValue: true
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="material-spinner">
+                <h2>MaterialSpinner (Dropdown)</h2>
+                <p>Custom dropdown/select component with search, lazy loading, and fixed-position dropdown.</p>
+
+                <h3>Usage</h3>
+                <pre><code>MaterialSpinner(props = {})</code></pre>
+
+                <h3>Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>options</code></td>
+                            <td>array</td>
+                            <td>[]</td>
+                            <td>Array of {value, label, icon?, disabled?}</td>
+                        </tr>
+                        <tr>
+                            <td><code>value</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>Initial selected value</td>
+                        </tr>
+                        <tr>
+                            <td><code>label</code></td>
+                            <td>string</td>
+                            <td>'Select'</td>
+                            <td>Label text</td>
+                        </tr>
+                        <tr>
+                            <td><code>placeholder</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>Placeholder text</td>
+                        </tr>
+                        <tr>
+                            <td><code>searchable</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Enable search functionality</td>
+                        </tr>
+                        <tr>
+                            <td><code>lazyLoad</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Enable lazy loading</td>
+                        </tr>
+                        <tr>
+                            <td><code>onLoadMore</code></td>
+                            <td>function</td>
+                            <td>-</td>
+                            <td>Callback (done) => void for loading more</td>
+                        </tr>
+                        <tr>
+                            <td><code>onSearch</code></td>
+                            <td>function</td>
+                            <td>-</td>
+                            <td>Async search callback (query, done)</td>
+                        </tr>
+                        <tr>
+                            <td><code>onChange</code></td>
+                            <td>function</td>
+                            <td>-</td>
+                            <td>Callback (value, selectedOption) => void</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Methods</h3>
+                <ul class="method-list">
+                    <li>getValue() → string</li>
+                    <li>setValue(value)</li>
+                    <li>getSelectedOption() → object</li>
+                    <li>setOptions(options)</li>
+                    <li>addOption(option)</li>
+                    <li>removeOption(value)</li>
+                    <li>open() / close() / toggle()</li>
+                    <li>isOpen() → boolean</li>
+                    <li>setLoading(loading)</li>
+                    <li>setError(message)</li>
+                    <li>clearError()</li>
+                    <li>destroy()</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example</h4>
+                    <pre><code>MaterialSpinner({
+    label: 'Select Country',
+    searchable: true,
+    options: [
+        { value: 'us', label: 'United States', icon: 'bx bx-flag' },
+        { value: 'uk', label: 'United Kingdom', icon: 'bx bx-flag' },
+        { value: 'ca', label: 'Canada', icon: 'bx bx-flag' }
+    ],
+    onChange: (value, option) => {
+        console.log('Selected:', option.label);
+    }
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="material-image">
+                <h2>MaterialImage</h2>
+                <p>Advanced image component with progressive loading, aspect ratio support, and retry logic.</p>
+
+                <h3>Usage</h3>
+                <pre><code>MaterialImage(props = {})</code></pre>
+
+                <h3>Key Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>src</code></td>
+                            <td>string</td>
+                            <td>Main image URL</td>
+                        </tr>
+                        <tr>
+                            <td><code>lowQualitySrc</code></td>
+                            <td>string</td>
+                            <td>Low-res preview for blur-up effect</td>
+                        </tr>
+                        <tr>
+                            <td><code>placeholder</code></td>
+                            <td>string</td>
+                            <td>Placeholder image URL</td>
+                        </tr>
+                        <tr>
+                            <td><code>fallback</code></td>
+                            <td>string</td>
+                            <td>Fallback URL on error</td>
+                        </tr>
+                        <tr>
+                            <td><code>aspectRatio</code></td>
+                            <td>string</td>
+                            <td>'16:9' | '4:3' | '1:1' | 'square' | '9:16' | 'W:H'</td>
+                        </tr>
+                        <tr>
+                            <td><code>fit</code></td>
+                            <td>string</td>
+                            <td>cover | contain | fill | none | scale-down</td>
+                        </tr>
+                        <tr>
+                            <td><code>enableBlurUp</code></td>
+                            <td>boolean</td>
+                            <td>Enable progressive blur-up loading</td>
+                        </tr>
+                        <tr>
+                            <td><code>enableRetry</code></td>
+                            <td>boolean</td>
+                            <td>Enable retry on load failure</td>
+                        </tr>
+                        <tr>
+                            <td><code>maxRetries</code></td>
+                            <td>number</td>
+                            <td>Maximum retry attempts</td>
+                        </tr>
+                        <tr>
+                            <td><code>cornerRadius</code></td>
+                            <td>number</td>
+                            <td>Border radius in pixels</td>
+                        </tr>
+                        <tr>
+                            <td><code>elevation</code></td>
+                            <td>number</td>
+                            <td>Shadow elevation (0-24)</td>
+                        </tr>
+                        <tr>
+                            <td><code>blur</code></td>
+                            <td>number</td>
+                            <td>Blur filter in pixels</td>
+                        </tr>
+                        <tr>
+                            <td><code>grayscale</code></td>
+                            <td>boolean</td>
+                            <td>Apply grayscale filter</td>
+                        </tr>
+                        <tr>
+                            <td><code>rotate</code></td>
+                            <td>number</td>
+                            <td>Rotation in degrees</td>
+                        </tr>
+                        <tr>
+                            <td><code>overlay</code></td>
+                            <td>boolean</td>
+                            <td>Show dark overlay</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Methods</h3>
+                <ul class="method-list">
+                    <li>setSrc(newSrc, newLowQualitySrc?)</li>
+                    <li>setOpacity(opacity)</li>
+                    <li>setBlur(blur)</li>
+                    <li>setGrayscale(enable)</li>
+                    <li>setRotation(degrees)</li>
+                    <li>setOverlay(show, opacity?)</li>
+                    <li>setBorder(width, color, style?)</li>
+                    <li>setCornerRadius(radius)</li>
+                    <li>setElevation(elevation)</li>
+                    <li>reload()</li>
+                    <li>retry()</li>
+                    <li>hasLoaded() → boolean</li>
+                    <li>hasError() → boolean</li>
+                    <li>destroy()</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example</h4>
+                    <pre><code>MaterialImage({
+    src: 'https://picsum.photos/800/400',
+    lowQualitySrc: 'https://picsum.photos/80/40',
+    aspectRatio: '16:9',
+    enableBlurUp: true,
+    cornerRadius: 16,
+    elevation: 4,
+    onLoad: () => console.log('Image loaded'),
+    onError: () => console.log('Load failed')
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="otp-input">
+                <h2>OTPInput</h2>
+                <p>Multi-box OTP/PIN entry component with paste support and auto-advance.</p>
+
+                <h3>Usage</h3>
+                <pre><code>OTPInput(props = {})</code></pre>
+
+                <h3>Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>length</code></td>
+                            <td>number</td>
+                            <td>6</td>
+                            <td>Number of input boxes</td>
+                        </tr>
+                        <tr>
+                            <td><code>type</code></td>
+                            <td>string</td>
+                            <td>'number'</td>
+                            <td>number | text | password</td>
+                        </tr>
+                        <tr>
+                            <td><code>value</code></td>
+                            <td>string</td>
+                            <td>''</td>
+                            <td>Initial value</td>
+                        </tr>
+                        <tr>
+                            <td><code>autoFocus</code></td>
+                            <td>boolean</td>
+                            <td>true</td>
+                            <td>Auto-focus first box</td>
+                        </tr>
+                        <tr>
+                            <td><code>boxWidth</code></td>
+                            <td>number</td>
+                            <td>48</td>
+                            <td>Width of each box</td>
+                        </tr>
+                        <tr>
+                            <td><code>boxHeight</code></td>
+                            <td>number</td>
+                            <td>56</td>
+                            <td>Height of each box</td>
+                        </tr>
+                        <tr>
+                            <td><code>gap</code></td>
+                            <td>number</td>
+                            <td>8</td>
+                            <td>Space between boxes</td>
+                        </tr>
+                        <tr>
+                            <td><code>placeholder</code></td>
+                            <td>string</td>
+                            <td>'·'</td>
+                            <td>Placeholder character</td>
+                        </tr>
+                        <tr>
+                            <td><code>onChange</code></td>
+                            <td>function</td>
+                            <td>-</td>
+                            <td>Called on each change (value) => void</td>
+                        </tr>
+                        <tr>
+                            <td><code>onComplete</code></td>
+                            <td>function</td>
+                            <td>-</td>
+                            <td>Called when all boxes filled (value) => void</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Methods</h3>
+                <ul class="method-list">
+                    <li>getValue() → string</li>
+                    <li>setValue(value)</li>
+                    <li>clear()</li>
+                    <li>focus()</li>
+                    <li>setDisabled(disabled)</li>
+                    <li>setError(error)</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example</h4>
+                    <pre><code>OTPInput({
+    length: 4,
+    boxWidth: 56,
+    boxHeight: 64,
+    gap: 12,
+    fontSize: 28,
+    color: '#6750A4',
+    onComplete: (value) => {
+        console.log('OTP entered:', value);
+        // Verify OTP
+    }
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="card">
+                <h2>Card</h2>
+                <p>Flexible Material container with variants, elevation, and ripple effects.</p>
+
+                <h3>Usage</h3>
+                <pre><code>Card(props = {}, children = [])</code></pre>
+
+                <h3>Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>variant</code></td>
+                            <td>string</td>
+                            <td>'elevated'</td>
+                            <td>elevated | filled | outlined</td>
+                        </tr>
+                        <tr>
+                            <td><code>elevation</code></td>
+                            <td>number</td>
+                            <td>-</td>
+                            <td>Shadow elevation (0-24)</td>
+                        </tr>
+                        <tr>
+                            <td><code>cornerRadius</code></td>
+                            <td>number</td>
+                            <td>12</td>
+                            <td>Border radius in pixels</td>
+                        </tr>
+                        <tr>
+                            <td><code>hoverable</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Enable hover effects</td>
+                        </tr>
+                        <tr>
+                            <td><code>hoverElevation</code></td>
+                            <td>number</td>
+                            <td>-</td>
+                            <td>Elevation on hover</td>
+                        </tr>
+                        <tr>
+                            <td><code>ripple</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Enable ripple effect on click</td>
+                        </tr>
+                        <tr>
+                            <td><code>disabled</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Disabled state</td>
+                        </tr>
+                        <tr>
+                            <td><code>strokeWidth</code></td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>Border width AKA stroke</td>
+                        <tr>
+                            <td><code>strokeColor</code></td>
+                            <td>string</td>
+                            <td>'var(--md-outline)'</td>
+                            <td>Border color</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="example-box">
+                    <h4>Example</h4>
+                    <pre><code>Card({
+    variant: 'elevated',
+    elevation: 4,
+    cornerRadius: 16,
+    hoverable: true,
+    padding: 24
+}, [
+    TextView({
+        text: 'Card Title',
+        textSize: 20,
+        textStyle: 'bold'
+    }),
+    TextView({
+        text: 'Card content goes here',
+        margin: { top: 8 }
+    })
+])</code></pre>
+                </div>
+            </section>
+
+            <section id="step-view">
+                <h2>MaterialStepView</h2>
+                <p>Stepper component for multi-step processes with status indicators and loading states.</p>
+
+                <h3>Usage</h3>
+                <pre><code>MaterialStepView(props = {})</code></pre>
+
+                <h3>Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>steps</code></td>
+                            <td>array</td>
+                            <td>[]</td>
+                            <td>Array of step objects</td>
+                        </tr>
+                        <tr>
+                            <td><code>orientation</code></td>
+                            <td>string</td>
+                            <td>'vertical'</td>
+                            <td>vertical | horizontal</td>
+                        </tr>
+                        <tr>
+                            <td><code>variant</code></td>
+                            <td>string</td>
+                            <td>'default'</td>
+                            <td>default | compact</td>
+                        </tr>
+                        <tr>
+                            <td><code>activeStep</code></td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>Current active step index</td>
+                        </tr>
+                        <tr>
+                            <td><code>clickable</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Allow clicking to navigate steps</td>
+                        </tr>
+                        <tr>
+                            <td><code>showNumbers</code></td>
+                            <td>boolean</td>
+                            <td>true</td>
+                            <td>Show step numbers</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Step Object Format</h3>
+                <pre><code>{
+    title: 'Step Title',
+    subtitle: 'Optional subtitle',
+    description: 'Optional description',
+    status: 'pending' | 'active' | 'completed' | 'error' | 'warning' | 'disabled',
+    icon: 'bx bx-check', // optional custom icon
+    loading: false // show loading spinner
+}</code></pre>
+
+                <h3>Methods</h3>
+                <ul class="method-list">
+                    <li>setActiveStep(index)</li>
+                    <li>nextStep()</li>
+                    <li>previousStep()</li>
+                    <li>setStepStatus(index, status)</li>
+                    <li>setStepLoading(index, loading)</li>
+                    <li>completeStep(index)</li>
+                    <li>setStepError(index, errorMsg)</li>
+                    <li>addStep(step, position?)</li>
+                    <li>removeStep(index)</li>
+                    <li>updateStep(index, updates)</li>
+                    <li>reset()</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example</h4>
+                    <pre><code>MaterialStepView({
+    title: 'Order Process',
+    steps: [
+        { title: 'Cart', status: 'completed' },
+        { title: 'Shipping', status: 'active', loading: true },
+        { title: 'Payment', status: 'pending' },
+        { title: 'Confirmation', status: 'pending' }
+    ],
+    onStepClick: (index, step) => {
+        console.log('Clicked step:', index);
+    }
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="toolbar">
+                <h2>MaterialToolbar</h2>
+                <p>Material Design top app bar with navigation, actions, and overflow menu.</p>
+
+                <h3>Usage</h3>
+                <pre><code>MaterialToolbar(props = {})</code></pre>
+
+                <h3>Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>title</code></td>
+                            <td>string</td>
+                            <td>Toolbar title</td>
+                        </tr>
+                        <tr>
+                            <td><code>navigationIcon</code></td>
+                            <td>string</td>
+                            <td>Navigation icon class (e.g., 'bx bx-menu')</td>
+                        </tr>
+                        <tr>
+                            <td><code>onNavigationClick</code></td>
+                            <td>function</td>
+                            <td>Navigation icon click handler</td>
+                        </tr>
+                        <tr>
+                            <td><code>actions</code></td>
+                            <td>array</td>
+                            <td>Action button configs</td>
+                        </tr>
+                        <tr>
+                            <td><code>overflowMenu</code></td>
+                            <td>array</td>
+                            <td>Overflow menu items</td>
+                        </tr>
+                        <tr>
+                            <td><code>elevation</code></td>
+                            <td>boolean</td>
+                            <td>Show shadow (default: true)</td>
+                        </tr>
+                        <tr>
+                            <td><code>collapsible</code></td>
+                            <td>boolean</td>
+                            <td>Enable collapse/expand</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Action Config</h3>
+                <pre><code>{
+    icon: 'bx bx-search',
+    label: 'Search',
+    badge: '5', // optional
+    onClick: () => {}
+}</code></pre>
+
+                <h3>Methods</h3>
+                <ul class="method-list">
+                    <li>setTitle(title)</li>
+                    <li>addAction(action)</li>
+                    <li>collapse() / expand() / toggleCollapse()</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example</h4>
+                    <pre><code>const toolbar = MaterialToolbar({
+    title: 'My App',
+    navigationIcon: 'bx bx-menu',
+    onNavigationClick: () => drawer.toggle(),
+    actions: [
+        {
+            icon: 'bx bx-search',
+            label: 'Search',
+            onClick: () => console.log('Search')
+        },
+        {
+            icon: 'bx bx-bell',
+            badge: '3',
+            onClick: () => console.log('Notifications')
+        }
+    ],
+    overflowMenu: [
+        { text: 'Settings', icon: 'bx bx-cog', onClick: () => {} },
+        { text: 'Help', icon: 'bx bx-help-circle', onClick: () => {} }
+    ]
+});</code></pre>
+                </div>
+            </section>
+
+            <section id="drawer">
+                <h2>MaterialDrawer</h2>
+                <p>Navigation drawer with sections, dividers, and swipe-to-dismiss support.</p>
+
+                <h3>Usage</h3>
+                <pre><code>MaterialDrawer(props = {})</code></pre>
+
+                <h3>Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>position</code></td>
+                            <td>string</td>
+                            <td>'left'</td>
+                            <td>left | right</td>
+                        </tr>
+                        <tr>
+                            <td><code>header</code></td>
+                            <td>string/object</td>
+                            <td>-</td>
+                            <td>Header content or {title, subtitle}</td>
+                        </tr>
+                        <tr>
+                            <td><code>items</code></td>
+                            <td>array</td>
+                            <td>[]</td>
+                            <td>Drawer items</td>
+                        </tr>
+                        <tr>
+                            <td><code>dismissOnItemClick</code></td>
+                            <td>boolean</td>
+                            <td>true</td>
+                            <td>Auto-close on item click</td>
+                        </tr>
+                        <tr>
+                            <td><code>dismissOnScrim</code></td>
+                            <td>boolean</td>
+                            <td>true</td>
+                            <td>Close when clicking backdrop</td>
+                        </tr>
+                        <tr>
+                            <td><code>swipeToDismiss</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Enable swipe to close</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Item Types</h3>
+                <pre><code>// Regular item
+{ id: 'home', text: 'Home', icon: 'bx bx-home', onClick: () => {} }
+
+// Section
+{ type: 'section', title: 'Settings', items: [...] }
+
+// Divider
+{ type: 'divider' }
+
+// Layout insertion
+{ type: 'layout', layout: someComponent }</code></pre>
+
+                <h3>Methods</h3>
+                <ul class="method-list">
+                    <li>open() / close() / toggle()</li>
+                    <li>addItem(item)</li>
+                    <li>addSection(title, items)</li>
+                    <li>addDivider()</li>
+                    <li>addLayout(layout)</li>
+                    <li>setActiveItem(itemId)</li>
+                    <li>isShowing() → boolean</li>
+                    <li>destroy()</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example</h4>
+                    <pre><code>const drawer = MaterialDrawer({
+    header: {
+        title: 'My App',
+        subtitle: 'user@example.com'
+    },
+    items: [
+        {
+            id: 'home',
+            text: 'Home',
+            icon: 'bx bx-home',
+            onClick: () => console.log('Home')
+        },
+        { type: 'divider' },
+        {
+            type: 'section',
+            title: 'Account',
+            items: [
+                { id: 'profile', text: 'Profile', icon: 'bx bx-user' },
+                { id: 'settings', text: 'Settings', icon: 'bx bx-cog' }
+            ]
+        }
+    ],
+    onItemClick: (itemId) => {
+        console.log('Selected:', itemId);
+    }
+});</code></pre>
+                </div>
+            </section>
+
+            <section id="bottom-nav">
+                <h2>BottomNavigation</h2>
+                <p>Fixed bottom navigation bar with icon + label items and badge support.</p>
+
+                <h3>Usage</h3>
+                <pre><code>BottomNavigation(props = {})</code></pre>
+
+                <h3>Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>onItemSelect</code></td>
+                            <td>function</td>
+                            <td>-</td>
+                            <td>Callback (itemId) => void</td>
+                        </tr>
+                        <tr>
+                            <td><code>itemColor</code></td>
+                            <td>string</td>
+                            <td>'#000'</td>
+                            <td>Item icon/text color</td>
+                        </tr>
+                        <tr>
+                            <td><code>background</code></td>
+                            <td>string</td>
+                            <td>'#FEF7FF'</td>
+                            <td>Background color</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Item Format</h3>
+                <pre><code>{
+    id: 'home',
+    name: 'Home',
+    icon: 'bx-home', // or 'bxs-home' for solid
+    badge: '5' // optional
+}</code></pre>
+
+                <h3>Methods</h3>
+                <ul class="method-list">
+                    <li>setItems(items)</li>
+                    <li>addItem(item)</li>
+                    <li>selectItem(id)</li>
+                    <li>setBadge(itemId, badge)</li>
+                    <li>getSelectedId() → string</li>
+                    <li>show() / hide()</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example</h4>
+                    <pre><code>const bottomNav = BottomNavigation({
+    itemColor: '#6750A4',
+    onItemSelect: (id) => console.log('Selected:', id)
+});
+
+bottomNav.setItems([
+    { id: 'home', name: 'Home', icon: 'bx-home' },
+    { id: 'explore', name: 'Explore', icon: 'bx-compass' },
+    { id: 'notifications', name: 'Alerts', icon: 'bx-bell', badge: '3' },
+    { id: 'profile', name: 'Profile', icon: 'bx-user' }
+]);
+
+bottomNav.show();</code></pre>
+                </div>
+            </section>
+
+            <section id="tabs">
+                <h2>TabLayout</h2>
+                <p>Tab navigation with page transitions, swipe support, and lazy loading.</p>
+
+                <h3>Usage</h3>
+                <pre><code>TabLayout(props = {})</code></pre>
+
+                <h3>Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>tabs</code></td>
+                            <td>array</td>
+                            <td>[]</td>
+                            <td>Array of {text, icon?, badge?}</td>
+                        </tr>
+                        <tr>
+                            <td><code>pages</code></td>
+                            <td>array</td>
+                            <td>[]</td>
+                            <td>Array of page components</td>
+                        </tr>
+                        <tr>
+                            <td><code>mode</code></td>
+                            <td>string</td>
+                            <td>'fixed'</td>
+                            <td>fixed | scrollable</td>
+                        </tr>
+                        <tr>
+                            <td><code>orientation</code></td>
+                            <td>string</td>
+                            <td>'horizontal'</td>
+                            <td>horizontal | vertical</td>
+                        </tr>
+                        <tr>
+                            <td><code>tabStyle</code></td>
+                            <td>string</td>
+                            <td>'default'</td>
+                            <td>default | pill | underline | segmented | icon-pill</td>
+                        </tr>
+                        <tr>
+                            <td><code>animation</code></td>
+                            <td>string</td>
+                            <td>'slide'</td>
+                            <td>slide | fade | scale</td>
+                        </tr>
+                        <tr>
+                            <td><code>heightMode</code></td>
+                            <td>string</td>
+                            <td>'natural'</td>
+                            <td>natural | fixed</td>
+                        </tr>
+                        <tr>
+                            <td><code>swipeable</code></td>
+                            <td>boolean</td>
+                            <td>true</td>
+                            <td>Enable swipe navigation</td>
+                        </tr>
+                        <tr>
+                            <td><code>lazyLoad</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Load pages only when selected</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Methods</h3>
+                <ul class="method-list">
+                    <li>selectTab(index)</li>
+                    <li>getSelectedIndex() → number</li>
+                    <li>addTab(tab, page)</li>
+                    <li>removeTab(index)</li>
+                    <li>updateTabBadge(index, badge)</li>
+                    <li>setAnimation(animation)</li>
+                    <li>setHeightMode(mode)</li>
+                    <li>refresh()</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example</h4>
+                    <pre><code>TabLayout({
+    tabStyle: 'pill',
+    animation: 'fade',
+    tabs: [
+        { text: 'Home', icon: 'bx bx-home' },
+        { text: 'Messages', icon: 'bx bx-message', badge: '5' },
+        { text: 'Settings', icon: 'bx bx-cog' }
+    ],
+    pages: [
+        homePage,
+        messagesPage,
+        settingsPage
+    ],
+    swipeable: true,
+    lazyLoad: true,
+    onTabSelected: (index, tab) => {
+        console.log('Selected:', tab.text);
+    }
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="viewpager">
+                <h2>ViewPager</h2>
+                <p>Simplified page swiping component without tabs.</p>
+
+                <h3>Usage</h3>
+                <pre><code>ViewPager(props = {})</code></pre>
+
+                <h3>Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>pages</code></td>
+                            <td>array</td>
+                            <td>[]</td>
+                            <td>Array of page components</td>
+                        </tr>
+                        <tr>
+                            <td><code>currentPage</code></td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>Initial page index</td>
+                        </tr>
+                        <tr>
+                            <td><code>swipeable</code></td>
+                            <td>boolean</td>
+                            <td>true</td>
+                            <td>Enable swipe navigation</td>
+                        </tr>
+                        <tr>
+                            <td><code>animation</code></td>
+                            <td>string</td>
+                            <td>'slide'</td>
+                            <td>slide | fade | scale</td>
+                        </tr>
+                        <tr>
+                            <td><code>heightMode</code></td>
+                            <td>string</td>
+                            <td>'natural'</td>
+                            <td>natural | fixed</td>
+                        </tr>
+                        <tr>
+                            <td><code>lazyLoad</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Load pages on demand</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Methods</h3>
+                <ul class="method-list">
+                    <li>setPage(index)</li>
+                    <li>getCurrentPage() → number</li>
+                    <li>nextPage()</li>
+                    <li>previousPage()</li>
+                    <li>addPage(page)</li>
+                    <li>refresh()</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example</h4>
+                    <pre><code>ViewPager({
+    pages: [page1, page2, page3],
+    currentPage: 0,
+    swipeable: true,
+    animation: 'slide',
+    onPageChanged: (newIndex, oldIndex) => {
+        console.log(`Page changed: ${oldIndex} → ${newIndex}`);
+    }
+})</code></pre>
+                </div>
+            </section>
+
+            <section id="recyclerview">
+                <h2>RecyclerView</h2>
+                <p>Efficient scrollable list/grid with adapter pattern and load-more support.</p>
+
+                <h3>Usage</h3>
+                <pre><code>RecyclerView(props = {})</code></pre>
+
+                <h3>Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>data</code></td>
+                            <td>array</td>
+                            <td>[]</td>
+                            <td>Dataset array</td>
+                        </tr>
+                        <tr>
+                            <td><code>adapter</code> <span class="badge required">Required</span></td>
+                            <td>function</td>
+                            <td>-</td>
+                            <td>(item, index) => HTMLElement</td>
+                        </tr>
+                        <tr>
+                            <td><code>layoutManager</code></td>
+                            <td>string</td>
+                            <td>'linear'</td>
+                            <td>linear | grid</td>
+                        </tr>
+                        <tr>
+                            <td><code>gridColumns</code></td>
+                            <td>number</td>
+                            <td>2</td>
+                            <td>Columns for grid layout</td>
+                        </tr>
+                        <tr>
+                            <td><code>divider</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Show dividers (linear only)</td>
+                        </tr>
+                        <tr>
+                            <td><code>onLoadMore</code></td>
+                            <td>function</td>
+                            <td>-</td>
+                            <td>async (offset) => {data, hasMore}</td>
+                        </tr>
+                        <tr>
+                            <td><code>loadMoreThreshold</code></td>
+                            <td>number</td>
+                            <td>200</td>
+                            <td>Pixels from bottom to trigger</td>
+                        </tr>
+                        <tr>
+                            <td><code>emptyView</code></td>
+                            <td>component</td>
+                            <td>-</td>
+                            <td>Custom empty state view</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Methods</h3>
+                <ul class="method-list">
+                    <li>setData(data)</li>
+                    <li>addData(newDataArray)</li>
+                    <li>addItem(item)</li>
+                    <li>addItemAt(index, item)</li>
+                    <li>removeItem(index)</li>
+                    <li>updateItem(index, newData)</li>
+                    <li>clear()</li>
+                    <li>notifyDataSetChanged()</li>
+                    <li>notifyItemInserted(index)</li>
+                    <li>notifyItemRemoved(index)</li>
+                    <li>notifyItemChanged(index)</li>
+                    <li>scrollToTop() / scrollToBottom()</li>
+                    <li>scrollToIndex(index)</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example</h4>
+                    <pre><code>const recyclerView = RecyclerView({
+    data: initialData,
+    adapter: (item, index) => {
+        return Card({ padding: 16 }, [
+            TextView({ text: item.title, textStyle: 'bold' }),
+            TextView({ text: item.description, margin: { top: 4 } })
+        ]);
+    },
+    layoutManager: 'linear',
+    divider: true,
+    onLoadMore: async (offset) => {
+        const response = await fetch(`/api/items?offset=${offset}`);
+        const data = await response.json();
+        return {
+            data: data.items,
+            hasMore: data.hasMore
+        };
+    }
+});</code></pre>
+                </div>
+            </section>
+
+            <section id="enhanced-scroll">
+                <h2>EnhancedScrollView</h2>
+                <p>Generic scroll container with load-more support.</p>
+
+                <h3>Usage</h3>
+                <pre><code>EnhancedScrollView(props = {}, children = [])</code></pre>
+
+                <h3>Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>orientation</code></td>
+                            <td>string</td>
+                            <td>'vertical'</td>
+                            <td>vertical | horizontal</td>
+                        </tr>
+                        <tr>
+                            <td><code>onLoadMore</code></td>
+                            <td>function</td>
+                            <td>-</td>
+                            <td>async () => {children, hasMore}</td>
+                        </tr>
+                        <tr>
+                            <td><code>loadMoreThreshold</code></td>
+                            <td>number</td>
+                            <td>200</td>
+                            <td>Trigger distance from edge</td>
+                        </tr>
+                        <tr>
+                            <td><code>showLoadingIndicator</code></td>
+                            <td>boolean</td>
+                            <td>true</td>
+                            <td>Show spinner when loading</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Methods</h3>
+                <ul class="method-list">
+                    <li>addChild(child)</li>
+                    <li>scrollTo(x, y)</li>
+                    <li>scrollToTop() / scrollToBottom()</li>
+                    <li>setHasMore(hasMore)</li>
+                    <li>loadMore()</li>
+                </ul>
+            </section>
+
+            <section id="dialog">
+                <h2>MaterialDialog</h2>
+                <p>Modal dialog with alert/confirm/prompt modes and custom views.</p>
+
+                <h3>Usage</h3>
+                <pre><code>MaterialDialog(props = {})</code></pre>
+
+                <h3>Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>type</code></td>
+                            <td>string</td>
+                            <td>'alert'</td>
+                            <td>alert | confirm | prompt</td>
+                        </tr>
+                        <tr>
+                            <td><code>icon</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>Icon class</td>
+                        </tr>
+                        <tr>
+                            <td><code>dismissOnBackdrop</code></td>
+                            <td>boolean</td>
+                            <td>true</td>
+                            <td>Close when clicking outside</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Builder Methods</h3>
+                <ul class="method-list">
+                    <li>setTitle(title)</li>
+                    <li>setMessage(message)</li>
+                    <li>setIcon(iconClass)</li>
+                    <li>setView(element)</li>
+                    <li>setPositiveButton(text, callback, {style?, error?})</li>
+                    <li>setNegativeButton(text, callback, {style?, error?})</li>
+                    <li>setNeutralButton(text, callback, {style?, error?})</li>
+                    <li>show()</li>
+                    <li>dismiss()</li>
+                </ul>
+
+                <h3>Static Methods</h3>
+                <ul class="method-list">
+                    <li>MaterialDialog.alert(title, message, options?)</li>
+                    <li>MaterialDialog.confirm(title, message, options?)</li>
+                    <li>MaterialDialog.prompt(title, message, options?)</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Examples</h4>
+                    <pre><code>// Alert
+MaterialDialog.alert(
+    'Success',
+    'Your changes have been saved.',
+    { icon: 'bx bx-check-circle' }
+);
+
+// Confirm
+MaterialDialog.confirm(
+    'Delete Item',
+    'Are you sure you want to delete this item?',
+    {
+        icon: 'bx bx-trash',
+        confirmText: 'Delete',
+        confirmStyle: 'filled',
+        confirmError: true,
+        onConfirm: () => {
+            // Delete logic
+        }
+    }
+);
+
+// Prompt
+MaterialDialog.prompt(
+    'Enter Name',
+    'Please enter your name:',
+    {
+        placeholder: 'John Doe',
+        onConfirm: (name) => {
+            console.log('Name:', name);
+        }
+    }
+);
+
+// Custom dialog
+const dialog = MaterialDialog({ type: 'confirm' });
+dialog.setTitle('Custom Dialog');
+dialog.setMessage('This is a custom dialog');
+dialog.setPositiveButton('OK', () => {});
+dialog.setNegativeButton('Cancel', () => {});
+dialog.show();</code></pre>
+                </div>
+            </section>
+
+            <section id="snackbar">
+                <h2>Snackbar</h2>
+                <p>Toast notifications with queueing, actions, and multiple positions.</p>
+
+                <h3>Usage</h3>
+                <pre><code>Snackbar(props = {})</code></pre>
+
+                <h3>Properties</h3>
+                <table class="prop-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>message</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>Snackbar message</td>
+                        </tr>
+                        <tr>
+                            <td><code>duration</code></td>
+                            <td>number</td>
+                            <td>4000</td>
+                            <td>Auto-dismiss duration (0 = indefinite)</td>
+                        </tr>
+                        <tr>
+                            <td><code>position</code></td>
+                            <td>string</td>
+                            <td>'bottom'</td>
+                            <td>bottom | top</td>
+                        </tr>
+                        <tr>
+                            <td><code>type</code></td>
+                            <td>string</td>
+                            <td>'default'</td>
+                            <td>default | error | success</td>
+                        </tr>
+                        <tr>
+                            <td><code>action</code></td>
+                            <td>object</td>
+                            <td>-</td>
+                            <td>{text, onClick}</td>
+                        </tr>
+                        <tr>
+                            <td><code>showClose</code></td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Show close button</td>
+                        </tr>
+                        <tr>
+                            <td><code>icon</code></td>
+                            <td>string</td>
+                            <td>-</td>
+                            <td>Icon class</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Static Methods</h3>
+                <ul class="method-list">
+                    <li>Snackbar.show(message, options?)</li>
+                    <li>Snackbar.error(message, options?)</li>
+                    <li>Snackbar.success(message, options?)</li>
+                    <li>Snackbar.dismissAll()</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Examples</h4>
+                    <pre><code>// Simple notification
+Snackbar.show('Item saved successfully');
+
+// Error notification
+Snackbar.error('Failed to save item');
+
+// Success with icon
+Snackbar.success('Upload complete!');
+
+// With action
+Snackbar({
+    message: 'Item deleted',
+    action: {
+        text: 'UNDO',
+        onClick: () => {
+            // Restore item
+        }
+    },
+    duration: 5000
+}).show();
+
+// Indefinite with close button
+Snackbar({
+    message: 'Check your internet connection',
+    duration: 0,
+    showClose: true,
+    type: 'error'
+}).show();</code></pre>
+                </div>
+            </section>
+
+            <div class="note">
+                <strong>Note:</strong> This documentation covers all major components in the JS Jetpack Compose library. For the most up-to-date information and examples, refer to the source code or visit the GitHub repository.
+            </div>
+
+            <div class="warning">
+                <strong>Known Limitations:</strong>
+                <ul style="margin-top: 8px;">
+                    <li>Multiple dialogs/drawers may conflict with body overflow locking</li>
+                    <li>Some global event listeners (toolbar overflow, drawer outside clicks) are added per instance</li>
+                    <li>dp() function currently returns pixel values, not actual Android dp calculations</li>
+                    <li>ConstraintLayout constraint aliases are simplified and don't fully match Android behavior</li>
+                </ul>
+            </div>
+        </main>
+    </div>
+
+    <div class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        <i class="bx bx-chevron-up" style="font-size: 24px;"></i>
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation
+        document.querySelectorAll('.nav-item').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+
+                    // Update active state
+                    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Back to top button
+        const backToTop = document.querySelector('.back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        // Highlight active section on scroll
+        const sections = document.querySelectorAll('section[id]');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href') === `#${current}`) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
